@@ -1,13 +1,13 @@
 package maestrogroup.core.user;
 
 
+import maestrogroup.core.user.model.ModifyUserInfoReq;
+import maestrogroup.core.user.model.ModifyUserInfoRes;
 import maestrogroup.core.user.model.SignUpUserReq;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+@RequestMapping("/user")
 @RestController
 public class UserController {
     @Autowired
@@ -37,5 +37,12 @@ public class UserController {
         }*/
     }
 
+    // 회원정보 수정
+    @ResponseBody
+    @PatchMapping("/modifyUser/{userIdx}")
+    public void modifyUserInfo(@PathVariable("userIdx") int userIdx, @RequestBody ModifyUserInfoReq modifyUserInfoReq){
+        userService.modifyUserInfo(userIdx, modifyUserInfoReq);
+    }
 
+    // 계정 삭제 : status 필드값을 변경하자. DELETE 메소드 요청을 하지말고!!!
 }
