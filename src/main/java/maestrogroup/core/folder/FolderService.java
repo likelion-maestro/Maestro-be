@@ -1,6 +1,5 @@
 package maestrogroup.core.folder;
 
-
 import maestrogroup.core.folder.model.PostFolderReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,5 +17,13 @@ public class FolderService {
     //createFolder
     public void createFolder(PostFolderReq postFolderReq, int teamIdx){
         folderDao.createFolder(postFolderReq, teamIdx);
+    }
+
+    public void modifyFolder(int folderIdx, ModifyFolderReq modifyFolderReq){
+        folderDao.modifyFolder(folderIdx, modifyFolderReq);
+    }
+
+    public void deleteFolder(int folderIdx){
+        folderDao.deleteFolder(folderIdx);
     }
 }

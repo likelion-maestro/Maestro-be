@@ -25,8 +25,6 @@ public class FolderDao {
     public void createFolder(PostFolderReq postFolderReq, int teamIdx){
         String createFolderQuery = "insert into Folder (folderImgUrl, folderName, teamIdx) VALUES (?, ?, ?)";
         Object[] createFolderParams = new Object[]{postFolderReq.getFolderImgUrl(), postFolderReq.getFolderName(), teamIdx};
-        System.out.println("teamIdx:" + createFolderParams[2]);
-        System.out.println("folderName:" + createFolderParams[1]);
         this.jdbcTemplate.update(createFolderQuery, createFolderParams);
     }
 
@@ -42,5 +40,16 @@ public class FolderDao {
                         rs.getString("folderName"),
                         rs.getInt("teamIdx")),
                 getTeamIdx);
+    }
+
+    public void modifyFolder(int folderIdx, ModifyFolderReq modifyFolderReq){
+        String UpdateModifyFolderQuery = "UPDATE Folder set folderName = ?, folderImgUrl = ? where folderIdx = ?";
+        Object[] modifyFolderParams = new Object[]{modifyFolderReq.getFolderName(), modifyFolderReq.getFolderImgUrl(), folderIdx};
+        this.jdbcTemplate.update(UpdateModifyFolderQuery, modifyFolderParams);
+    }
+
+    public void deleteFolder(int folderIdx){
+        String deleteFolderQuery = "DELETE FROM Folder WHERE folderIdx = ?";
+        this.jdbcTemplate.update(deleteFolderQuery, folderIdx);
     }
 }
