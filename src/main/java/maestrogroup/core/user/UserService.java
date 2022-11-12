@@ -1,5 +1,6 @@
 package maestrogroup.core.user;
 
+import maestrogroup.core.user.model.ModifyUserInfoReq;
 import maestrogroup.core.user.model.SignUpUserReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,5 +17,9 @@ public class UserService {
 
     public void createUser(SignUpUserReq signUpUserReq){
         userDao.createUser(signUpUserReq);
+    }
+
+    public void modifyUserInfo(int userIdx, ModifyUserInfoReq modifyUserInfoReq){
+        userDao.modifyUserInfo(userIdx, modifyUserInfoReq);
     }
 }
