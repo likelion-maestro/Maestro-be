@@ -1,8 +1,8 @@
 package maestrogroup.core.team;
 
 import maestrogroup.core.team.model.GetTeamRes;
+import maestrogroup.core.team.model.PatchTeamReq;
 import maestrogroup.core.team.model.PostTeamReq;
-import maestrogroup.core.team.model.PostTeamRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -25,8 +25,6 @@ public class TeamDao {
 
         String lastInsertTeamIdx = "select last_insert_id()";
         String insertTeamQuery = "select * from Team where teamIdx = ?";
-
-        System.out.println("=======================================================");
     }
 
     public List<GetTeamRes> getAllTeam(){
@@ -38,6 +36,17 @@ public class TeamDao {
                   rs.getString("teamImgUrl"),
                   rs.getInt("count"))
         );
+    }
+
+    public void modifyTeam(PatchTeamReq patchUserReq){
+        String modifyTeamQuery = "update Team set teamName = ?,  teamImgUrl = ? where teamIdx = ?";
+        Object[] modifyUserNameParams = new Object[]{patchUserReq.getTeamName(), patchUserReq.getTeamImgUrl(), patchUserReq.getTeamIdx()};
+        this.jdbcTemplate.update(modifyTeamQuery, modifyUserNameParams);
+    }
+
+    public void deleteTeam(int teamIdx){
+        String deleteTeamQuery = "delete from Team where teamIdx = ?";
+        this.jdbcTemplate.update(deleteTeamQuery, teamIdx);
     }
 }
 

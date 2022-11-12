@@ -1,8 +1,8 @@
 package maestrogroup.core.team;
 
 
+import maestrogroup.core.team.model.PatchTeamReq;
 import maestrogroup.core.team.model.PostTeamReq;
-import maestrogroup.core.team.model.PostTeamRes;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,6 +20,14 @@ public class TeamService {
         System.out.println("postteamreq teamname:" +  postTeamReq.getTeamName());
         //PostTeamRes postTeamRes = teamDao.createTeam(postTeamReq);
         //return postTeamRes;
+    }
+
+    public void modifyTeam(PatchTeamReq patchTeamReq){
+        teamDao.modifyTeam(patchTeamReq);
+    }
+
+    public void deleteTeam(int teamIdx){
+        teamDao.deleteTeam(teamIdx);
     }
 }
 
