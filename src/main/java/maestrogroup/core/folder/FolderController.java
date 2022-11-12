@@ -5,6 +5,8 @@ import maestrogroup.core.folder.model.PostFolderReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class FolderController {
 
@@ -27,5 +29,12 @@ public class FolderController {
     @PostMapping("/create_folder/{teamIdx}")
     public void createFolder(@PathVariable("teamIdx") int teamIdx, @RequestBody PostFolderReq postFolderReq){
         folderService.createFolder(postFolderReq, teamIdx);
+    }
+
+    // 특정 팀에 대한 폴더 리스트 조회
+    @ResponseBody
+    @GetMapping("/get_all_folder/{teamIdx}")
+    public List<Folder> GetAllFolder(@PathVariable("teamIdx") int teamIdx){
+        return folderProvider.GetAllFolder(teamIdx);
     }
 }
