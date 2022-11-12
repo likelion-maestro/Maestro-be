@@ -1,13 +1,11 @@
 package maestrogroup.core.folder.model;
 
 import lombok.Data;
-
 // folderIdx, folderImgUrl, folderName, teamIdx
 
 @Data
-public class Folder {
-    private int folderIdx;
+public class PostFolderReq {
     private String folderImgUrl;
     private String folderName;
-    private int teamIdx;
+    //private int teamIdx;
 }
