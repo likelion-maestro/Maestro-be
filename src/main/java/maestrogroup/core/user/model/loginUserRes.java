@@ -1,6 +1,11 @@
 package maestrogroup.core.user.model;
 
-public class User {
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+@Data
+@AllArgsConstructor
+public class loginUserRes {
     private int userIdx;
     private String email;
     private String nickname;
