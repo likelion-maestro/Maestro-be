@@ -1,6 +1,7 @@
 package maestrogroup.core.team;
 
 import maestrogroup.core.team.model.GetTeamRes;
+import maestrogroup.core.team.model.PatchTeamReq;
 import maestrogroup.core.team.model.PostTeamReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +37,21 @@ public class TeamContoller {
         List<GetTeamRes> getTeamResList = teamProvider.getAllTeam();
         return getTeamResList;
     }
+
+    @ResponseBody
+    @PatchMapping("/patch_team/{teamIdx}")
+    public void modifyTeam(@PathVariable("teamIdx") int teamIdx, @RequestBody PostTeamReq postTeamReq){
+        PatchTeamReq patchUserReq = new PatchTeamReq(teamIdx, postTeamReq.getTeamName(), postTeamReq.getTeamImgUrl());
+        teamService.modifyTeam(patchUserReq);
+    }
+
+    @ResponseBody
+    @DeleteMapping("/delete_team/{teamIdx}")
+    public void deleteTeam(@PathVariable("teamIdx") int teamIdx){
+        teamService.deleteTeam(teamIdx);
+    }
 }
+
 
 
 
