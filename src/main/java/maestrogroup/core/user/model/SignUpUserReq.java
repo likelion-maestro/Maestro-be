@@ -1,11 +1,12 @@
 package maestrogroup.core.user.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
 
 // userIdx, createdAt, email, is_connected, nickname, password, status, updatedAt, userProfileImgUrl
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class SignUpUserReq {
     private String email;
     private String password;

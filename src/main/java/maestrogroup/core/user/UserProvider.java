@@ -16,4 +16,8 @@ public class UserProvider {
     public GetUser getUser(int userIdx){
         return userDao.getUser(userIdx);
     }
+
+    public int Email_Duplicate_Check(String email){
+        return userDao.Email_Duplicate_Check(email);
+    }
 }
