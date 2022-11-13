@@ -24,6 +24,13 @@ public class UserDao {
         Object[] createUserParams = new Object[]{signUpUserReq.getEmail(), signUpUserReq.getPassword(), signUpUserReq.getNickname()};
         this.jdbcTemplate.update(createUserQuery, createUserParams);
     }
+    /*
+     public int Email_Duplicate_Check(String email){
+        String Email_Duplicate_Check_Query = "select exists(select email from User where email = ?)"; // 해당 email 값을 갖는 유저가 존재하는가?
+        String checkEmailparams = email;
+        return this.jdbcTemplate.queryForObject(Email_Duplicate_Check_Query, int.class, checkEmailparams); // 존재하면 1을, 존재하지 않으면 0을 리턴(int형 타입으로써 리턴)
+    }
+     */
 
     public void modifyUserInfo(int userIdx, ModifyUserInfoReq modifyUserInfoReq){
         String ModifyUserInfoQuery = "update User set email = ?, nickname = ?, userProfileImgUrl = ?, password = ? where userIdx = ?";
@@ -36,7 +43,7 @@ public class UserDao {
         this.jdbcTemplate.update(deleteUserQuery, userIdx);
     }
 
-    public GetUser getUser(int userIdx){
+    public GetUser getUser(int userIdx) {
         String GetUserQuery = "select * from User where userIdx = ?";
         System.out.println("=================================================================");
         return this.jdbcTemplate.queryForObject(GetUserQuery,
@@ -51,5 +58,11 @@ public class UserDao {
                         rs.getTimestamp("updatedAt"),
                         rs.getString("userProfileImgUrl")),
                 userIdx);
+    }
+
+    public int Email_Duplicate_Check(String email){
+        String Email_Duplicate_Check_Query = "select exists(select email from User where email = ?)"; // 해당 email 값을 갖는 유저가 존재하는가?
+        String checkEmailparams = email;
+        return this.jdbcTemplate.queryForObject(Email_Duplicate_Check_Query, int.class, checkEmailparams); // 존재하면 1을, 존재하지 않으면 0을 리턴(int형 타입으로써 리턴)
     }
 }
