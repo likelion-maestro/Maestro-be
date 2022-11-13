@@ -7,15 +7,14 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 // userIdx, createdAt, email, is_connected, nickname, password, status, updatedAt, userProfileImgUrl
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class SignUpUserReq {
     //@Email(message = "올바른 이메일 형식이 아닙니다.")
     private String email;
     private String password;
-    private String Repassword;
+    private String repass;
     private String nickname;
 }
 // implementation 'org.springframework.boot:spring-boot-starter-validation' 로 의존성을 추가해야지 유효성 검사 관련 어노테이션 사용가능

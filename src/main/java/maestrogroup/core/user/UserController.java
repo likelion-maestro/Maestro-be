@@ -33,12 +33,11 @@ public class UserController {
     // 회원가입
     @ResponseBody
     @PostMapping("/sign-up")
-    public BaseResponse createUser(@RequestBody @Valid SignUpUserReq signUpUserReq) {
+    public BaseResponse createUser(@RequestBody SignUpUserReq signUpUserReq) {
         try {
-            System.out.println(signUpUserReq.getEmail());
             userService.createUser(signUpUserReq);
             return new BaseResponse(); // 생성자에 파라미터 값을 아무것도 부여하지 않으면 성공에 대한 BaseResponse 가 생성 및 호출됨
-        } catch (BaseException exception) {  // userService.createUser() 를 호출했더니 도중에 예외가 발생한 경우에 대한 예외처리ㄷ
+        } catch (BaseException exception) {  // userService.createUser() 를 호출했더니 도중에 예외가 발생한 경우에 대한 예외처리
             return new BaseResponse(exception.getStatus());
         }
     }
