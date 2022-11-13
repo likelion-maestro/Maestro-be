@@ -29,11 +29,9 @@ public class UserDao {
         Object[] ModifyUserInfoParams = new Object[]{modifyUserInfoReq.getEmail(), modifyUserInfoReq.getNickname(), modifyUserInfoReq.getUserProfileImgUrl(), modifyUserInfoReq.getPassword(), userIdx};
         this.jdbcTemplate.update(ModifyUserInfoQuery, ModifyUserInfoParams);
     }
-    /*
-    public void modifyTeam(PatchTeamReq patchUserReq){
-        String modifyTeamQuery = "update Team set teamName = ?,  teamImgUrl = ? where teamIdx = ?";
-        Object[] modifyUserNameParams = new Object[]{patchUserReq.getTeamName(), patchUserReq.getTeamImgUrl(), patchUserReq.getTeamIdx()};
-        this.jdbcTemplate.update(modifyTeamQuery, modifyUserNameParams);
+
+    public void deleteUser(int userIdx){
+        String deleteUserQuery = "update User set status = 'D' where userIdx = ?";
+        this.jdbcTemplate.update(deleteUserQuery, userIdx);
     }
-     */
 }
