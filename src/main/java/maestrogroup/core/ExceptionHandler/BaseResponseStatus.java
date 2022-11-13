@@ -16,7 +16,8 @@ public enum BaseResponseStatus {
     // 회원가입 관련
     INVALID_EMAIL_FORM("이메일 형식을 확인해주세요.", HttpStatus.BAD_REQUEST),
     EXIST_USER_EMAIL("이미 가입된 이메일 입니다.", HttpStatus.FORBIDDEN),
-
+    NOT_EQUAL_PASSWORD_REPASSWORD("비밓번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST),
+    INVALID_PASSWORD_FORM("비밀번호는 숫자,문자를 모두 포함하며, 8자~20자 사이로 입력해주세요", HttpStatus.BAD_REQUEST),
     // 로그인 관련
     LOGIN_FAILURE("존재하지 않는 아이디 또는 비밀번호입니다.", HttpStatus.FORBIDDEN),
 
