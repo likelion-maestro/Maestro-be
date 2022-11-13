@@ -24,7 +24,11 @@ public class UserService {
         if(userDao.Email_Duplicate_Check(signUpUserReq.getEmail()) == 1){
             throw new BaseException(BaseResponseStatus.EXIST_USER_EMAIL);
         }
-        userDao.createUser(signUpUserReq);
+        try {
+            userDao.createUser(signUpUserReq);  // Dao를 통해 User 생성
+        } catch(Exception exception){ // 서버 및 DB 에 연동해서 데이터를 Dao에서 데이터를 처리할 떄 문제가 발생한 경우
+            throw new BaseException(BaseResponseStatus.SERVER_ERROR);  // 예외를 던지기
+        }
     }
 
     public void modifyUserInfo(int userIdx, ModifyUserInfoReq modifyUserInfoReq){

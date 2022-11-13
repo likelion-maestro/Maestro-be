@@ -35,10 +35,9 @@ public class UserController {
         try {
             userService.createUser(signUpUserReq);
             return new BaseResponse(); // 생성자에 파라미터 값을 아무것도 부여하지 않으면 성공에 대한 BaseResponse 가 생성 및 호출됨
-        } catch(BaseException exception){
+        } catch (BaseException exception) {
             return new BaseResponse(exception.getStatus());
         }
-        // 비밀번호과 재입력받은 비밀번호가 다른경우에 대한 검증 및 예외처리
     }
 
     // 회원정보 수정
