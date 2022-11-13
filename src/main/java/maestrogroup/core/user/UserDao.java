@@ -1,5 +1,6 @@
 package maestrogroup.core.user;
 
+import maestrogroup.core.user.model.GetUser;
 import maestrogroup.core.user.model.ModifyUserInfoReq;
 import maestrogroup.core.user.model.SignUpUserReq;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,5 +34,22 @@ public class UserDao {
     public void deleteUser(int userIdx){
         String deleteUserQuery = "update User set status = 'D' where userIdx = ?";
         this.jdbcTemplate.update(deleteUserQuery, userIdx);
+    }
+
+    public GetUser getUser(int userIdx){
+        String GetUserQuery = "select * from User where userIdx = ?";
+        System.out.println("=================================================================");
+        return this.jdbcTemplate.queryForObject(GetUserQuery,
+                (rs, rowNum) -> new GetUser(
+                        rs.getInt("userIdx"),
+                        rs.getTimestamp("createdAt"),
+                        rs.getString("email"),
+                        rs.getInt("is_connected"),
+                        rs.getString("nickname"),
+                        rs.getString("password"),
+                        rs.getString("status"),
+                        rs.getTimestamp("updatedAt"),
+                        rs.getString("userProfileImgUrl")),
+                userIdx);
     }
 }
