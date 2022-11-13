@@ -33,13 +33,9 @@ public class UserController {
         userService.createUser(signUpUserReq);
         // 비밀번호과 재입력받은 비밀번호가 다른경우에 대한 검증 및 예외처리
 
-
         // 중복된 이메일을 가지는 유저가 또 존재하는지 확인
-        /*
-        try {
-            if (signUpUserReq.getPassword() != signUpUserReq.getRepassword()) {
-
-            }
+        /*if(userProvider.checkEmail(postUserReq.getEmail()) == 1){
+            throw new BaseException()
         }*/
     }
 
