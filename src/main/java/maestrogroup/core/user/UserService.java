@@ -71,7 +71,28 @@ public class UserService {
             throw new BaseException(BaseResponseStatus.MODIFY_FIELD_NOT_FULL);
         }
 
-        // 회원가입때와 마찬가지로 비밓번호 및 이메일에 대한 유효성 검사 처리요망
+        // 회원가입때와 마찬가지로 비밓번호 및 이메일에 대한 유효성 검사 처리
+
+        // 입력받은 이메일을 빈 값으로 요청하지 않았는지 유효성(Validation) 검사
+        if(modifyUserInfoReq.getEmail() == null || modifyUserInfoReq.getEmail() == ""){
+            throw new BaseException(BaseResponseStatus.INVALID_EMAIL_FORM);
+        }
+
+        // 이메일 정규화 표현 : email@naver.com 과 같은 형식인지 유효성 검사.
+        if(!CheckValidForm.isValidEmailForm(modifyUserInfoReq.getEmail())){
+            throw new BaseException(BaseResponseStatus.INVALID_EMAIL_FORM);
+        }
+
+        // 중복된 이메일을 가지는 유저가 또 존재하는지 확인
+        if(userDao.Email_Duplicate_Check(modifyUserInfoReq.getEmail()) == 1){
+            throw new BaseException(BaseResponseStatus.EXIST_USER_EMAIL);
+        }
+
+        // 비밀번호 형식에 대한 유효성 검사
+        if(!CheckValidForm.isValid_Password_Form(modifyUserInfoReq.getPassword())){
+            throw new BaseException(BaseResponseStatus.INVALID_PASSWORD_FORM);
+        }
+
 
         try {
             userDao.modifyUserInfo(userIdx, modifyUserInfoReq);
