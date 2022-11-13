@@ -79,11 +79,6 @@ public class UserService {
             throw new BaseException(BaseResponseStatus.INVALID_EMAIL_FORM);
         }
 
-        // 중복된 이메일을 가지는 유저가 또 존재하는지 확인
-        if(userDao.Email_Duplicate_Check(modifyUserInfoReq.getEmail()) == 1){
-            throw new BaseException(BaseResponseStatus.EXIST_USER_EMAIL);
-        }
-
         // 비밀번호 형식에 대한 유효성 검사
         if(!CheckValidForm.isValid_Password_Form(modifyUserInfoReq.getPassword())){
             throw new BaseException(BaseResponseStatus.INVALID_PASSWORD_FORM);
