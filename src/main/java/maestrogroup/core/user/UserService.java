@@ -2,6 +2,7 @@ package maestrogroup.core.user;
 
 import maestrogroup.core.ExceptionHandler.BaseException;
 import maestrogroup.core.ExceptionHandler.BaseResponseStatus;
+import maestrogroup.core.ExceptionHandler.Validation.CorrectEmailForm;
 import maestrogroup.core.user.model.GetUser;
 import maestrogroup.core.user.model.ModifyUserInfoReq;
 import maestrogroup.core.user.model.SignUpUserReq;
@@ -20,10 +21,21 @@ public class UserService {
 
     // 검증 과정 도중에 예외가 발생하면 Controller 에게 BaseException 예외 객체를 던진다.
     public void createUser(SignUpUserReq signUpUserReq) throws BaseException{
+        // 입력받은 이메일을 빈 값으로 요청하지 않았는지 유효성(Validation) 검사
+        if(signUpUserReq.getEmail() == null){
+            throw new BaseException(BaseResponseStatus.INVALID_EMAIL_FORM);
+        }
+
+        // 이메일 정규화 표현 : email@naver.com 과 같은 형식인지 유효성 검사.
+        if(!CorrectEmailForm.isValidEmailForm(signUpUserReq.getEmail())){
+            throw new BaseException(BaseResponseStatus.INVALID_EMAIL_FORM);
+        }
+
         // 중복된 이메일을 가지는 유저가 또 존재하는지 확인
         if(userDao.Email_Duplicate_Check(signUpUserReq.getEmail()) == 1){
             throw new BaseException(BaseResponseStatus.EXIST_USER_EMAIL);
         }
+
         try {
             userDao.createUser(signUpUserReq);  // Dao를 통해 User 생성
         } catch(Exception exception){ // 서버 및 DB 에 연동해서 데이터를 Dao에서 데이터를 처리할 떄 문제가 발생한 경우
