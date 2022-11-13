@@ -45,8 +45,13 @@ public class UserController {
     // 회원정보 수정
     @ResponseBody
     @PatchMapping("/modifyUser/{userIdx}")
-    public void modifyUserInfo(@PathVariable("userIdx") int userIdx, @RequestBody ModifyUserInfoReq modifyUserInfoReq){
-        userService.modifyUserInfo(userIdx, modifyUserInfoReq);
+    public BaseResponse modifyUserInfo(@PathVariable("userIdx") int userIdx, @RequestBody ModifyUserInfoReq modifyUserInfoReq){
+        try {
+            userService.modifyUserInfo(userIdx, modifyUserInfoReq);
+            return new BaseResponse();
+        } catch(BaseException baseException){
+            return new BaseResponse(baseException.getStatus());
+        }
     }
 
     // 계정 삭제 : status 필드값을 변경하자. DELETE 메소드 요청을 하지말고!!!

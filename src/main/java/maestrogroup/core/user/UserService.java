@@ -53,8 +53,31 @@ public class UserService {
         }
     }
 
-    public void modifyUserInfo(int userIdx, ModifyUserInfoReq modifyUserInfoReq){
-        userDao.modifyUserInfo(userIdx, modifyUserInfoReq);
+    public void modifyUserInfo(int userIdx, ModifyUserInfoReq modifyUserInfoReq) throws BaseException{
+        // 모든 필드가 입력되지 않을경우 프로필 수정이 불가능
+        if(modifyUserInfoReq.getEmail()== null || modifyUserInfoReq.getEmail() == ""){
+            throw new BaseException(BaseResponseStatus.MODIFY_FIELD_NOT_FULL);
+        }
+
+        if(modifyUserInfoReq.getPassword() == null || modifyUserInfoReq.getPassword() == ""){
+            throw new BaseException(BaseResponseStatus.MODIFY_FIELD_NOT_FULL);
+        }
+
+        if(modifyUserInfoReq.getUserProfileImgUrl() == null || modifyUserInfoReq.getUserProfileImgUrl() == ""){
+            throw new BaseException(BaseResponseStatus.MODIFY_FIELD_NOT_FULL);
+        }
+
+        if(modifyUserInfoReq.getNickname() == null || modifyUserInfoReq.getNickname() == ""){
+            throw new BaseException(BaseResponseStatus.MODIFY_FIELD_NOT_FULL);
+        }
+
+        // 회원가입때와 마찬가지로 비밓번호 및 이메일에 대한 유효성 검사 처리요망
+
+        try {
+            userDao.modifyUserInfo(userIdx, modifyUserInfoReq);
+        } catch(Exception exception) { // 서버 및 DB 에 연동해서 데이터를 Dao에서 데이터를 처리할 떄 문제가 발생한 경우
+            throw new BaseException(BaseResponseStatus.SERVER_ERROR);  // 예외를 던지기
+        }
     }
 
     public void deleteUser(int userIdx){
