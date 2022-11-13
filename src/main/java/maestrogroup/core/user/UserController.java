@@ -1,11 +1,13 @@
 package maestrogroup.core.user;
 
 
+import maestrogroup.core.ExceptionHandler.BaseResponse;
 import maestrogroup.core.user.model.GetUser;
 import maestrogroup.core.user.model.ModifyUserInfoReq;
 import maestrogroup.core.user.model.ModifyUserInfoRes;
 import maestrogroup.core.user.model.SignUpUserReq;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/user")
@@ -27,9 +29,12 @@ public class UserController {
     // 회원가입
     @ResponseBody
     @PostMapping("/sign-up")
-    public void createUser(@RequestBody SignUpUserReq signUpUserReq){
+    public BaseResponse createUser(@RequestBody SignUpUserReq signUpUserReq){
         userService.createUser(signUpUserReq);
         // 비밀번호과 재입력받은 비밀번호가 다른경우에 대한 검증 및 예외처리
+
+
+        // 중복된 이메일을 가지는 유저가 또 존재하는지 확인
         /*
         try {
             if (signUpUserReq.getPassword() != signUpUserReq.getRepassword()) {
