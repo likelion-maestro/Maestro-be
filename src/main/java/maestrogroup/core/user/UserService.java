@@ -22,4 +22,8 @@ public class UserService {
     public void modifyUserInfo(int userIdx, ModifyUserInfoReq modifyUserInfoReq){
         userDao.modifyUserInfo(userIdx, modifyUserInfoReq);
     }
+
+    public void deleteUser(int userIdx){
+        userDao.deleteUser(userIdx);
+    }
 }

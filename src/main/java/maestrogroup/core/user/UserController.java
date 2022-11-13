@@ -45,4 +45,9 @@ public class UserController {
     }
 
     // 계정 삭제 : status 필드값을 변경하자. DELETE 메소드 요청을 하지말고!!!
+    @ResponseBody
+    @PatchMapping("/deleteUser/{userIdx}")
+    public void deleteUser(@PathVariable("userIdx") int userIdx){
+        userService.deleteUser(userIdx);
+    }
 }
