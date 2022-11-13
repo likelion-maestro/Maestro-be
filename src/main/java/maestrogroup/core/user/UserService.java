@@ -63,10 +63,6 @@ public class UserService {
             throw new BaseException(BaseResponseStatus.MODIFY_FIELD_NOT_FULL);
         }
 
-        if(modifyUserInfoReq.getUserProfileImgUrl() == null || modifyUserInfoReq.getUserProfileImgUrl() == ""){
-            throw new BaseException(BaseResponseStatus.MODIFY_FIELD_NOT_FULL);
-        }
-
         if(modifyUserInfoReq.getNickname() == null || modifyUserInfoReq.getNickname() == ""){
             throw new BaseException(BaseResponseStatus.MODIFY_FIELD_NOT_FULL);
         }
