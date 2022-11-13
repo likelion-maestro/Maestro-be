@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 
 @RequestMapping("/user")
 @RestController
@@ -58,7 +60,8 @@ public class UserController {
     @ResponseBody
     @PatchMapping("/deleteUser/{userIdx}")
     public void deleteUser(@PathVariable("userIdx") int userIdx){
-        userService.deleteUser(userIdx);
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        userService.deleteUser(userIdx, timestamp);
     }
 
     @ResponseBody

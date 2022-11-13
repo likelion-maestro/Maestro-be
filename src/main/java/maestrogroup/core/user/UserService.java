@@ -9,6 +9,9 @@ import maestrogroup.core.user.model.SignUpUserReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.util.TimeZone;
+
 @Service
 public class UserService {
 
@@ -92,8 +95,8 @@ public class UserService {
         }
     }
 
-    public void deleteUser(int userIdx){
-        userDao.deleteUser(userIdx);
+    public void deleteUser(int userIdx, Timestamp timestamp){
+        userDao.deleteUser(userIdx, timestamp);
     }
 
     public GetUser getUser(int userIdx){
