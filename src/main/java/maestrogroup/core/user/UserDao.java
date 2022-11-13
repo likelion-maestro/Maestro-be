@@ -8,6 +8,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.TimeZone;
 
 @Repository
 public class UserDao {
@@ -38,9 +42,11 @@ public class UserDao {
         this.jdbcTemplate.update(ModifyUserInfoQuery, ModifyUserInfoParams);
     }
 
-    public void deleteUser(int userIdx){
-        String deleteUserQuery = "update User set status = 'D' where userIdx = ?";
-        this.jdbcTemplate.update(deleteUserQuery, userIdx);
+    public void deleteUser(int userIdx, Timestamp timestamp){
+        //System.out.println(simpleDateFormat.format(timestamp));
+        String deleteUserQuery = "update User set status = 'D', updatedAt = ? where userIdx = ?";
+        Object[] deleteUserQueryParams = new Object[]{timestamp, userIdx};
+        this.jdbcTemplate.update(deleteUserQuery, deleteUserQueryParams);
     }
 
     public GetUser getUser(int userIdx) {
