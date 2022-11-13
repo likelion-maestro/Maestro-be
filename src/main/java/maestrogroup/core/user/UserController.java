@@ -1,6 +1,7 @@
 package maestrogroup.core.user;
 
 
+import maestrogroup.core.user.model.GetUser;
 import maestrogroup.core.user.model.ModifyUserInfoReq;
 import maestrogroup.core.user.model.ModifyUserInfoRes;
 import maestrogroup.core.user.model.SignUpUserReq;
@@ -49,5 +50,11 @@ public class UserController {
     @PatchMapping("/deleteUser/{userIdx}")
     public void deleteUser(@PathVariable("userIdx") int userIdx){
         userService.deleteUser(userIdx);
+    }
+
+    @ResponseBody
+    @GetMapping("/getUser/{userIdx}")
+    public GetUser getUser(@PathVariable("userIdx") int userIdx){
+        return userProvider.getUser(userIdx);
     }
 }

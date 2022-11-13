@@ -1,5 +1,6 @@
 package maestrogroup.core.user;
 
+import maestrogroup.core.user.model.GetUser;
 import maestrogroup.core.user.model.ModifyUserInfoReq;
 import maestrogroup.core.user.model.SignUpUserReq;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,5 +26,9 @@ public class UserService {
 
     public void deleteUser(int userIdx){
         userDao.deleteUser(userIdx);
+    }
+
+    public GetUser getUser(int userIdx){
+        return userDao.getUser(userIdx);
     }
 }
