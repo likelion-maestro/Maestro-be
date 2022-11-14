@@ -1,8 +1,6 @@
 package maestrogroup.core.user;
 
-import maestrogroup.core.user.model.GetUser;
-import maestrogroup.core.user.model.ModifyUserInfoReq;
-import maestrogroup.core.user.model.SignUpUserReq;
+import maestrogroup.core.user.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -70,5 +68,19 @@ public class UserDao {
         String Email_Duplicate_Check_Query = "select exists(select email from User where email = ?)"; // 해당 email 값을 갖는 유저가 존재하는가?
         String checkEmailparams = email;
         return this.jdbcTemplate.queryForObject(Email_Duplicate_Check_Query, int.class, checkEmailparams); // 존재하면 1을, 존재하지 않으면 0을 리턴(int형 타입으로써 리턴)
+    }
+
+    public LoginUserSomeField getPwd(LoginUserReq loginUserReq){
+        String getPwdQuery = "select userIdx, password, email, nickname from User where email = ?";
+        String getPwdParams = loginUserReq.getEmail();
+        return this.jdbcTemplate.queryForObject(getPwdQuery,
+                (rs, rowNum) -> new LoginUserSomeField(
+                        rs.getInt("userIdx"),
+                        rs.getString("password"),
+                        rs.getString("email"),
+                        rs.getString("nickname")
+                ),
+                getPwdParams
+        );
     }
 }
