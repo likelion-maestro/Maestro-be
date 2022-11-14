@@ -1,8 +1,11 @@
 package maestrogroup.core.mapping;
 
 import maestrogroup.core.team.model.PostTeamReq;
+import maestrogroup.core.user.model.GetUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RequestMapping("/mapping")
@@ -54,9 +57,15 @@ public class MappingController {
 
     // 해당 그룹을 특정 유저가 탈퇴할떄 Mapping 객체가 삭제되도록 구현
     // + 그리고 해당 그룹 팀의 총 인원수가 0명일떄, 그룹 객체(Team 객체)도 Mapping객체와 함께 삭제되도록 구현
-    @GetMapping("/getTeamMembers/{teamIdx}")
-    public void getTeamMembers(@PathVariable("teamIdx") int teamIdx){
+    @DeleteMapping("deleteTeam/{teamIdx}")
+    public void deleteTeam(@PathVariable("teamIdx") int teamIdx){
 
+    }
+
+    // 특정 팀 그룹에 속하는 모든 팀멤버 출력
+    @GetMapping("/getTeamMembers/{teamIdx}")
+    public List<GetUser> getTeamMembers(@PathVariable("teamIdx") int teamIdx){
+        return mappingProvider.getTeamMembers(teamIdx);
     }
 }
 
