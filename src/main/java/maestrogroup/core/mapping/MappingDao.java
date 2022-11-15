@@ -1,7 +1,9 @@
 package maestrogroup.core.mapping;
 
+import maestrogroup.core.mapping.model.GetTeamIdx;
 import maestrogroup.core.mapping.model.GetUserIdx;
 import maestrogroup.core.mapping.model.Mapping;
+import maestrogroup.core.team.model.GetTeamRes;
 import maestrogroup.core.team.model.PostTeamReq;
 import maestrogroup.core.user.model.GetUser;
 import org.apache.catalina.LifecycleState;
@@ -81,6 +83,37 @@ public class MappingDao {
         }
 
         return getUserList;
+    }
+
+    public List<GetTeamRes> getTeamList(int teamIdx){
+        String getUserAllTeamIdxQuery = "select teamIdx from Mapping where teamidx = ?";
+
+        java.util.List<GetTeamIdx> GetTeamIdxList = this.jdbcTemplate.query(getUserAllTeamIdxQuery,
+                (rs, rowNum) -> new GetTeamIdx(
+                        rs.getInt("teamIdx")), teamIdx);
+
+        List<Integer> teamIdxList = new ArrayList<Integer>();
+        for(GetTeamIdx getTeamIdx : GetTeamIdxList){
+            teamIdxList.add(getTeamIdx.getTeamIdx());
+        }
+
+        // 반복문으로 순환하면서 얻어온 각 userIdx 값을 기반으로 GetUser 리스트 생성
+        List<GetTeamRes> getTeamResList = new ArrayList<GetTeamRes>();
+        String GetTeamResQuery = "select * from Team where teamIdx = ?";
+
+        for(int eachTeamIdx : teamIdxList){
+            GetTeamRes eachTeam = this.jdbcTemplate.queryForObject(GetTeamResQuery,
+                    (rs, rowNum) -> new GetTeamRes(
+                            rs.getInt("teamIdx"),
+                            rs.getString("teamName"),
+                            rs.getString("teamImgUrl"),
+                            rs.getInt("count")),
+                    eachTeamIdx);
+
+            getTeamResList.add(eachTeam);
+        }
+
+        return getTeamResList;
     }
 }
 

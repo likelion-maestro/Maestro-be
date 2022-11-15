@@ -1,5 +1,6 @@
 package maestrogroup.core.mapping;
 
+import maestrogroup.core.team.model.GetTeamRes;
 import maestrogroup.core.team.model.PostTeamReq;
 import maestrogroup.core.user.model.GetUser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,8 +71,8 @@ public class MappingController {
 
     // 특정 유저가 속해있는 모든 팀 그룹 출력 : ManyToMany
     @GetMapping("/getTeamList/{userIdx}")
-    public List<GetUser> getTeamList(@PathVariable("userIdx") int userIdx){
-
+    public List<GetTeamRes> getTeamList(@PathVariable("userIdx") int userIdx){
+        return mappingProvider.getTeamList(userIdx);
     }
 }
 
