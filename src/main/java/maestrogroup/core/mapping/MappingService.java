@@ -21,6 +21,10 @@ public class MappingService {
     public void inviteUser(int teamIdx, int userIdx){
         mappingDao.inviteUser(teamIdx, userIdx);
     }
+
+    public void deleteTeam(int teamIdx, int userIdx){
+        mappingDao.deleteTeam(teamIdx, userIdx);
+    }
 }
 
 
