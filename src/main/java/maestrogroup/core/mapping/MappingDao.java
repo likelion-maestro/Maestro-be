@@ -9,6 +9,7 @@ import maestrogroup.core.user.model.GetUser;
 import org.apache.catalina.LifecycleState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.objenesis.ObjenesisHelper;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
@@ -114,6 +115,16 @@ public class MappingDao {
         }
 
         return getTeamResList;
+    }
+
+    // public void deleteTeam(int teamIdx){
+    //        String deleteTeamQuery = "delete from Team where teamIdx = ?";
+    //        this.jdbcTemplate.update(deleteTeamQuery, teamIdx);
+    //    }
+    public void deleteTeam(int teamIdx, int userIdx){
+        String deleteTeamQuery = "delete from Mapping where teamIdx = ? AND userIdx = ?";
+        Object[] deleteTeamQueryParams = new Object[]{teamIdx, userIdx};
+        this.jdbcTemplate.update(deleteTeamQuery, deleteTeamQueryParams);
     }
 }
 
