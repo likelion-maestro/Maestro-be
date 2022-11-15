@@ -56,11 +56,11 @@ public class MappingController {
     }
 
 
-    // 해당 그룹을 특정 유저가 탈퇴할떄 Mapping 객체가 삭제되도록 구현
+    // 해당 그룹을 특정 유저가 탈퇴할떄 teamIdx 값을 가지는 Mapping 객체가 삭제되도록 구현
     // + 그리고 해당 그룹 팀의 총 인원수가 0명일떄, 그룹 객체(Team 객체)도 Mapping객체와 함께 삭제되도록 구현
-    @DeleteMapping("deleteTeam/{teamIdx}")
-    public void deleteTeam(@PathVariable("teamIdx") int teamIdx){
-
+    @DeleteMapping("deleteTeam/{teamIdx}/{userIdx}")
+    public void deleteTeam(@PathVariable("teamIdx") int teamIdx, @PathVariable("userIdx") int userIdx){
+        mappingService.deleteTeam(teamIdx, userIdx);
     }
 
     // 특정 팀 그룹에 속하는 모든 팀멤버 출력 : ManyToMany
@@ -72,7 +72,7 @@ public class MappingController {
     // 특정 유저가 속해있는 모든 팀 그룹 출력 : ManyToMany
     @GetMapping("/getTeamList/{userIdx}")
     public List<GetTeamRes> getTeamList(@PathVariable("userIdx") int userIdx){
-        return mappingProvider.getTeamList(userIdx);
+            return mappingProvider.getTeamList(userIdx);
     }
 }
 
