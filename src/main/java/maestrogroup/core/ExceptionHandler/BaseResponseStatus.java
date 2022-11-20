@@ -5,7 +5,8 @@ import org.springframework.http.HttpStatus;
 
 // enum 클래스
 @Getter
-public enum BaseResponseStatus {
+public enum
+BaseResponseStatus {
     // 요청 성공관련
     SUCCESS("요청에 성공했습니다.", HttpStatus.OK),
 
