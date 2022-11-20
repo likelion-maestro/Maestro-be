@@ -24,6 +24,8 @@ public class BaseResponse<T>{  // BaseResponse 객체를 사용할 때 성공, �
     }
 
     public BaseResponse(T result){
+        this.httpStatus = BaseResponseStatus.SUCCESS.getHttpStatus();
+        this.message = BaseResponseStatus.SUCCESS.getMessage();
         this.result = result;
     }
 

@@ -86,12 +86,12 @@ public class MappingDao {
         return getUserList;
     }
 
-    public List<GetTeamRes> getTeamList(int teamIdx){
-        String getUserAllTeamIdxQuery = "select teamIdx from Mapping where teamidx = ?";
+    public List<GetTeamRes> getTeamList(int userIdx){
+        String getUserAllTeamIdxQuery = "select teamIdx from Mapping where userIdx = ?";
 
         java.util.List<GetTeamIdx> GetTeamIdxList = this.jdbcTemplate.query(getUserAllTeamIdxQuery,
                 (rs, rowNum) -> new GetTeamIdx(
-                        rs.getInt("teamIdx")), teamIdx);
+                        rs.getInt("teamIdx")), userIdx);
 
         List<Integer> teamIdxList = new ArrayList<Integer>();
         for(GetTeamIdx getTeamIdx : GetTeamIdxList){

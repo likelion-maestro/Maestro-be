@@ -1,5 +1,8 @@
 package maestrogroup.core.mapping;
 
+import maestrogroup.core.ExceptionHandler.BaseException;
+import maestrogroup.core.ExceptionHandler.BaseResponse;
+import maestrogroup.core.Security.JwtService;
 import maestrogroup.core.team.model.GetTeamRes;
 import maestrogroup.core.team.model.PostTeamReq;
 import maestrogroup.core.user.model.GetUser;
@@ -19,10 +22,14 @@ public class MappingController {
     @Autowired
     private final MappingDao mappingDao;
 
-    public MappingController(MappingService mappingService, MappingProvider mappingProvider, MappingDao mappingDao){
+    @Autowired
+    private final JwtService jwtService;
+
+    public MappingController(MappingService mappingService, MappingProvider mappingProvider, MappingDao mappingDao, JwtService jwtService){
         this.mappingService = mappingService;
         this.mappingProvider = mappingProvider;
         this.mappingDao = mappingDao;
+        this.jwtService = jwtService;
     }
 
 
@@ -70,9 +77,15 @@ public class MappingController {
     }
 
     // 특정 유저가 속해있는 모든 팀 그룹 출력 : ManyToMany
-    @GetMapping("/getTeamList/{userIdx}")
-    public List<GetTeamRes> getTeamList(@PathVariable("userIdx") int userIdx){
-            return mappingProvider.getTeamList(userIdx);
+    @GetMapping("/getTeamList")
+    public BaseResponse<List<GetTeamRes>> getTeamList(){
+        try {
+            int userIdxByJwt = jwtService.getUserIdx();
+            List<GetTeamRes> getTeamResList = mappingProvider.getTeamList(userIdxByJwt);
+            return new BaseResponse<List<GetTeamRes>>(getTeamResList);
+        } catch(BaseException baseException){
+            return new BaseResponse(baseException.getStatus());
+        }
     }
 }
 
