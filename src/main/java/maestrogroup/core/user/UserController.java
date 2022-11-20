@@ -63,7 +63,6 @@ public class UserController {
     @PatchMapping("/modifyUser")
     public BaseResponse modifyUserInfo(@RequestBody ModifyUserInfoReq modifyUserInfoReq){
         try {
-            System.out.println("==========================================================");
             int userIdxByJwt = jwtService.getUserIdx(); // 클라이언트로 부터 넘겨받은 JWT 토큰으로부터 userIdx 값 추출
             System.out.println("userIdxByJwt:" + userIdxByJwt);
             userService.modifyUserInfo(userIdxByJwt, modifyUserInfoReq);
