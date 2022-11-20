@@ -49,7 +49,6 @@ public class UserDao {
 
     public GetUser getUser(int userIdx) {
         String GetUserQuery = "select * from User where userIdx = ?";
-        System.out.println("=================================================================");
         return this.jdbcTemplate.queryForObject(GetUserQuery,
                 (rs, rowNum) -> new GetUser(
                         rs.getInt("userIdx"),
@@ -60,7 +59,8 @@ public class UserDao {
                         rs.getString("password"),
                         rs.getString("status"),
                         rs.getTimestamp("updatedAt"),
-                        rs.getString("userProfileImgUrl")),
+                        rs.getString("userProfileImgU" +
+                                "rl")),
                 userIdx);
     }
 
@@ -70,7 +70,7 @@ public class UserDao {
         return this.jdbcTemplate.queryForObject(Email_Duplicate_Check_Query, int.class, checkEmailparams); // 존재하면 1을, 존재하지 않으면 0을 리턴(int형 타입으로써 리턴)
     }
 
-    public LoginUserSomeField getPwd(LoginUserReq loginUserReq){
+    public LoginUserSomeField getSomeInfo_WhenLogin(LoginUserReq loginUserReq){
         String getPwdQuery = "select userIdx, password, email, nickname from User where email = ?";
         String getPwdParams = loginUserReq.getEmail();
         return this.jdbcTemplate.queryForObject(getPwdQuery,

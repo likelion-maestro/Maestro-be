@@ -35,24 +35,25 @@ public class UserController {
     public BaseResponse createUser(@RequestBody SignUpUserReq signUpUserReq) {
         try {
             userService.createUser(signUpUserReq);
-            return new BaseResponse(); // 생성자에 파라미터 값을 아무것도 부여하지 않으면 성공에 대한 BaseResponse 가 생성 및 호출됨
+            return new BaseResponse<>(); // 생성자에 파라미터 값을 아무것도 부여하지 않으면 성공에 대한 BaseResponse 가 생성 및 호출됨
         } catch (BaseException exception) {  // userService.createUser() 를 호출했더니 도중에 예외가 발생한 경우에 대한 예외처리
-            return new BaseResponse(exception.getStatus());
+            return new BaseResponse<>(exception.getStatus());
         }
     }
 
+    /*
     // 로그인
     @ResponseBody
     @PostMapping("/login")
-    public BaseResponse loginUser(@RequestBody LoginUserReq loginUserReq){
+    public  BaseResponse<LoginUserRes>loginUser(@RequestBody LoginUserReq loginUserReq){
         try {
-            userProvider.loginUser(loginUserReq);
-            //LoginUserRes loginUserRes = userProvider.loginUser(loginUserReq);
-            return new BaseResponse();
+            LoginUserRes loginUserRes = userProvider.loginUser(loginUserReq);
+            return new BaseResponse<>(loginUserRes);
         } catch(BaseException baseException){
-            return new BaseResponse(baseException.getStatus());
+            return new BaseResponse<>(baseException.getStatus());
         }
     }
+    */
 
     // 회원정보 수정
     @ResponseBody
