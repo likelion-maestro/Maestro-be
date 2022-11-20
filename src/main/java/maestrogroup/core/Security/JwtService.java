@@ -41,7 +41,7 @@ public class JwtService {
         Date now = new Date();
         return Jwts.builder()
                 .setHeaderParam("type","jwt") // Header 의 type 에다 해당 토큰의 타입을 jwt로 명시
-                //.claim("userIdx",userIdx) // claim 에 userIdx 할당
+                .claim("userIdx",userIdx) // claim 에 userIdx 할당
                 .setIssuedAt(now) // 언제 발급되었는지를 현재 시간으로 넣어줌
                 .setExpiration(new Date(System.currentTimeMillis()+1*(1000*60*60*24*365))) // 토큰 만료기간은 1년으로 설정
                 .signWith(key) // 서명(Signature) 를 할떄는 HS256 알고리즘 사용하며,  Secret.JWT_SECRET_KEY 라는 비밀키(Secret key) 를 가지고 Signature 를 생성한다.
@@ -72,12 +72,16 @@ public class JwtService {
         // 2. JWT parsing
         Jws<Claims> claims;
         try{
-            claims = Jwts.parser()
+            claims = Jwts.parserBuilder()
                     .setSigningKey(Secret.JWT_SECRET_KEY)
+                    .build()
                     .parseClaimsJws(accessToken);
         } catch (Exception ignored) {
             throw new BaseException(BaseResponseStatus.INVALID_JWT);
         }
+        System.out.println("gk=============================================");
+        System.out.println(claims);
+        System.out.println(claims.getBody());
 
         // 3. userIdx 추출
         return claims.getBody().get("userIdx",Integer.class);  // jwt 에서 userIdx를 추출합니다.

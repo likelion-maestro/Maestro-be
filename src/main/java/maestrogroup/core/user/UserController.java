@@ -4,6 +4,7 @@ package maestrogroup.core.user;
 import maestrogroup.core.ExceptionHandler.BaseException;
 import maestrogroup.core.ExceptionHandler.BaseResponse;
 import maestrogroup.core.ExceptionHandler.BaseResponseStatus;
+import maestrogroup.core.Security.JwtService;
 import maestrogroup.core.user.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,10 +24,14 @@ public class UserController {
     @Autowired
     private final UserDao userDao;
 
-    public UserController(UserService userService, UserProvider userProvider, UserDao userDao) {
+    @Autowired
+    private final JwtService jwtService;
+
+    public UserController(UserService userService, UserProvider userProvider, UserDao userDao, JwtService jwtService) {
         this.userProvider = userProvider;
         this.userService = userService;
         this.userDao = userDao;
+        this.jwtService = jwtService;
     }
 
     // 회원가입
@@ -55,10 +60,13 @@ public class UserController {
 
     // 회원정보 수정
     @ResponseBody
-    @PatchMapping("/modifyUser/{userIdx}")
-    public BaseResponse modifyUserInfo(@PathVariable("userIdx") int userIdx, @RequestBody ModifyUserInfoReq modifyUserInfoReq){
+    @PatchMapping("/modifyUser")
+    public BaseResponse modifyUserInfo(@RequestBody ModifyUserInfoReq modifyUserInfoReq){
         try {
-            userService.modifyUserInfo(userIdx, modifyUserInfoReq);
+            System.out.println("==========================================================");
+            int userIdxByJwt = jwtService.getUserIdx(); // 클라이언트로 부터 넘겨받은 JWT 토큰으로부터 userIdx 값 추출
+            System.out.println("userIdxByJwt:" + userIdxByJwt);
+            userService.modifyUserInfo(userIdxByJwt, modifyUserInfoReq);
             return new BaseResponse();
         } catch(BaseException baseException){
             return new BaseResponse(baseException.getStatus());
