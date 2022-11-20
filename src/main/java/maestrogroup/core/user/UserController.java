@@ -64,13 +64,15 @@ public class UserController {
     public BaseResponse modifyUserInfo(@RequestBody ModifyUserInfoReq modifyUserInfoReq){
         try {
             int userIdxByJwt = jwtService.getUserIdx(); // 클라이언트로 부터 넘겨받은 JWT 토큰으로부터 userIdx 값 추출
-            System.out.println("userIdxByJwt:" + userIdxByJwt);
+            //System.out.println("userIdxByJwt:" + userIdxByJwt);
             userService.modifyUserInfo(userIdxByJwt, modifyUserInfoReq);
             return new BaseResponse();
         } catch(BaseException baseException){
             return new BaseResponse(baseException.getStatus());
         }
     }
+
+    //
 
     // 계정 삭제 : status 필드값을 변경하자. DELETE 메소드 요청을 하지말고!!!
     @ResponseBody
