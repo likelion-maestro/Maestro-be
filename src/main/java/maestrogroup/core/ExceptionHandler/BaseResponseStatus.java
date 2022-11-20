@@ -21,6 +21,8 @@ BaseResponseStatus {
     INVALID_PASSWORD_FORM("비밀번호는 숫자,문자를 모두 포함하며, 8자~20자 사이로 입력해주세요", HttpStatus.BAD_REQUEST),
     // 로그인 관련
     LOGIN_FAILURE("존재하지 않는 아이디 또는 비밀번호입니다.", HttpStatus.FORBIDDEN),
+    EMPTY_JWT("JWT를 입력해주세요", HttpStatus.BAD_REQUEST),
+    INVALID_JWT("유효하지 않은 JWT 입니다.", HttpStatus.BAD_REQUEST),
 
     // 회원정보 수정 관련
     MODIFY_FIELD_NOT_FULL("아직 기입하지 않은 정보가 존재합니다!", HttpStatus.BAD_REQUEST),
