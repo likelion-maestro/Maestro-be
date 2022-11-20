@@ -41,7 +41,6 @@ public class UserController {
         }
     }
 
-    /*
     // 로그인
     @ResponseBody
     @PostMapping("/login")
@@ -53,7 +52,6 @@ public class UserController {
             return new BaseResponse<>(baseException.getStatus());
         }
     }
-    */
 
     // 회원정보 수정
     @ResponseBody
