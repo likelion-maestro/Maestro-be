@@ -41,25 +41,24 @@ public class UserProvider {
         String password;           // 저장했었는데, 아무튼 이 암호화된 비밀번호를 DB로부터 가져온다.
         try {
             // 복호화 : DB 에서 가져온 비밀번호를 암호화를 해제한다.(=> decrpyt 한다. 즉 인코딩(암호화)된 것을 다시 디코딩해준다.)
-            password = new AES128(Secret.USER_INFO_PASSWORD_KEY).decrypt(loginUserSomeField.getUserPassword()); // 복호화
+            password = new AES128(Secret.USER_INFO_PASSWORD_KEY).decrypt(loginUserSomeField.getPassword()); // 복호화
         } catch (Exception baseException){
-            System.out.println("============================================================================123123123==============");
             throw new BaseException(BaseResponseStatus.LOGIN_FAILURE);
         }
 
         // DB에 저장된 회원의 비밀번호(password)와, 현재 로그인 창에서 입력한 비밀번호(loginUserSomeField.getPassword())가
         // 일치하면 해당 사용자 계정에 대한 userIdx 를 가져온다.
         // 또한 jwt 를 발급해준다
-        if(loginUserSomeField.getUserPassword().equals(password)){
+        if(loginUserReq.getPassword().equals(password)){
             int userIdx = userDao.getSomeInfo_WhenLogin(loginUserReq).getUserIdx();
             String email = userDao.getSomeInfo_WhenLogin(loginUserReq).getEmail();
             String nickname = userDao.getSomeInfo_WhenLogin(loginUserReq).getNickname();
             String jwt = jwtService.createJwt(userIdx); // 토큰을 생성하고
+            System.out.println(jwt);
             return new LoginUserRes(userIdx, email, nickname, jwt);  // JWT 토큰을 클라이언트에게 Response로 발급해준다.
         }
         // 비밀번호가 일치하지 않는다면 로그인에 실패한것
         else{
-            System.out.println("123==========================================================================================");
             throw new BaseException(BaseResponseStatus.LOGIN_FAILURE);
         }
     }

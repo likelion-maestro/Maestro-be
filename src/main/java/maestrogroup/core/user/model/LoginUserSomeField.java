@@ -12,5 +12,5 @@ public class LoginUserSomeField {
     private int userIdx;
     private String email;
     private String nickname;
-    private String userPassword;
+    private String password;
 }

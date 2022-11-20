@@ -21,10 +21,22 @@ public class UserDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    public void createUser(SignUpUserReq signUpUserReq){
+    public SignUpUserRes createUser(SignUpUserReq signUpUserReq){
         String createUserQuery = "insert into User (email, password, nickname) VALUES (?, ?, ?)";
         Object[] createUserParams = new Object[]{signUpUserReq.getEmail(), signUpUserReq.getPassword(), signUpUserReq.getNickname()};
         this.jdbcTemplate.update(createUserQuery, createUserParams);
+
+        String userIdxQuery = "select last_insert_id()";
+        int userIdx = this.jdbcTemplate.queryForObject(userIdxQuery, int.class);
+
+        String GetUserQuery = "select * from User where userIdx = ?";
+        return this.jdbcTemplate.queryForObject(GetUserQuery,
+                (rs, rowNum) -> new SignUpUserRes(
+                        rs.getInt("userIdx"),
+                        rs.getString("email"),
+                        rs.getString("password"),
+                        rs.getString("nickname")),
+                userIdx);
     }
     /*
      public int Email_Duplicate_Check(String email){
@@ -76,9 +88,9 @@ public class UserDao {
         return this.jdbcTemplate.queryForObject(getPwdQuery,
                 (rs, rowNum) -> new LoginUserSomeField(
                         rs.getInt("userIdx"),
-                        rs.getString("password"),
                         rs.getString("email"),
-                        rs.getString("nickname")
+                        rs.getString("nickname"),
+                        rs.getString("password")
                 ),
                 getPwdParams
         );
