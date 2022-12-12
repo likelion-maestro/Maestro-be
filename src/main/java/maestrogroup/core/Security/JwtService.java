@@ -35,7 +35,7 @@ public class JwtService {
     */
 
     // Access Token 생성
-    public String createJwt(int userIdx){
+    public String createAccessToken(int userIdx){
         byte[] keyBytes = Decoders.BASE64.decode(Secret.ACCESS_TOKEN_SECRET_KEY);
         Key key = Keys.hmacShaKeyFor(keyBytes);
         Date now = new Date();
@@ -88,7 +88,7 @@ public class JwtService {
         Jws<Claims> claims;
         try{
             claims = Jwts.parserBuilder()
-                    .setSigningKey(Secret.ACCESS_TOKEN_SECRET_KEY) // ACCESS Token 으로 변경
+                    .setSigningKey(Secret.ACCESS_TOKEN_SECRET_KEY) // ACCESS Token
                     .build()
                     .parseClaimsJws(accessToken);
         } catch (Exception ignored) {
@@ -101,4 +101,32 @@ public class JwtService {
         return claims.getBody().get("userIdx",Integer.class);  // jwt 에서 userIdx를 추출합니다.
     }
 
+    // 넘어온 RefreshToken 에 대해 유효성 검증을 하는 메소드
+    // refresh 토큰의 만료시간이 지나지 않은경우, 새로운 access 토큰을 생성한다.
+    // refresh 토큰이 만료되었을 경우, 로그인 시도가 필요하다는 Response 메시지를 보낸다.
+    public String validateRefreshToken(RefreshToken refreshTokenObj) throws Exception{
+        // refresh 객체에서 refreshToken 객체 추출
+        String refreshToken = refreshTokenObj.getRefreshToken();
+
+        // refresh token 만료기간 여부 검증
+        Jws<Claims> claims;
+        try{
+           claims = Jwts.parserBuilder()
+                   .setSigningKey(Secret.REFRESH_TOKEN_SECRET_KEY)
+                   .build()
+                   .parseClaimsJws(refreshToken);
+
+           // refresh token 의 만료기간이 지나지 않았을 경우, 새로운 access token 을 생성한다.
+            if(!claims.getBody().getExpiration().before(new Date())){
+                int userIdx = claims.getBody().get("userIdx", Integer.class);
+                return createAccessToken(userIdx);
+            }
+
+        } catch(Exception ignored){
+            // Refresh Token 이 만료된 경우
+            throw new BaseException(BaseResponseStatus.REFRESH_TOKEN_INVALID);
+        }
+
+        return null;
+    }
 }
