@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import maestrogroup.core.ExceptionHandler.BaseException;
 import maestrogroup.core.ExceptionHandler.BaseResponseStatus;
 import maestrogroup.core.Security.JWTtoken.RefreshToken;
+import maestrogroup.core.user.model.LoginUserRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -29,6 +30,15 @@ public class JwtService {
 
     public JwtService(JwtRepository jwtRepository){
         this.jwtRepository = jwtRepository;
+    }
+
+    public String[] createTokenWhenLogin(int userIdx){
+        String RefreshToken = createRefreshToken(userIdx);
+        String AccessToken = createAccessToken(userIdx);
+        // 발급받은 RefreshToken 은 DB 에 저장
+        jwtRepository.saveRefreshToken(RefreshToken);
+        String[] tokenList = {RefreshToken, AccessToken};
+        return tokenList;
     }
 
     // Access Token 생성
@@ -64,9 +74,9 @@ public class JwtService {
     Header에서 X-ACCESS-TOKEN 으로 JWT 추출
     @return String
      */
-    public String getJwt(){
+    public String getAccessToken(){
         HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
-        return request.getHeader("X-ACCESS-TOKEN");
+        return request.getHeader("ACCESS-TOKEN");
     }
 
     /*
@@ -76,7 +86,7 @@ public class JwtService {
      */
     public int getUserIdx() throws BaseException {
         //1. JWT 추출
-        String accessToken = getJwt();
+        String accessToken = getAccessToken();
         if(accessToken == null || accessToken.length() == 0){
             throw new BaseException(BaseResponseStatus.EMPTY_JWT);
         }
@@ -85,10 +95,15 @@ public class JwtService {
         Jws<Claims> claims;
         try{
             claims = Jwts.parserBuilder()
-                    .setSigningKey(Secret.ACCESS_TOKEN_SECRET_KEY) // ACCESS Token
+                    .setSigningKey(Secret.ACCESS_TOKEN_SECRET_KEY) // ACCESS Token 임에 착각하지 말자!
                     .build()
                     .parseClaimsJws(accessToken);
-        } catch (Exception ignored) {
+
+            if(claims.getBody().getExpiration().before(new Date())){ // AccessToken 이 만료된 경우
+                int userIdx = claims.getBody().get("userIdx", Integer.class);
+                createAccessToken(userIdx); // AccessToken 을 새롭게 발급
+            }
+        } catch (Exception ignored) { // Access token 의 만료기간이 지난경우, 예외을 발생시켜서 새롭게 Access Token 을 발급받는다.
             throw new BaseException(BaseResponseStatus.INVALID_JWT);
         }
         System.out.println(claims);
@@ -98,10 +113,10 @@ public class JwtService {
         return claims.getBody().get("userIdx",Integer.class);  // jwt 에서 userIdx를 추출합니다.
     }
 
-    // 넘어온 RefreshToken 에 대해 유효성 검증을 하는 메소드
-    // refresh 토큰의 만료시간이 지나지 않은경우, 새로운 access 토큰을 생성한다.
-    // refresh 토큰이 만료되었을 경우, 로그인 시도가 필요하다는 Response 메시지를 보낸다.
-    public String validateRefreshToken(RefreshToken refreshTokenObj) throws Exception{
+    // 넘어온 RefreshToken 에 대해 유효성 검증을 한 후에, 새로운 AccessToken 을 재발급해주는 메소드
+    // 1. refresh 토큰의 만료시간이 지나지 않은경우, 새로운 access 토큰을 생성한다.
+    // 2. refresh 토큰이 만료되었을 경우, 로그인 시도가 필요하다는 Response 메시지를 보낸다.
+    public String ReCreateAccessToken(RefreshToken refreshTokenObj) throws Exception{
         // refresh 객체에서 refreshToken 객체 추출
         String refreshToken = refreshTokenObj.getRefreshToken();
 
@@ -116,7 +131,7 @@ public class JwtService {
            // refresh token 의 만료기간이 지나지 않았을 경우, 새로운 access token 을 생성한다.
             if(!claims.getBody().getExpiration().before(new Date())){
                 int userIdx = claims.getBody().get("userIdx", Integer.class);
-                return createAccessToken(userIdx);
+                return createAccessToken(userIdx); // 새롭게 발급된 AccessToken 을 리턴
             }
 
         } catch(Exception ignored){
@@ -126,4 +141,7 @@ public class JwtService {
 
         return null;
     }
+    
+    // accessToken 을 기반
+
 }
