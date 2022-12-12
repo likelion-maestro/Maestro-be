@@ -6,9 +6,12 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import lombok.Value;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import maestrogroup.core.ExceptionHandler.BaseException;
 import maestrogroup.core.ExceptionHandler.BaseResponseStatus;
+import maestrogroup.core.Security.JWTtoken.RefreshToken;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -17,22 +20,16 @@ import javax.servlet.http.HttpServletRequest;
 import java.security.Key;
 import java.util.Date;
 
+
 @Service
+@Slf4j
+@RequiredArgsConstructor
 public class JwtService {
+    @Autowired JwtRepository jwtRepository;
 
-    /*
-    JWT 생성
-    @param userIdx
-    @return String
-     */
-
-    /*
-    private final Key key;
-    public JwtService(@Value("${jwt.secret}") String secretKey) {
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
-        this.key = Keys.hmacShaKeyFor(keyBytes);
+    public JwtService(JwtRepository jwtRepository){
+        this.jwtRepository = jwtRepository;
     }
-    */
 
     // Access Token 생성
     public String createAccessToken(int userIdx){

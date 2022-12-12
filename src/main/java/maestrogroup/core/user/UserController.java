@@ -4,6 +4,8 @@ package maestrogroup.core.user;
 import maestrogroup.core.ExceptionHandler.BaseException;
 import maestrogroup.core.ExceptionHandler.BaseResponse;
 import maestrogroup.core.ExceptionHandler.BaseResponseStatus;
+import maestrogroup.core.Security.JwtProvider;
+import maestrogroup.core.Security.JwtRepository;
 import maestrogroup.core.Security.JwtService;
 import maestrogroup.core.user.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,11 +29,19 @@ public class UserController {
     @Autowired
     private final JwtService jwtService;
 
-    public UserController(UserService userService, UserProvider userProvider, UserDao userDao, JwtService jwtService) {
+    @Autowired
+    private final JwtProvider jwtProvider;
+
+    @Autowired
+    private final JwtRepository jwtRepository;
+
+    public UserController(UserService userService, UserProvider userProvider, UserDao userDao, JwtService jwtService, JwtProvider jwtProvider, JwtRepository jwtRepository) {
         this.userProvider = userProvider;
         this.userService = userService;
         this.userDao = userDao;
         this.jwtService = jwtService;
+        this.jwtProvider = jwtProvider;
+        this.jwtRepository = jwtRepository;
     }
 
     // 회원가입
