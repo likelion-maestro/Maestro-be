@@ -4,6 +4,7 @@ import maestrogroup.core.ExceptionHandler.BaseException;
 import maestrogroup.core.ExceptionHandler.BaseResponseStatus;
 import maestrogroup.core.ExceptionHandler.Validation.CheckValidForm;
 import maestrogroup.core.Security.AES128;
+import maestrogroup.core.Security.JwtRepository;
 import maestrogroup.core.Security.JwtService;
 import maestrogroup.core.Security.Secret;
 import maestrogroup.core.user.model.GetUser;
@@ -24,9 +25,13 @@ public class UserService {
     @Autowired
     private final JwtService jwtService;
 
-    public UserService(UserDao userDao, JwtService jwtService) {
+    @Autowired
+    private final JwtRepository jwtRepository;
+
+    public UserService(UserDao userDao, JwtService jwtService, JwtRepository jwtRepository) {
         this.userDao = userDao;
         this.jwtService = jwtService;
+        this.jwtRepository = jwtRepository;
     }
 
     // 검증 과정 도중에 예외가 발생하면 Controller 에게 BaseException 예외 객체를 던진다.

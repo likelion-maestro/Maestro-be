@@ -1,4 +1,4 @@
-package maestrogroup.core.Security;
+package maestrogroup.core.Security.JWTtoken;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
