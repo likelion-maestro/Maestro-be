@@ -9,5 +9,6 @@ public class LoginUserRes {
     private int userIdx;
     private String email;
     private String nickname;
-    private String jwt; // 로그인에 성공하면 jwt 토큰값도 리턴
+    private String accessToken; // 로그인에 성공하면 jwt 토큰값도 리턴
+    private String refreshToken;
 }

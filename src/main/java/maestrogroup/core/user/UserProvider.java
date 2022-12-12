@@ -53,9 +53,9 @@ public class UserProvider {
             int userIdx = userDao.getSomeInfo_WhenLogin(loginUserReq).getUserIdx();
             String email = userDao.getSomeInfo_WhenLogin(loginUserReq).getEmail();
             String nickname = userDao.getSomeInfo_WhenLogin(loginUserReq).getNickname();
-            String jwt = jwtService.createJwt(userIdx); // 토큰을 생성하고
-            System.out.println(jwt);
-            return new LoginUserRes(userIdx, email, nickname, jwt);  // JWT 토큰을 클라이언트에게 Response로 발급해준다.
+            String AccessToken = jwtService.createJwt(userIdx); // access token 생성
+            String RefreshToken = jwtService.createRefreshToken(userIdx);  // refresh token 생성
+            return new LoginUserRes(userIdx, email, nickname, AccessToken, RefreshToken);  // JWT 토큰을 클라이언트에게 Response로 발급해준다.
         }
         // 비밀번호가 일치하지 않는다면 로그인에 실패한것
         else{
