@@ -48,6 +48,19 @@ public class JwtService {
                 .compact();                                   //  Secret.JWT_SECRET_KEY 는 비밀키로써 .gitignore 로 절대 노출시키지 말것! 이 비밀키를 통해 내가 밝급한건인지 아닌지를 판별할 수 있으므로
     }
 
+    // refresh token 생성
+    public String createRefreshToken(){
+        byte[] keyBytes = Decoders.BASE64.decode(Secret.JWT_SECRET_KEY);
+        Key key = Keys.hmacShaKeyFor(keyBytes);
+        Date now = new Date();
+        return Jwts.builder()
+                .setIssuedAt(now)
+                .setExpiration(new Date(now.getTime() + 1*(1000*60*60*24*365)))
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact();
+    }
+    // .signWith(Secret.JWT_SECRET_KEY, SignatureAlgorithm.HS256)
+
     /*
     Header에서 X-ACCESS-TOKEN 으로 JWT 추출
     @return String
