@@ -102,6 +102,7 @@ public class JwtService {
                     .build()
                     .parseClaimsJws(accessToken);
         } catch (Exception ignored) {
+            System.out.println(ignored);
             throw new BaseException(BaseResponseStatus.INVALID_JWT);
         }
 
