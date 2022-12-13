@@ -26,17 +26,13 @@ public class JwtRepository {
         this.jdbcTemplate.update(saveTokenQuery, newRefreshToken);
     }
 
-    public void deleteRefreshToken(String refreshToken){
-        String deleteTokenQuery = "update FROM RefreshToken where tokenContents = ?";
-        this.jdbcTemplate.update(deleteTokenQuery, refreshToken);
-    }
-    /*
-    public void deleteUser(int userIdx, Timestamp timestamp){
-        //System.out.println(simpleDateFormat.format(timestamp));
-        String deleteUserQuery = "update User set status = 'D', updatedAt = ? where userIdx = ?";
-        Object[] deleteUserQueryParams = new Object[]{timestamp, userIdx};
-        this.jdbcTemplate.update(deleteUserQuery, deleteUserQueryParams);
+    public void changeNewRefreshToken(String updateRefreshToken){
+        String updateTokenQuery = "update RefreshToken (refreshToken) VALUES (?)";
+        this.jdbcTemplate.update(updateTokenQuery, updateRefreshToken);
     }
 
-     */
+    public void deleteRefreshToken(String refreshToken){
+        String deleteTokenQuery = "DELETE FROM RefreshToken where tokenContents = ?";
+        this.jdbcTemplate.update(deleteTokenQuery, refreshToken);
+    }
 }
