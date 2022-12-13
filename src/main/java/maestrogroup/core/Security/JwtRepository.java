@@ -23,13 +23,14 @@ public class JwtRepository {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    public void saveRefreshToken(String newRefreshToken){
-        String saveTokenQuery = "insert into RefreshToken (refreshToken) VALUES (?)";
-        this.jdbcTemplate.update(saveTokenQuery, newRefreshToken);
+    public void saveRefreshToken(String newRefreshToken, int userIdx){
+        String saveTokenQuery = "insert into RefreshToken (tokenContents, userIdx) VALUES (?, ?)";
+        Object[] saveTokenQueryParams  = new Object[]{newRefreshToken, userIdx};
+        this.jdbcTemplate.update(saveTokenQuery, saveTokenQueryParams);
     }
 
     public RefreshToken getRefreshToken(String dbRefreshToken){
-        String getRefreshTokenQuery = "select * from RefreshToken where refreshToken = ?";
+        String getRefreshTokenQuery = "select * from RefreshToken where tokenContents = ?";
         return this.jdbcTemplate.queryForObject(getRefreshTokenQuery,
                 (rs, rowNum) -> new RefreshToken(
                         rs.getString("refreshToken")),
@@ -37,7 +38,7 @@ public class JwtRepository {
     }
 
     public void changeNewRefreshToken(String updateRefreshToken, String originRefreshToken){
-        String updateTokenQuery = "update RefreshToken set refreshToken = ? where refreshToken = ?";
+        String updateTokenQuery = "update RefreshToken set tokenContents = ? where tokenContents = ?";
         Object[] refreshTokenList = new Object[]{updateRefreshToken, originRefreshToken};
         this.jdbcTemplate.update(updateTokenQuery, refreshTokenList);
     }

@@ -56,6 +56,8 @@ public class UserProvider {
             //String AccessToken = jwtService.createAccessToken(userIdx); // access token 생성
             // String RefreshToken = jwtService.createRefreshToken(userIdx);  // refresh token 생성
             String[] tokenList = jwtService.createTokenWhenLogin(userIdx); // access, refresh token 생성
+            System.out.println(tokenList[0]);
+            System.out.println(tokenList[1]);
             return new LoginUserRes(userIdx, email, nickname, tokenList[0], tokenList[1]);  // JWT 토큰을 클라이언트에게 Response로 발급해준다.
         }
         // 비밀번호가 일치하지 않는다면 로그인에 실패한것
