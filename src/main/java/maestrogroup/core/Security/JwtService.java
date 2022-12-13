@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import maestrogroup.core.ExceptionHandler.BaseException;
 import maestrogroup.core.ExceptionHandler.BaseResponseStatus;
+import maestrogroup.core.Security.JWTtoken.AccessToken;
 import maestrogroup.core.Security.JWTtoken.RefreshToken;
 import maestrogroup.core.user.model.LoginUserRes;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,7 @@ public class JwtService {
         String RefreshToken = createRefreshToken(userIdx);
         String AccessToken = createAccessToken(userIdx);
         // 발급받은 RefreshToken 은 DB 에 저장
-        jwtRepository.saveRefreshToken(RefreshToken);
+        jwtRepository.saveRefreshToken(RefreshToken, userIdx);
         String[] tokenList = {RefreshToken, AccessToken};
         return tokenList;
     }
@@ -85,6 +86,7 @@ public class JwtService {
     }
 
      // Access Token 으로부터 userIdx 추출
+     // + API 호출시 HTTP Header 에 넘겨주는 Access Token 에 대한 유효성 검증 과정도 포함되어 있음
     public int getUserIdx() throws BaseException {
         //1. JWT 추출
         String accessToken = getAccessToken();
@@ -94,34 +96,36 @@ public class JwtService {
 
         // 2. JWT parsing
         Jws<Claims> claims;
-        claims = Jwts.parserBuilder()
-                .setSigningKey(Secret.ACCESS_TOKEN_SECRET_KEY) // ACCESS Token 임에 착각하지 말자!
-                .build()
-                .parseClaimsJws(accessToken);
-
-        try{
-            if(claims.getBody().getExpiration().before(new Date())){ // AccessToken 이 만료된 경우
-                throw new BaseException(BaseResponseStatus.ACCESS_TOKEN_EXPIRED);  // access token 이 만료되었다는 Response 를 보낸다.
-                // createAccessToken(userIdx); // AccessToken 을 새롭게 발급
-            }
+        try {
+            claims = Jwts.parserBuilder()
+                    .setSigningKey(Secret.ACCESS_TOKEN_SECRET_KEY) // ACCESS Token 임에 착각하지 말자!
+                    .build()
+                    .parseClaimsJws(accessToken);
         } catch (Exception ignored) {
             throw new BaseException(BaseResponseStatus.INVALID_JWT);
+        }
+
+        // Access Token 유효성 검증2. accessToken의 만료 여부 검증
+        if (claims.getBody().getExpiration().before(new Date())) { // AccessToken 이 만료된 경우
+            throw new BaseException(BaseResponseStatus.ACCESS_TOKEN_EXPIRED);  // access token 이 만료되었다는 Response 를 보낸다.
         }
 
         System.out.println(claims);
         System.out.println(claims.getBody());
 
-            // 3. userIdx 추출
-            return claims.getBody().get("userIdx", Integer.class);  // jwt 에서 userIdx를 추출합니다.
+        // userIdx 추출
+        return claims.getBody().get("userIdx", Integer.class);  // jwt 에서 userIdx를 추출합니다.
     }
+
 
     // 넘어온 RefreshToken 에 대해 유효성 검증을 한 후에, 새로운 AccessToken 을 재발급해주는 메소드
     // 1. refresh 토큰의 만료시간이 지나지 않은경우, 새로운 access 토큰을 생성한다.
     // 2. refresh 토큰이 만료되었을 경우, 로그인 시도가 필요하다는 Response 메시지를 보낸다.
     //public String ReCreateAccessToken(RefreshToken refreshTokenObj) throws Exception{
-    public String ReCreateAccessToken(RefreshToken refreshTokenObj) throws Exception {
+    public String ReCreateAccessToken() throws Exception {
         // RefreshToken 객체에서 refresh 토큰 추출
-        String refreshToken = refreshTokenObj.getRefreshToken();
+        // String refreshToken = refreshTokenObj.getRefreshToken();
+        String refreshToken = getRefreshToken();
         String dbRefreshToken;
 
         // refresh token 유효성 검증1 : DB조회
