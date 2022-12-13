@@ -3,6 +3,8 @@ package maestrogroup.core.Security;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import maestrogroup.core.Security.JWTtoken.RefreshToken;
+import maestrogroup.core.user.model.ModifyUserInfoReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -26,9 +28,24 @@ public class JwtRepository {
         this.jdbcTemplate.update(saveTokenQuery, newRefreshToken);
     }
 
-    public void changeNewRefreshToken(String updateRefreshToken){
-        String updateTokenQuery = "update RefreshToken (refreshToken) VALUES (?)";
-        this.jdbcTemplate.update(updateTokenQuery, updateRefreshToken);
+    public RefreshToken getRefreshToken(String dbRefreshToken){
+        String getRefreshTokenQuery = "select * from RefreshToken where refreshToken = ?";
+        return this.jdbcTemplate.queryForObject(getRefreshTokenQuery,
+                (rs, rowNum) -> new RefreshToken(
+                        rs.getString("refreshToken")),
+                dbRefreshToken);
+    }
+
+    public void changeNewRefreshToken(String updateRefreshToken, String originRefreshToken){
+        String updateTokenQuery = "update RefreshToken set refreshToken = ? where refreshToken = ?";
+        Object[] refreshTokenList = new Object[]{updateRefreshToken, originRefreshToken};
+        this.jdbcTemplate.update(updateTokenQuery, refreshTokenList);
+    }
+
+    public void modifyUserInfo(int userIdx, ModifyUserInfoReq modifyUserInfoReq){
+        String ModifyUserInfoQuery = "update User set email = ?, nickname = ?, userProfileImgUrl = ?, password = ? where userIdx = ?";
+        Object[] ModifyUserInfoParams = new Object[]{modifyUserInfoReq.getEmail(), modifyUserInfoReq.getNickname(), modifyUserInfoReq.getUserProfileImgUrl(), modifyUserInfoReq.getPassword(), userIdx};
+        this.jdbcTemplate.update(ModifyUserInfoQuery, ModifyUserInfoParams);
     }
 
     public void deleteRefreshToken(String refreshToken){

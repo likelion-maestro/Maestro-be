@@ -119,30 +119,47 @@ public class JwtService {
     // 1. refresh 토큰의 만료시간이 지나지 않은경우, 새로운 access 토큰을 생성한다.
     // 2. refresh 토큰이 만료되었을 경우, 로그인 시도가 필요하다는 Response 메시지를 보낸다.
     //public String ReCreateAccessToken(RefreshToken refreshTokenObj) throws Exception{
-    public String ReCreateAccessToken(RefreshToken refreshTokenObj) throws Exception{
+    public String ReCreateAccessToken(RefreshToken refreshTokenObj) throws Exception {
         // RefreshToken 객체에서 refresh 토큰 추출
         String refreshToken = refreshTokenObj.getRefreshToken();
+        String dbRefreshToken;
 
-        // refresh token 만료기간 여부 검증
+        // refresh token 유효성 검증1 : DB조회
+        try {
+            RefreshToken dbRefreshTokenObj = jwtRepository.getRefreshToken(refreshToken);
+            dbRefreshToken = dbRefreshTokenObj.getRefreshToken();
+        } catch(Exception ignored){  // DB에 RefreshToken 이 존재하지 않는경우
+            throw new BaseException(BaseResponseStatus.NOT_MATCHING_TOKEN);
+        }
+
+        // DB에 RefreshToken이 존재하지 않거나(null), 전달받은 refeshToken 이 DB에 있는 refreshToken 과 일치하지 않는 경우
+        if(dbRefreshToken == null || dbRefreshToken != refreshToken){
+            throw new BaseException(BaseResponseStatus.NOT_MATCHING_TOKEN);
+        }
+
+        // Refresh Token 에 대한 DB 조회에 성공한 경우
+        // refresh token 유효성 검증2 : 형태 유효성
         Jws<Claims> claims;
-        try{
-           claims = Jwts.parserBuilder()
-                   .setSigningKey(Secret.REFRESH_TOKEN_SECRET_KEY)
-                   .build()
-                   .parseClaimsJws(refreshToken);
-
-           // refresh token 의 만료기간이 지나지 않았을 경우, 새로운 access token 을 생성한다.
-            if(!claims.getBody().getExpiration().before(new Date())){
-                int userIdx = claims.getBody().get("userIdx", Integer.class);
-                return createAccessToken(userIdx); // 새롭게 발급된 AccessToken 을 리턴
-            }
-        } catch(Exception ignored){
-            // Refresh Token 이 만료된 경우
+        try {
+            claims = Jwts.parserBuilder()
+                    .setSigningKey(Secret.REFRESH_TOKEN_SECRET_KEY)
+                    .build()
+                    .parseClaimsJws(refreshToken);
+        } catch (Exception ignored) {
+            // Refresh Token이 유효아지 않은 경우
             throw new BaseException(BaseResponseStatus.REFRESH_TOKEN_INVALID);
         }
-        return null;
-    }
-    
-    // accessToken 을 기반
 
+        // // refresh token 유효성 검증3 : refresh token 만료기간 여부 검증
+        // refresh token 의 만료기간이 지나지 않았을 경우, 새로운 access token 을 생성한다.
+        if (!claims.getBody().getExpiration().before(new Date())) {
+            int userIdx = claims.getBody().get("userIdx", Integer.class);
+            // DB에 저장된 RefreshToken 과 비교하고 일치한다면 Access Token 을 발급한다.
+            return createAccessToken(userIdx); // 새롭게 발급된 AccessToken 을 리턴
+        }
+        // refresh token 이 만료된 경우
+        else {  // 새롭게 로그인읋 시도하라는 Response 를 보낸다.
+            throw new BaseException(BaseResponseStatus.REFRESH_TOKEN_EXPIRED);
+        }
+    }
 }
