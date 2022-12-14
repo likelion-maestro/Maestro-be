@@ -53,8 +53,6 @@ public class UserProvider {
             int userIdx = userDao.getSomeInfo_WhenLogin(loginUserReq).getUserIdx();
             String email = userDao.getSomeInfo_WhenLogin(loginUserReq).getEmail();
             String nickname = userDao.getSomeInfo_WhenLogin(loginUserReq).getNickname();
-            //String AccessToken = jwtService.createAccessToken(userIdx); // access token 생성
-            // String RefreshToken = jwtService.createRefreshToken(userIdx);  // refresh token 생성
             String[] tokenList = jwtService.createTokenWhenLogin(userIdx); // access, refresh token 생성
             return new LoginUserRes(userIdx, email, nickname, tokenList[1], tokenList[0]);  // JWT 토큰을 클라이언트에게 Response로 발급해준다.
         }
