@@ -68,6 +68,11 @@ public class UserController {
         }
     }
 
+    @PostMapping("/logout")
+    public BaseResponse<LoginUserRes>logoutUser(){
+
+    }
+
     // 회원정보 수정
     @ResponseBody
     @PatchMapping("/modifyUser")
