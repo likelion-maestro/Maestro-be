@@ -9,6 +9,7 @@ import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import maestrogroup.core.ExceptionHandler.BaseException;
+import maestrogroup.core.ExceptionHandler.BaseResponse;
 import maestrogroup.core.ExceptionHandler.BaseResponseStatus;
 import maestrogroup.core.Security.JWTtoken.AccessToken;
 import maestrogroup.core.Security.JWTtoken.RefreshToken;
@@ -51,10 +52,11 @@ public class JwtService {
                 .setHeaderParam("type","jwt") // Header 의 type 에다 해당 토큰의 타입을 jwt로 명시
                 .claim("userIdx",userIdx) // claim 에 userIdx 할당
                 .setIssuedAt(now) // 언제 발급되었는지를 현재 시간으로 넣어줌
-                .setExpiration(new Date(System.currentTimeMillis()+1*(1000*60*30))) // Access Token 만료기간은 30분으로 설정
+                .setExpiration(new Date(System.currentTimeMillis()+1*(1))) // Access Token 만료기간은 30분으로 설정
                 .signWith(key, SignatureAlgorithm.HS256) // 서명(Signature) 를 할떄는 HS256 알고리즘 사용하며,  Secret.JWT_SECRET_KEY 라는 비밀키(Secret key) 를 가지고 Signature 를 생성한다.
                 .compact();                                   //  Secret.JWT_SECRET_KEY 는 비밀키로써 .gitignore 로 절대 노출시키지 말것! 이 비밀키를 통해 내가 밝급한건인지 아닌지를 판별할 수 있으므로
     }
+    // .setExpiration(new Date(System.currentTimeMillis()+1*(1000*60*30)))
 
     // Refresh Token 생성
     public String createRefreshToken(int userIdx){
@@ -97,22 +99,23 @@ public class JwtService {
         // 2. JWT parsing
         Jws<Claims> claims;
         try {
+            System.out.println("==========================================wwww");
             claims = Jwts.parserBuilder()
                     .setSigningKey(Secret.ACCESS_TOKEN_SECRET_KEY) // ACCESS Token 임에 착각하지 말자!
                     .build()
                     .parseClaimsJws(accessToken);
-        } catch (Exception ignored) {
-            System.out.println(ignored);
-            throw new BaseException(BaseResponseStatus.INVALID_JWT);
+        } catch (io.jsonwebtoken.security.SignatureException signatureException) { // AccessToken 유효성 검증1. Signature(서명값) 변조여부 검증
+            throw new BaseException(BaseResponseStatus.INVALID_TOKEN);
+        } catch (io.jsonwebtoken.ExpiredJwtException expiredJwtException){ // AccessToken 유효성 검증2. accessToken의 만료 여부 검증
+            throw new BaseException(BaseResponseStatus.ACCESS_TOKEN_EXPIRED);
         }
 
+        /*
         // Access Token 유효성 검증2. accessToken의 만료 여부 검증
         if (claims.getBody().getExpiration().before(new Date())) { // AccessToken 이 만료된 경우
             throw new BaseException(BaseResponseStatus.ACCESS_TOKEN_EXPIRED);  // access token 이 만료되었다는 Response 를 보낸다.
         }
-
-        System.out.println(claims);
-        System.out.println(claims.getBody());
+        */
 
         // userIdx 추출
         return claims.getBody().get("userIdx", Integer.class);  // jwt 에서 userIdx를 추출합니다.

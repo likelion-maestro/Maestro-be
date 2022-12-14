@@ -23,7 +23,7 @@ BaseResponseStatus {
     LOGIN_FAILURE("존재하지 않는 아이디 또는 비밀번호입니다.", HttpStatus.FORBIDDEN),
     EMPTY_JWT("JWT를 입력해주세요", HttpStatus.BAD_REQUEST),
     NOT_MATCHING_TOKEN("올바른 토큰을 입력으로 넣어주세요. 토큰이 조회되지 않습니다.", HttpStatus.BAD_REQUEST),
-    INVALID_JWT("유효하지 않은 JWT 입니다.", HttpStatus.BAD_REQUEST),
+    INVALID_TOKEN("잘못된 토큰이 입력되었거나 변조된 토큰이 입력되었습니다.", HttpStatus.BAD_REQUEST),
     REFRESH_TOKEN_INVALID("유효하지 않은 Refresh Token 입니다.", HttpStatus.NOT_MODIFIED),
     REFRESH_TOKEN_EXPIRED("만료된 Refresh Token 입니다. 로그인을 새롭게 시도해주세요.", HttpStatus.NOT_MODIFIED),
     ACCESS_TOKEN_EXPIRED(" 만료된 Access Token 입니다. 새로운 Access Token을 발급 받으세요. ", HttpStatus.NOT_ACCEPTABLE),
