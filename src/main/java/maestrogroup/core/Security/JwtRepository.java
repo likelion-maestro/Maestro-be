@@ -33,7 +33,7 @@ public class JwtRepository {
         String getRefreshTokenQuery = "select * from RefreshToken where tokenContents = ?";
         return this.jdbcTemplate.queryForObject(getRefreshTokenQuery,
                 (rs, rowNum) -> new RefreshToken(
-                        rs.getString("refreshToken")),
+                        rs.getString("tokenContents")),
                 dbRefreshToken);
     }
 
