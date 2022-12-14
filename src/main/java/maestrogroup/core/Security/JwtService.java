@@ -159,34 +159,8 @@ public class JwtService {
         } catch (Exception ignored) { // Refresh Token이 유효하지 않은 경우 (만료여부 외의 예외처리)
             throw new BaseException(BaseResponseStatus.REFRESH_TOKEN_INVALID);
         }
-        /*
-         Jws<Claims> claims;
-        try {
-            claims = Jwts.parserBuilder()
-                    .setSigningKey(Secret.ACCESS_TOKEN_SECRET_KEY) // ACCESS Token 임에 착각하지 말자!
-                    .build()
-                    .parseClaimsJws(accessToken);
-        } catch (io.jsonwebtoken.security.SignatureException signatureException) { // AccessToken 유효성 검증1. Signature(서명값) 변조여부 검증
-            throw new BaseException(BaseResponseStatus.INVALID_TOKEN);
-        } catch (io.jsonwebtoken.ExpiredJwtException expiredJwtException){ // AccessToken 유효성 검증2. accessToken의 만료 여부 검증
-            throw new BaseException(BaseResponseStatus.ACCESS_TOKEN_EXPIRED);
-        }
-         */
 
         /*
-        Jws<Claims> claims;
-        try {
-            claims = Jwts.parserBuilder()
-                    .setSigningKey(Secret.ACCESS_TOKEN_SECRET_KEY) // ACCESS Token 임에 착각하지 말자!
-                    .build()
-                    .parseClaimsJws(accessToken);
-        } catch (io.jsonwebtoken.security.SignatureException signatureException) { // AccessToken 유효성 검증1. Signature(서명값) 변조여부 검증
-            throw new BaseException(BaseResponseStatus.INVALID_TOKEN);
-        } catch (io.jsonwebtoken.ExpiredJwtException expiredJwtException){ // AccessToken 유효성 검증2. accessToken의 만료 여부 검증
-            throw new BaseException(BaseResponseStatus.ACCESS_TOKEN_EXPIRED);
-        }
-         */
-
         // // refresh token 유효성 검증3 : refresh token 만료기간 여부 검증
         // refresh token 의 만료기간이 지나지 않았을 경우, 새로운 access token 을 생성한다.
         if (!claims.getBody().getExpiration().before(new Date())) {
@@ -194,7 +168,9 @@ public class JwtService {
             // DB에 저장된 RefreshToken 과 비교하고 일치한다면 Access Token 을 발급한다.
             return createAccessToken(userIdx); // 새롭게 발급된 AccessToken 을 리턴
         }
-
         return null;
+        */
+        int userIdx = claims.getBody().get("userIdx", Integer.class);
+        return createAccessToken(userIdx);
     }
 }
