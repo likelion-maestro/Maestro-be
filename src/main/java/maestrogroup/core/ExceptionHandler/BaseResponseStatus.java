@@ -28,7 +28,7 @@ BaseResponseStatus {
     REFRESH_TOKEN_INVALID("유효하지 않은 Refresh Token 입니다.", HttpStatus.NOT_MODIFIED),
     REFRESH_TOKEN_EXPIRED("만료된 Refresh Token 입니다. 로그인을 새롭게 시도해주세요.", HttpStatus.NOT_ACCEPTABLE),
     ACCESS_TOKEN_EXPIRED(" 만료된 Access Token 입니다. 새로운 Access Token을 발급 받으세요. ", HttpStatus.NOT_ACCEPTABLE),
-    LOGOUT_FAILED("로그아웃에 실패했스니다.", HttpStatus.INTERNAL_SERVER_ERROR);
+    LOGOUT_FAILED("로그아웃에 실패했스니다.", HttpStatus.INTERNAL_SERVER_ERROR),
 
     // 회원정보 수정 관련
     MODIFY_FIELD_NOT_FULL("아직 기입하지 않은 정보가 존재합니다!", HttpStatus.BAD_REQUEST),
