@@ -64,10 +64,10 @@ public class UserProvider {
 
     public void logoutUser() throws BaseException{
         try {
-            userDao.makeExpireToken_WhenLogout();
+            jwtService.makeExpireToken_WhenLogout();
         }
         catch (Exception baseException){
-            throw new BaseException(BaseResponseStatus.ACCESS_TOKEN_EXPIRED)
+            throw new BaseException(BaseResponseStatus.ACCESS_TOKEN_EXPIRED);
         }
     }
 }
