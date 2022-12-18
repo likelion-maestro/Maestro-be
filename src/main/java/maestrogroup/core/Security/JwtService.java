@@ -78,12 +78,12 @@ public class JwtService {
      */
     public String getAccessToken(){
         HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
-        return request.getHeader("ACCESS-TOKEN");
+        return request.getHeader("Authorization");
     }
 
     public String getRefreshToken() {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-        return request.getHeader("REFRESH-TOKEN");
+        return request.getHeader("RefreshToken");
     }
 
      // Access Token 으로부터 userIdx 추출
@@ -172,5 +172,45 @@ public class JwtService {
         */
         int userIdx = claims.getBody().get("userIdx", Integer.class);
         return createAccessToken(userIdx);
+    }
+
+    public void makeExpireToken_WhenLogout() throws Exception{
+        String refreshToken = getRefreshToken();
+        String dbRefreshToken;
+
+        // refresh token 유효성 검증1 : DB조회
+        try {
+            RefreshToken dbRefreshTokenObj = jwtRepository.getRefreshToken(refreshToken);
+            dbRefreshToken = dbRefreshTokenObj.getRefreshToken();
+        } catch(Exception ignored){  // DB에 RefreshToken 이 존재하지 않는경우
+            throw new BaseException(BaseResponseStatus.NOT_DB_CONNECTED_TOKEN);
+        }
+
+        // DB에 RefreshToken이 존재하지 않거나(null), 전달받은 refeshToken 이 DB에 있는 refreshToken 과 일치하지 않는 경우
+        if(dbRefreshToken == null || !dbRefreshToken.equals(refreshToken)){
+            throw new BaseException(BaseResponseStatus.NOT_MATCHING_TOKEN);
+        }
+
+        // DB에 RefreshToken이 존재하지 않거나(null), 전달받은 refeshToken 이 DB에 있는 refreshToken 과 일치하지 않는 경우
+        if(dbRefreshToken == null || !dbRefreshToken.equals(refreshToken)){
+            throw new BaseException(BaseResponseStatus.NOT_MATCHING_TOKEN);
+        }
+
+        Jws<Claims> claims;
+        try {
+            claims = Jwts.parserBuilder()
+                    .setSigningKey(Secret.REFRESH_TOKEN_SECRET_KEY)
+                    .build()
+                    .parseClaimsJws(refreshToken);
+        }  catch (io.jsonwebtoken.security.SignatureException signatureException){
+            throw new BaseException(BaseResponseStatus.INVALID_TOKEN);
+        }
+        catch (io.jsonwebtoken.ExpiredJwtException expiredJwtException) { // refresh token 이 만료된 경우
+            throw new BaseException(BaseResponseStatus.REFRESH_TOKEN_EXPIRED); // 새롭게 로그인읋 시도하라는 Response 를 보낸다.
+        } catch (Exception ignored) { // Refresh Token이 유효하지 않은 경우 (만료여부 외의 예외처리)
+            throw new BaseException(BaseResponseStatus.REFRESH_TOKEN_INVALID);
+        }
+
+        claims.
     }
 }
