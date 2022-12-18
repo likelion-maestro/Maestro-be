@@ -61,6 +61,15 @@ public class UserProvider {
             throw new BaseException(BaseResponseStatus.LOGIN_FAILURE);
         }
     }
+
+    public void logoutUser() throws BaseException{
+        try {
+            userDao.makeExpireToken_WhenLogout();
+        }
+        catch (Exception baseException){
+            throw new BaseException(BaseResponseStatus.ACCESS_TOKEN_EXPIRED)
+        }
+    }
 }
 
 
