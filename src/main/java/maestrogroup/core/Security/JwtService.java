@@ -174,6 +174,8 @@ public class JwtService {
         return createAccessToken(userIdx);
     }
 
+    // 로그아웃 : 서버측에서 JWT 토큰값 자체를 변경하는 것은 불가능한 것으로 판단되어, DB에 존재하는
+    // RefreshToken 을 삭제시켜서 마치 로그아웃된 것으로 구현하기
     public void makeExpireToken_WhenLogout() throws Exception{
         String refreshToken = getRefreshToken();
         String dbRefreshToken;
@@ -211,6 +213,10 @@ public class JwtService {
             throw new BaseException(BaseResponseStatus.REFRESH_TOKEN_INVALID);
         }
 
-        claims.
+        try {
+            jwtRepository.deleteRefreshToken(dbRefreshToken);
+        } catch(Exception exception){
+            throw new BaseException(BaseResponseStatus.LOGOUT_FAILED); // DB 에 있는 RefreshToken 삭제에 실패한 경우
+        }
     }
 }
