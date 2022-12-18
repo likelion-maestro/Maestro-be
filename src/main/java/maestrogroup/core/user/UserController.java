@@ -70,7 +70,12 @@ public class UserController {
 
     @PostMapping("/logout")
     public BaseResponse<LoginUserRes>logoutUser(){
-
+        try{
+            userProvider.logoutRes();
+            return new BaseResponse<>();
+        } catch (BaseException baseException){
+            return new BaseResponse<>(baseException.getStatus());
+        }
     }
 
     // 회원정보 수정

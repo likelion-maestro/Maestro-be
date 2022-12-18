@@ -41,9 +41,6 @@ public class MappingController {
     @ResponseBody
     @PostMapping("makeTeam/{userIdx}")
     public void makeTeam(@PathVariable("userIdx") int userIdx, @RequestBody PostTeamReq postTeamReq){
-        System.out.println(userIdx);
-        System.out.println(postTeamReq.getTeamName());
-        System.out.println(postTeamReq.getTeamImgUrl());
         mappingService.makeTeam(userIdx, postTeamReq);
     }
     /*
