@@ -33,8 +33,8 @@ BaseResponseStatus {
     // 회원정보 수정 관련
     MODIFY_FIELD_NOT_FULL("아직 기입하지 않은 정보가 존재합니다!", HttpStatus.BAD_REQUEST),
     MODFIY_USER_FAILURE("프로틸을 수정하는데 실패했습니다.", HttpStatus.NOT_MODIFIED),
-    PASSWORD_ENCRYPTION_FAILURE("비밀번호 암호화에 실패했습니다.", HttpStatus.NOT_ACCEPTABLE);
-
+    PASSWORD_ENCRYPTION_FAILURE("비밀번호 암호화에 실패했습니다.", HttpStatus.NOT_ACCEPTABLE),
+    INVALID_TEAM_AUTH("팀장이 아니므로, 팀장 권한 부여가 불가능합니다.", HttpStatus.NOT_ACCEPTABLE),´
     private final HttpStatus httpStatus;
     private final String message;
 
