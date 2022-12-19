@@ -71,7 +71,7 @@ public class UserController {
     @PostMapping("/logout")
     public BaseResponse<LoginUserRes>logoutUser(){
         try{
-            userProvider.logoutRes();
+            userProvider.logoutUser();
             return new BaseResponse<>();
         } catch (BaseException baseException){
             return new BaseResponse<>(baseException.getStatus());
