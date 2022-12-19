@@ -56,7 +56,7 @@ public class TeamContoller {
 
     @ResponseBody
     @PatchMapping("/change_team_leader/{teamIdx}/{userIdx1}/{userIdx2}")
-    public void modifyTeamLeader(@PathVariable("teamIdx") int teamIdx, int userIdx1, int userIdx2) throws BaseException {
+    public void modifyTeamLeader(@PathVariable("teamIdx")  int teamIdx, @PathVariable("userIdx1") int userIdx1, @PathVariable("userIdx2") int userIdx2) throws BaseException {
         teamService.modifyTeamLeader(userIdx1, userIdx2, teamIdx);
     }
 }
