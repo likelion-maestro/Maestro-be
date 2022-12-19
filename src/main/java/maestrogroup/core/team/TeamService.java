@@ -30,6 +30,10 @@ public class TeamService {
     public void deleteTeam(int teamIdx){
         teamDao.deleteTeam(teamIdx);
     }
+
+    public void modifyTeamLeader(int userIdx2, int teamIdx) {
+        teamDao.modifyTeamLeader(userIdx2, teamIdx);
+    }
 }
 
 

@@ -34,7 +34,9 @@ public class TeamDao {
                   rs.getInt("teamIdx"),
                   rs.getString("teamName"),
                   rs.getString("teamImgUrl"),
-                  rs.getInt("count"))
+                  rs.getInt("count"),
+                  rs.getInt("leaderIdx")
+                )
         );
     }
 
@@ -47,6 +49,18 @@ public class TeamDao {
     public void deleteTeam(int teamIdx){
         String deleteTeamQuery = "delete from Team where teamIdx = ?";
         this.jdbcTemplate.update(deleteTeamQuery, teamIdx);
+    }
+
+    public int getLeaderIdx(int teamIdx) {
+        String getLeaderIdxQuery = "select leaderIdx from Team where teamIdx = ?";
+//        Object getLeaderIdxParams = new Object{teamIdx};
+        return this.jdbcTemplate.queryForObject(getLeaderIdxQuery, int.class, teamIdx);
+    }
+
+    public void modifyTeamLeader(int userIdx2, int teamIdx) {
+        String modifyTeamLeaderQuery = "update Team set leaderIdx = ? where teamIdx = ?";
+        Object[] modifyTeamLeaderParams = new Object[]{userIdx2, teamIdx};
+        this.jdbcTemplate.update(modifyTeamLeaderQuery, modifyTeamLeaderParams);
     }
 }
 
