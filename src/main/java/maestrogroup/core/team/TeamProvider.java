@@ -20,4 +20,8 @@ public class TeamProvider {
         List<GetTeamRes> getTeamResList = teamDao.getAllTeam();
         return getTeamResList;
     }
+
+    public int getLeaderIdx(int teamIdx) {
+        return teamDao.getLeaderIdx(teamIdx);
+    }
 }

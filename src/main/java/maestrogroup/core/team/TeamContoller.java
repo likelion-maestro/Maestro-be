@@ -50,6 +50,18 @@ public class TeamContoller {
     public void deleteTeam(@PathVariable("teamIdx") int teamIdx){
         teamService.deleteTeam(teamIdx);
     }
+
+    @ResponseBody
+    @PatchMapping("/change_team_leader/{teamIdx}/{userIdx1}/{userIdx2}")
+    public void modifyTeamLeader(@PathVariable("teamIdx") int teamIdx, int userIdx1, int userIdx2) {
+        int nowLeaderIdx = teamProvider.getLeaderIdx(teamIdx);
+        if (nowLeaderIdx == userIdx1) {
+            teamService.modifyTeamLeader(userIdx2, teamIdx);
+        }
+        else {
+            //userIdx1은 팀장이 아니므로 변경 권한이 없습니다.
+        }
+    }
 }
 
 
