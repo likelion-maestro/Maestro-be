@@ -21,7 +21,7 @@ public class TeamProvider {
         return getTeamResList;
     }
 
-    public int getLeaderIdx(int teamIdx) {
-        return teamDao.getLeaderIdx(teamIdx);
+    public boolean isLeader(int userIdx1, int teamIdx) {
+        return userIdx1 == teamDao.getLeaderIdx(teamIdx);
     }
 }

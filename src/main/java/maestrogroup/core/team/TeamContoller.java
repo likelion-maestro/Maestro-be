@@ -56,20 +56,8 @@ public class TeamContoller {
 
     @ResponseBody
     @PatchMapping("/change_team_leader/{teamIdx}/{userIdx1}/{userIdx2}")
-    public BaseResponse modifyTeamLeader(@PathVariable("teamIdx") int teamIdx, int userIdx1, int userIdx2) {
-        int nowLeaderIdx = teamProvider.getLeaderIdx(teamIdx);
-        try {
-            if (nowLeaderIdx == userIdx1) {
-                teamService.modifyTeamLeader(userIdx2, teamIdx);
-                return new BaseResponse<>();
-            }
-            else {
-                throw new BaseException(BaseResponseStatus.INVALID_TEAM_AUTH);
-            }
-        } catch(BaseException baseException) {
-            //userIdx1은 팀장이 아니므로 변경 권한이 없습니다.
-            return new BaseResponse(baseException.getStatus());
-        }
+    public void modifyTeamLeader(@PathVariable("teamIdx") int teamIdx, int userIdx1, int userIdx2) throws BaseException {
+        teamService.modifyTeamLeader(userIdx1, userIdx2, teamIdx);
     }
 }
 

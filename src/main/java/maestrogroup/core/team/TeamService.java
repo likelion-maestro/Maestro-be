@@ -1,6 +1,9 @@
 package maestrogroup.core.team;
 
 
+import maestrogroup.core.ExceptionHandler.BaseException;
+import maestrogroup.core.ExceptionHandler.BaseResponse;
+import maestrogroup.core.ExceptionHandler.BaseResponseStatus;
 import maestrogroup.core.team.model.PatchTeamReq;
 import maestrogroup.core.team.model.PostTeamReq;
 import org.springframework.stereotype.Service;
@@ -31,7 +34,10 @@ public class TeamService {
         teamDao.deleteTeam(teamIdx);
     }
 
-    public void modifyTeamLeader(int userIdx2, int teamIdx) {
+    public void modifyTeamLeader(int userIdx1, int userIdx2, int teamIdx) throws BaseException {
+        if (teamProvider.isLeader(userIdx1, teamIdx)) {
+            throw new BaseException(BaseResponseStatus.INVALID_TEAM_AUTH);
+        }
         teamDao.modifyTeamLeader(userIdx2, teamIdx);
     }
 }
