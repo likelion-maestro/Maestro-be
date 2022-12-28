@@ -55,10 +55,9 @@ public class MappingController {
      */
 
     // 이전에 생성된 팀원 그룹에 특정 유저를 초대하기 : mapping 객체만 생성함
-    @PostMapping("/inviteUser/{teamIdx}")
-    public void inviteUser(@PathVariable("teamIdx") int teamIdx) throws BaseException {
-        int userIdxByJwt = jwtService.getUserIdx();
-        mappingService.inviteUser(teamIdx, userIdxByJwt);
+    @PostMapping("/inviteUser/{teamIdx}/{userIdx}")
+    public void inviteUser(@PathVariable("teamIdx") int teamIdx, @PathVariable("userIdx") int userIdx) {
+        mappingService.inviteUser(teamIdx, userIdx);
     }
 
 
