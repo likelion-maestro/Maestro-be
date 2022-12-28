@@ -18,7 +18,6 @@ import java.text.SimpleDateFormat;
 
 @RequestMapping("/user")
 @RestController
-@CrossOrigin(origins = "http://maestro:3000")
 public class UserController {
     @Autowired
     private final UserService userService;

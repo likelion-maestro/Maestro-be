@@ -8,7 +8,6 @@ import java.util.List;
 
 @RequestMapping(value = "/music")
 @RestController
-@CrossOrigin(origins = "http://maestro:3000")
 public class MusicController {
 
     @Autowired
