@@ -13,6 +13,8 @@ public class Music {
     int folderIdx;
     String musicImgUrl;
     String musicName;
+    int circleNum;
+    int totalNum;
 
 
 }

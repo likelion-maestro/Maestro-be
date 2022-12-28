@@ -108,8 +108,7 @@ public class MappingDao {
                             rs.getInt("teamIdx"),
                             rs.getString("teamName"),
                             rs.getString("teamImgUrl"),
-                            rs.getInt("count"),
-                            rs.getInt("leaderIdx")
+                            rs.getInt("count")
                     ),
                     eachTeamIdx);
 

@@ -26,7 +26,9 @@ public class MusicDao {
                  rs.getInt("BPM"),
                  rs.getInt("folderIdx"),
                  rs.getString("musicImgUrl"),
-                        rs.getString("musicName")),
+                        rs.getString("musicName"),
+                        rs.getInt("circleNum"),
+                        rs.getInt("totalNum")),
                 folderIdx);
     }
 }

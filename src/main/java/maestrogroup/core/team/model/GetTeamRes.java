@@ -12,7 +12,6 @@ public class GetTeamRes {
     private String teamName;
     private String teamImgUrl;
     private int count;
-    private int leaderIdx;
 
 //    public GetTeamRes(int teamIdx, String teamName, String teamImgUrl, int count, int leaderIdx) {
 //        this.teamIdx = teamIdx;
