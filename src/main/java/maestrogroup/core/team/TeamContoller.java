@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://maestro:3000")
 public class TeamContoller {
     @Autowired // 의존관계 주입
     private final TeamDao teamDao;
