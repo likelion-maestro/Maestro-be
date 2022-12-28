@@ -7,14 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Music {
-    int musicIdx;
-    int bpm;
-    int folderIdx;
-    String musicImgUrl;
-    String musicName;
-    int circleNum;
-    int totalNum;
-
-
+public class PostMusicReq {
+    private String musicName;
+    private String musicImgUrl;
+    private int bpm;
+    private int circleNum;
 }
