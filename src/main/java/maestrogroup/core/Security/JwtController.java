@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/jwtSecurity")
-@CrossOrigin(origins = "http://maestro:3000")
 public class JwtController {
     @Autowired
     private final JwtProvider jwtProvider;
