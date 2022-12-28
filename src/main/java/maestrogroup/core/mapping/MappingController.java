@@ -14,6 +14,7 @@ import java.util.List;
 
 @RequestMapping("/mapping")
 @RestController
+@CrossOrigin(origins = "http://maestro:3000")
 public class MappingController {
     @Autowired
     private final MappingService mappingService;
