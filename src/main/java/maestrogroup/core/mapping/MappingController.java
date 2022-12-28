@@ -39,7 +39,7 @@ public class MappingController {
 
     // team 객체와 mapping 객체를 생성
     @ResponseBody
-    @PostMapping("/makeTeam/{userIdx}")
+    @PostMapping("/makeTeam")
     public void makeTeam(@RequestBody PostTeamReq postTeamReq) throws BaseException {
         int userIdxByJwt = jwtService.getUserIdx();
         mappingService.makeTeam(userIdxByJwt, postTeamReq);

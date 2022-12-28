@@ -43,7 +43,7 @@ public class MappingDao {
         int teamIdx = this.jdbcTemplate.queryForObject(lastInsertTeamIdxQuery, int.class);
 
         Object[] createMappingParams = new Object[]{teamIdx, userIdx};
-        this.jdbcTemplate.update(makeTeamQuery, createMappingParams); // Mapping 객체 생성
+        this.jdbcTemplate.update(makeMappingQuery, createMappingParams); // Mapping 객체 생성
     }
 
     // ManyToMany 다대다 관계 활용
