@@ -39,9 +39,10 @@ public class MappingController {
 
     // team 객체와 mapping 객체를 생성
     @ResponseBody
-    @PostMapping("makeTeam/{userIdx}")
-    public void makeTeam(@PathVariable("userIdx") int userIdx, @RequestBody PostTeamReq postTeamReq){
-        mappingService.makeTeam(userIdx, postTeamReq);
+    @PostMapping("/makeTeam/{userIdx}")
+    public void makeTeam(@RequestBody PostTeamReq postTeamReq) throws BaseException {
+        int userIdxByJwt = jwtService.getUserIdx();
+        mappingService.makeTeam(userIdxByJwt, postTeamReq);
     }
     /*
     @ResponseBody
@@ -54,17 +55,19 @@ public class MappingController {
      */
 
     // 이전에 생성된 팀원 그룹에 특정 유저를 초대하기 : mapping 객체만 생성함
-    @PostMapping("/inviteUser/{teamIdx}/{userIdx}")
-    public void inviteUser(@PathVariable("teamIdx") int teamIdx, @PathVariable("userIdx") int userIdx){
-        mappingService.inviteUser(teamIdx, userIdx);
+    @PostMapping("/inviteUser/{teamIdx}")
+    public void inviteUser(@PathVariable("teamIdx") int teamIdx) throws BaseException {
+        int userIdxByJwt = jwtService.getUserIdx();
+        mappingService.inviteUser(teamIdx, userIdxByJwt);
     }
 
 
     // 해당 그룹을 특정 유저가 탈퇴할떄 teamIdx 값을 가지는 Mapping 객체가 삭제되도록 구현
     // + 그리고 해당 그룹 팀의 총 인원수가 0명일떄, 그룹 객체(Team 객체)도 Mapping객체와 함께 삭제되도록 구현
-    @DeleteMapping("deleteTeam/{teamIdx}/{userIdx}")
-    public void deleteTeam(@PathVariable("teamIdx") int teamIdx, @PathVariable("userIdx") int userIdx){
-        mappingService.deleteTeam(teamIdx, userIdx);
+    @DeleteMapping("/deleteTeam/{teamIdx}")
+    public void deleteTeam(@PathVariable("teamIdx") int teamIdx) throws BaseException {
+        int userIdxByJwt = jwtService.getUserIdx();
+        mappingService.deleteTeam(teamIdx, userIdxByJwt);
     }
 
     // 특정 팀 그룹에 속하는 모든 팀멤버 출력 : ManyToMany
