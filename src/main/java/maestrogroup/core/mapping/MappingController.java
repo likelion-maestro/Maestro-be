@@ -3,6 +3,7 @@ package maestrogroup.core.mapping;
 import maestrogroup.core.ExceptionHandler.BaseException;
 import maestrogroup.core.ExceptionHandler.BaseResponse;
 import maestrogroup.core.Security.JwtService;
+import maestrogroup.core.mapping.model.InviteUserWithEmailReq;
 import maestrogroup.core.team.model.GetTeamRes;
 import maestrogroup.core.team.model.PostTeamReq;
 import maestrogroup.core.user.model.GetUser;
@@ -39,7 +40,7 @@ public class MappingController {
 
     // team 객체와 mapping 객체를 생성
     @ResponseBody
-    @PostMapping("/makeTeam/{userIdx}")
+    @PostMapping("/makeTeam")
     public void makeTeam(@RequestBody PostTeamReq postTeamReq) throws BaseException {
         int userIdxByJwt = jwtService.getUserIdx();
         mappingService.makeTeam(userIdxByJwt, postTeamReq);
@@ -59,6 +60,11 @@ public class MappingController {
     public void inviteUser(@PathVariable("teamIdx") int teamIdx) throws BaseException {
         int userIdxByJwt = jwtService.getUserIdx();
         mappingService.inviteUser(teamIdx, userIdxByJwt);
+    }
+
+    @PostMapping("/inviteUserWithEmail/{teamIdx}")
+    public void inviteUserWithEmail(@RequestBody InviteUserWithEmailReq inviteUserWithEmailReq, @PathVariable("teamIdx") int teamIdx) {
+        mappingService.inviteUserUsingEmail(inviteUserWithEmailReq, teamIdx);
     }
 
 

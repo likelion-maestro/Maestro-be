@@ -2,6 +2,7 @@ package maestrogroup.core.mapping;
 
 import maestrogroup.core.mapping.model.GetTeamIdx;
 import maestrogroup.core.mapping.model.GetUserIdx;
+import maestrogroup.core.mapping.model.InviteUserWithEmailReq;
 import maestrogroup.core.mapping.model.Mapping;
 import maestrogroup.core.team.model.GetTeamRes;
 import maestrogroup.core.team.model.PostTeamReq;
@@ -28,6 +29,15 @@ public class MappingDao {
     }
 
     public void inviteUser(int teamIdx, int userIdx) {
+        String inviteUserQuery = "insert into Mapping (teamIdx, userIdx) VALUES (?, ?)";
+        Object[] inviteUserParams = new Object[]{teamIdx, userIdx};
+        this.jdbcTemplate.update(inviteUserQuery, inviteUserParams);
+    }
+    public void inviteUserWithEmail(InviteUserWithEmailReq inviteUserWithEmailReq, int teamIdx) {
+        String userEmail = inviteUserWithEmailReq.getEmail();
+        String getUserIdxWithEmailQuery = "select userIdx from User where email = ?";
+        int userIdx = this.jdbcTemplate.queryForObject(getUserIdxWithEmailQuery, int.class, userEmail);
+
         String inviteUserQuery = "insert into Mapping (teamIdx, userIdx) VALUES (?, ?)";
         Object[] inviteUserParams = new Object[]{teamIdx, userIdx};
         this.jdbcTemplate.update(inviteUserQuery, inviteUserParams);

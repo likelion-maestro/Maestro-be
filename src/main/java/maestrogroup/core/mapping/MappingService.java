@@ -1,5 +1,6 @@
 package maestrogroup.core.mapping;
 
+import maestrogroup.core.mapping.model.InviteUserWithEmailReq;
 import maestrogroup.core.team.model.PostTeamReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,10 @@ public class MappingService {
 
     public void inviteUser(int teamIdx, int userIdx){
         mappingDao.inviteUser(teamIdx, userIdx);
+    }
+
+    public void inviteUserUsingEmail(InviteUserWithEmailReq inviteUserWithEmailReq, int teamIdx) {
+        mappingDao.inviteUserWithEmail(inviteUserWithEmailReq, teamIdx);
     }
 
     public void deleteTeam(int teamIdx, int userIdx){
