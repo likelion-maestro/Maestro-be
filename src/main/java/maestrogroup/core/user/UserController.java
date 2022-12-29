@@ -105,8 +105,13 @@ public class UserController {
     }
 
     @ResponseBody
-    @GetMapping("/getUser/{userIdx}")
-    public GetUser getUser(@PathVariable("userIdx") int userIdx){
-        return userProvider.getUser(userIdx);
+    @GetMapping("/getUser")
+    public BaseResponse<GetUser> getUser(){
+        try {
+            int userIdx = jwtService.getUserIdx();
+            return new BaseResponse<GetUser>(userService.getUser(userIdx));
+        } catch (BaseException baseException) {
+            return new BaseResponse<>(baseException.getStatus());
+        }
     }
 }
