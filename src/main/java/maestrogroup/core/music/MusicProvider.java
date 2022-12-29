@@ -1,6 +1,7 @@
 package maestrogroup.core.music;
 
 import maestrogroup.core.music.model.Music;
+import maestrogroup.core.music.model.MusicInfoRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,5 +19,9 @@ public class MusicProvider {
 
     public List<Music> GetAllMusic(int folderIdx){
         return musicDao.GetAllMusic(folderIdx);
+    }
+
+    public List<MusicInfoRes> GetMusicInfo(int musicIdx){
+        return musicDao.GetMusicInfo(musicIdx);
     }
 }

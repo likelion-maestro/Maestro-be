@@ -1,6 +1,7 @@
 package maestrogroup.core.music;
 
 import maestrogroup.core.music.model.Music;
+import maestrogroup.core.music.model.MusicInfoRes;
 import maestrogroup.core.music.model.PostMusicReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -33,5 +34,10 @@ public class MusicController {
     @PostMapping("createMusic/{folderIdx}")
     public void createMusic (@RequestBody PostMusicReq postMusicReq, @PathVariable int folderIdx) {
         musicService.createMusic(postMusicReq, folderIdx);
+    }
+
+    @GetMapping("getMusicInfo/{musicIdx}")
+    public List<MusicInfoRes> GetAllMusicInfo(@PathVariable("musicIdx") int musicIdx){
+        return musicProvider.GetMusicInfo(musicIdx);
     }
 }
