@@ -10,7 +10,7 @@ public class CorsConfiguration implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry){
         registry.addMapping("/**")  // 프로그램에서 제공하는 URL
-                .allowedOrigins("http://localhost:3000", "localhost:3000", "https://localhost:3000") // 클라이언트 주소. 어떤 출처들을 허용할 것인지
+                .allowedOrigins("http://localhost:3000", "localhost:3000", "https://localhost:3000", "https://maestrometronome.netlify.app/", "http://maestrometronome.netlify.app/") // 클라이언트 주소. 어떤 출처들을 허용할 것인지
                 .allowedHeaders("*") // 어떤 헤더들을 허용할 것인지
                 .allowedMethods("POST", "GET", "DELETE", "PATCH", "OPTIONS") // 어떤 메소드들을 허용할 것인지
                 .allowCredentials(true)  // Credentialed Request : 인증 관련 헤더를 포함할때 사용하는 요청 => true 로 설정해줘야 클라이언트 측에서 보낸것을 받을 수 있다.
