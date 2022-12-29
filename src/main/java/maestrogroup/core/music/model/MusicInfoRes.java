@@ -4,10 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Array;
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Music {
+public class MusicInfoRes {
     int musicIdx;
     int bpm;
     int folderIdx;
@@ -15,6 +18,5 @@ public class Music {
     String musicName;
     int circleNum;
     double totalNum;
-
-
+    List<Double> startTimes;
 }
