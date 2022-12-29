@@ -193,10 +193,6 @@ public class JwtService {
             throw new BaseException(BaseResponseStatus.NOT_MATCHING_TOKEN);
         }
 
-        // DB에 RefreshToken이 존재하지 않거나(null), 전달받은 refeshToken 이 DB에 있는 refreshToken 과 일치하지 않는 경우
-        if(dbRefreshToken == null || !dbRefreshToken.equals(refreshToken)){
-            throw new BaseException(BaseResponseStatus.NOT_MATCHING_TOKEN);
-        }
 
         Jws<Claims> claims;
         try {
