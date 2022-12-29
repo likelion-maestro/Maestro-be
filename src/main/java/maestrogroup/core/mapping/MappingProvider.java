@@ -1,5 +1,6 @@
 package maestrogroup.core.mapping;
 
+import maestrogroup.core.mapping.model.GetTeamAndImportantRes;
 import maestrogroup.core.mapping.model.Mapping;
 import maestrogroup.core.team.model.GetTeamRes;
 import maestrogroup.core.user.model.GetUser;
@@ -24,5 +25,9 @@ public class MappingProvider {
 
     public List<GetTeamRes> getTeamList(int teamIdx){
         return mappingDao.getTeamList(teamIdx);
+    }
+
+    public List<GetTeamAndImportantRes> getTeamAndImportant(int userIdx) {
+        return mappingDao.getTeamAndImportant(userIdx);
     }
 }
