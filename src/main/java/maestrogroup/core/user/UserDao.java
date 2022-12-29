@@ -52,11 +52,9 @@ public class UserDao {
         this.jdbcTemplate.update(ModifyUserInfoQuery, ModifyUserInfoParams);
     }
 
-    public void deleteUser(int userIdx, Timestamp timestamp){
-        //System.out.println(simpleDateFormat.format(timestamp));
-        String deleteUserQuery = "update User set status = 'D', updatedAt = ? where userIdx = ?";
-        Object[] deleteUserQueryParams = new Object[]{timestamp, userIdx};
-        this.jdbcTemplate.update(deleteUserQuery, deleteUserQueryParams);
+    public void deleteUser(int userIdx){
+        String deleteUserQuery = "delete from User where userIdx = ?";
+        this.jdbcTemplate.update(deleteUserQuery, userIdx);
     }
 
     public GetUser getUser(int userIdx) {
