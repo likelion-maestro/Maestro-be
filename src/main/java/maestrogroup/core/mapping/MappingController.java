@@ -86,6 +86,12 @@ public class MappingController {
             return new BaseResponse(baseException.getStatus());
         }
     }
+
+    @PatchMapping("/changeImportanceOfTeam/{teamIdx}")
+    public void changeImportanceOfTeam(@PathVariable("teamIdx") int teamIdx) throws BaseException {
+        int userIdx = jwtService.getUserIdx();
+        mappingService.changeImportanceOfTeam(userIdx, teamIdx);
+    }
 }
 
 

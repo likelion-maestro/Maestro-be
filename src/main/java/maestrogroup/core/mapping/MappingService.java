@@ -25,6 +25,10 @@ public class MappingService {
     public void deleteTeam(int teamIdx, int userIdx){
         mappingDao.deleteTeam(teamIdx, userIdx);
     }
+
+    public void changeImportanceOfTeam(int userIdx, int teamIdx) {
+        mappingDao.changeImportanceOfTeam(userIdx, teamIdx);
+    }
 }
 
 

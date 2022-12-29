@@ -127,6 +127,20 @@ public class MappingDao {
         Object[] deleteTeamQueryParams = new Object[]{teamIdx, userIdx};
         this.jdbcTemplate.update(deleteTeamQuery, deleteTeamQueryParams);
     }
+
+    public void changeImportanceOfTeam(int userIdx, int teamIdx) {
+        int nowImportance = this.jdbcTemplate.queryForObject("select important from Mapping where userIdx = ? AND teamIdx = ?", int.class, userIdx, teamIdx);
+        int value = -1;
+        if (nowImportance == 1) {
+            value = 0;
+        }
+        if (nowImportance == 0) {
+            value = 1;
+        }
+        String changeImportanceOfTeamQuery = "update Mapping set important = ? where teamIdx = ?";
+        Object[] params = new Object[]{value, teamIdx};
+        this.jdbcTemplate.update(changeImportanceOfTeamQuery, params);
+    }
 }
 
 
