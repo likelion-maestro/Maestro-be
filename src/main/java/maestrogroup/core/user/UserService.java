@@ -1,6 +1,7 @@
 package maestrogroup.core.user;
 
 import maestrogroup.core.ExceptionHandler.BaseException;
+import maestrogroup.core.ExceptionHandler.BaseResponse;
 import maestrogroup.core.ExceptionHandler.BaseResponseStatus;
 import maestrogroup.core.ExceptionHandler.Validation.CheckValidForm;
 import maestrogroup.core.Security.AES128;
@@ -126,7 +127,11 @@ public class UserService {
         }
     }
 
-    public GetUser getUser(int userIdx){
-        return userDao.getUser(userIdx);
+    public GetUser getUser(int userIdx) throws BaseException {
+        try {
+            return userDao.getUser(userIdx);
+        } catch (Exception exception) {
+            throw new BaseException(BaseResponseStatus.SERVER_ERROR);
+        }
     }
 }
