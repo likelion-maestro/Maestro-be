@@ -178,6 +178,7 @@ public class JwtService {
     // RefreshToken 을 삭제시켜서 마치 로그아웃된 것으로 구현하기
     public void makeExpireToken_WhenLogout() throws Exception{
         String refreshToken = getRefreshToken();
+        String accessToken = getAccessToken();
         String dbRefreshToken;
 
         // refresh token 유효성 검증1 : DB조회
