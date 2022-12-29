@@ -35,9 +35,15 @@ public class UserProvider {
 
     // 로그인 (password 검사)
     public LoginUserRes loginUser(LoginUserReq loginUserReq) throws BaseException {
-
-        // 회원가입시 저장한 회원 계정의 비밓번호와, 현재 로그인 창에서 입력된 비밀번호(loginUserSomeField가 동일한지 검증한다.
-        LoginUserSomeField loginUserSomeField = userDao.getSomeInfo_WhenLogin(loginUserReq); // 회원가입 때 입력받은 비밀번호를 DB에 그냥 저장한 것이 아니라 암호화해서
+        LoginUserSomeField loginUserSomeField = new LoginUserSomeField();
+        try {
+            // 회원가입시 저장한 회원 계정의 비밓번호와, 현재 로그인 창에서 입력된 비밀번호(loginUserSomeField가 동일한지 검증한다.
+            loginUserSomeField = userDao.getSomeInfo_WhenLogin(loginUserReq); // 회원가입 때 입력받은 비밀번호를 DB에 그냥 저장한 것이 아니라 암호화해서
+        } catch (Exception e) {
+            throw new BaseException(BaseResponseStatus.INVALID_USER);
+        }
+//        // 회원가입시 저장한 회원 계정의 비밓번호와, 현재 로그인 창에서 입력된 비밀번호(loginUserSomeField가 동일한지 검증한다.
+//        LoginUserSomeField loginUserSomeField = userDao.getSomeInfo_WhenLogin(loginUserReq); // 회원가입 때 입력받은 비밀번호를 DB에 그냥 저장한 것이 아니라 암호화해서
         String password;           // 저장했었는데, 아무튼 이 암호화된 비밀번호를 DB로부터 가져온다.
         try {
             // 복호화 : DB 에서 가져온 비밀번호를 암호화를 해제한다.(=> decrpyt 한다. 즉 인코딩(암호화)된 것을 다시 디코딩해준다.)
