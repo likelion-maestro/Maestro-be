@@ -1,8 +1,10 @@
 package maestrogroup.core.mapping;
 
+import maestrogroup.core.mapping.model.GetTeamAndImportantRes;
 import maestrogroup.core.mapping.model.GetTeamIdx;
 import maestrogroup.core.mapping.model.GetUserIdx;
 import maestrogroup.core.mapping.model.Mapping;
+import maestrogroup.core.music.model.Music;
 import maestrogroup.core.team.model.GetTeamRes;
 import maestrogroup.core.team.model.PostTeamReq;
 import maestrogroup.core.user.model.GetUser;
@@ -140,6 +142,27 @@ public class MappingDao {
         String changeImportanceOfTeamQuery = "update Mapping set important = ? where teamIdx = ?";
         Object[] params = new Object[]{value, teamIdx};
         this.jdbcTemplate.update(changeImportanceOfTeamQuery, params);
+    }
+
+    public List<GetTeamAndImportantRes> getTeamAndImportant(int userIdx){
+        List<GetTeamAndImportantRes> result = new ArrayList<GetTeamAndImportantRes>();
+
+        List<Integer> teamIdxList = this.jdbcTemplate.queryForList("select teamIdx from Mapping where userIdx = ?", int.class, userIdx);
+        for (int teamIdx : teamIdxList) {
+
+            int important = this.jdbcTemplate.queryForObject("select important from Mapping where userIdx = ? AND teamIdx = ?", int.class, userIdx, teamIdx);
+
+            GetTeamAndImportantRes eachTeam = this.jdbcTemplate.queryForObject("select * from Team where teamIdx = ?",
+                    (rs, rowNum) -> new GetTeamAndImportantRes(
+                            rs.getInt("teamIdx"),
+                            rs.getString("teamName"),
+                            rs.getString("teamImgUrl"),
+                            rs.getInt("count"),
+                            important),
+                    teamIdx);
+            result.add(eachTeam);
+        }
+        return result;
     }
 }
 

@@ -3,6 +3,7 @@ package maestrogroup.core.mapping;
 import maestrogroup.core.ExceptionHandler.BaseException;
 import maestrogroup.core.ExceptionHandler.BaseResponse;
 import maestrogroup.core.Security.JwtService;
+import maestrogroup.core.mapping.model.GetTeamAndImportantRes;
 import maestrogroup.core.team.model.GetTeamRes;
 import maestrogroup.core.team.model.PostTeamReq;
 import maestrogroup.core.user.model.GetUser;
@@ -91,6 +92,17 @@ public class MappingController {
     public void changeImportanceOfTeam(@PathVariable("teamIdx") int teamIdx) throws BaseException {
         int userIdx = jwtService.getUserIdx();
         mappingService.changeImportanceOfTeam(userIdx, teamIdx);
+    }
+
+    @GetMapping("/getTeamListAndImportant")
+    public BaseResponse<List<GetTeamAndImportantRes>> getTeamListAndImportant() throws BaseException {
+        try {
+            int userIdx = jwtService.getUserIdx();
+            List<GetTeamAndImportantRes> getTeamAndImportantResList = mappingProvider.getTeamAndImportant(userIdx);
+            return new BaseResponse<List<GetTeamAndImportantRes>>(getTeamAndImportantResList);
+        } catch (BaseException baseException) {
+            return new BaseResponse<>(baseException.getStatus());
+        }
     }
 }
 
