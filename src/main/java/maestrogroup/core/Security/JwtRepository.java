@@ -37,9 +37,11 @@ public class JwtRepository {
                 dbRefreshToken);
     }
 
-    public void saveBlickList(String )
-
-
+    public void saveBlickList(int userIdx, String accessToken, int exp){
+        String saveTokenQuery = "insert into BlackList (userIdx, accessToken, expireDate) VALUES (?, ?, ?)";
+        Object[] saveTokenQueryParams = new Object[]{userIdx, accessToken, exp};
+        this.jdbcTemplate.update(saveTokenQuery, saveTokenQueryParams);
+    }
 
     public void changeNewRefreshToken(String updateRefreshToken, String originRefreshToken){
         String updateTokenQuery = "update RefreshToken set tokenContents = ? where tokenContents = ?";
