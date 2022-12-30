@@ -37,6 +37,10 @@ public class JwtRepository {
                 dbRefreshToken);
     }
 
+    public void saveBlickList(String )
+
+
+
     public void changeNewRefreshToken(String updateRefreshToken, String originRefreshToken){
         String updateTokenQuery = "update RefreshToken set tokenContents = ? where tokenContents = ?";
         Object[] refreshTokenList = new Object[]{updateRefreshToken, originRefreshToken};
