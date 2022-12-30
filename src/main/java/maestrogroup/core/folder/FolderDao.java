@@ -23,7 +23,7 @@ public class FolderDao {
     // folderIdx, folderImgUrl, folderName, teamIdx
 
     public void createFolder(PostFolderReq postFolderReq, int teamIdx){
-        String createFolderQuery = "insert into Folder (folderName, teamIdx) VALUES (?, ?, ?)";
+        String createFolderQuery = "insert into Folder (folderName, teamIdx) VALUES (?, ?)";
         Object[] createFolderParams = new Object[]{postFolderReq.getFolderName(), teamIdx};
         this.jdbcTemplate.update(createFolderQuery, createFolderParams);
     }
