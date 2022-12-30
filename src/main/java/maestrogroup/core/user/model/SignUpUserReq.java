@@ -16,6 +16,7 @@ public class SignUpUserReq {
     private String password;
     private String repass;
     private String nickname;
+    
 }
 // implementation 'org.springframework.boot:spring-boot-starter-validation' 로 의존성을 추가해야지 유효성 검사 관련 어노테이션 사용가능
 // https://victorydntmd.tistory.com/332
