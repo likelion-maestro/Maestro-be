@@ -184,8 +184,13 @@ public class JwtService {
             int userIdx = claimsAccessToken.getBody().get("userIdx", Integer.class);
             int exp = claimsAccessToken.getBody().get("exp", Integer.class);
 
-            jwtRepository.saveBlickList(userIdx, accessToken, exp); // accessToken 에 대한 정보들을 블랙리스트에 저장
-            checkValidationOfRefreshToken(refreshToken);
+            try {
+                jwtRepository.saveBlickList(userIdx, accessToken, exp); // accessToken 에 대한 정보들을 블랙리스트에 저장
+                checkValidationOfRefreshToken(refreshToken);
+            } catch (BaseException baseException){
+                System.out.println(baseException);
+                throw baseException;
+            }
         } catch(io.jsonwebtoken.ExpiredJwtException expiredJwtException){ // accessToken 이 만료된 경우 그냥 refreshToken에 대해 검증 및 만료시켜주면 된다.
             checkValidationOfRefreshToken(refreshToken);
         }

@@ -1,6 +1,7 @@
 package maestrogroup.core.Security;
 
 
+import ch.qos.logback.core.encoder.EchoEncoder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import maestrogroup.core.ExceptionHandler.BaseException;
@@ -43,7 +44,6 @@ public class JwtRepository {
         String findBlackUserQuery = "select count(*) from BlackList where accessToken = ?";
         Object[] accessTokenQueryParams = new Object[]{accessTokenParam};
         Integer tokenCount = this.jdbcTemplate.queryForObject(findBlackUserQuery, accessTokenQueryParams, Integer.class);
-        System.out.println(tokenCount);
         return tokenCount;
     }
 
@@ -52,12 +52,10 @@ public class JwtRepository {
     // 단 특정 유저가 짧은 시간에 로그인을 여러번 시도해서 한 유저가 여러개의
     // 토큰을 지닐 수 있므므로 userIdx값이 아닌, 토큰값을 기준으로 판단하자.
     public void saveBlickList(int userIdx, String accessToken, int exp) throws BaseException {
-        try {
-            int tokenCount = checkDuplicateBlackAccessToken(accessToken);
-            if (tokenCount >= 2){
-                throw new BaseException(BaseResponseStatus.ACCESS_TOKEN_EXPIRED);
+        int tokenCount = checkDuplicateBlackAccessToken(accessToken);
+            if (tokenCount >= 2) {
+                throw new BaseException(BaseResponseStatus.BLACK_USER_EXIST);
             }
-        }
         String saveTokenQuery = "insert into BlackList (userIdx, accessToken, expireDate) VALUES (?, ?, ?)";
         Object[] saveTokenQueryParams = new Object[]{userIdx, accessToken, exp};
         this.jdbcTemplate.update(saveTokenQuery, saveTokenQueryParams);
