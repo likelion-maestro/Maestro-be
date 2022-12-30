@@ -3,6 +3,8 @@ package maestrogroup.core.Security;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import maestrogroup.core.ExceptionHandler.BaseException;
+import maestrogroup.core.ExceptionHandler.BaseResponseStatus;
 import maestrogroup.core.Security.JWTtoken.RefreshToken;
 import maestrogroup.core.user.model.ModifyUserInfoReq;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,10 +51,13 @@ public class JwtRepository {
     // => 특정 토큰에 대한 블랙리스트 데이터는 유일성을 보장할 것, 즉 동일한 토큰을 또 보냈을 때 db에 저장되는 현상을 막자.
     // 단 특정 유저가 짧은 시간에 로그인을 여러번 시도해서 한 유저가 여러개의
     // 토큰을 지닐 수 있므므로 userIdx값이 아닌, 토큰값을 기준으로 판단하자.
-    public void saveBlickList(int userIdx, String accessToken, int exp){
-        int tokenCount = checkDuplicateBlackAccessToken(accessToken);
-        System.out.println(tokenCount);
-        System.out.println("===========================");
+    public void saveBlickList(int userIdx, String accessToken, int exp) throws BaseException {
+        try {
+            int tokenCount = checkDuplicateBlackAccessToken(accessToken);
+            if (tokenCount >= 2){
+                throw new BaseException(BaseResponseStatus.ACCESS_TOKEN_EXPIRED);
+            }
+        }
         String saveTokenQuery = "insert into BlackList (userIdx, accessToken, expireDate) VALUES (?, ?, ?)";
         Object[] saveTokenQueryParams = new Object[]{userIdx, accessToken, exp};
         this.jdbcTemplate.update(saveTokenQuery, saveTokenQueryParams);
