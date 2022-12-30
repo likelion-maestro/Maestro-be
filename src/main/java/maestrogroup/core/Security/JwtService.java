@@ -1,5 +1,6 @@
 package maestrogroup.core.Security;
 
+import com.fasterxml.jackson.databind.ser.Serializers;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -160,16 +161,6 @@ public class JwtService {
             throw new BaseException(BaseResponseStatus.REFRESH_TOKEN_INVALID);
         }
 
-        /*
-        // // refresh token 유효성 검증3 : refresh token 만료기간 여부 검증
-        // refresh token 의 만료기간이 지나지 않았을 경우, 새로운 access token 을 생성한다.
-        if (!claims.getBody().getExpiration().before(new Date())) {
-            int userIdx = claims.getBody().get("userIdx", Integer.class);
-            // DB에 저장된 RefreshToken 과 비교하고 일치한다면 Access Token 을 발급한다.
-            return createAccessToken(userIdx); // 새롭게 발급된 AccessToken 을 리턴
-        }
-        return null;
-        */
         int userIdx = claims.getBody().get("userIdx", Integer.class);
         return createAccessToken(userIdx);
     }
@@ -182,7 +173,7 @@ public class JwtService {
     // RefreshToken 을 삭제시켜서 마치 로그아웃된 것으로 구현하기
 
     // 로그아웃 호출시 클라이언트는 local storage 에 저장하고 있던 access, refresh token을 모두 버려야한다.
-    public void makeExpireToken_WhenLogout() throws Exception{
+    public void makeExpireToken_WhenLogout() throws BaseException {
         String refreshToken = getRefreshToken();
         String accessToken = getAccessToken();
         // String dbRefreshToken;
@@ -193,19 +184,20 @@ public class JwtService {
                     .setSigningKey(Secret.ACCESS_TOKEN_SECRET_KEY)
                     .build()
                     .parseClaimsJws(accessToken);
+
             // accessToken 이 만료되지 않은 경우 아래의 구문들을 실행
             int userIdx = claimsAccessToken.getBody().get("userIdx", Integer.class);
             int exp = claimsAccessToken.getBody().get("exp", Integer.class);
 
             jwtRepository.saveBlickList(userIdx, accessToken, exp); // accessToken 에 대한 정보들을 블랙리스트에 저장
             checkValidationOfRefreshToken(refreshToken);
-
-        } catch(io.jsonwebtoken.ExpiredJwtException expiredJwtException){ // accessToken 이 만료된 경우 그냥 refreshToken에 대해 검증 및 만료시켜주면 된다.
+        }
+        catch(io.jsonwebtoken.ExpiredJwtException expiredJwtException){ // accessToken 이 만료된 경우 그냥 refreshToken에 대해 검증 및 만료시켜주면 된다.
             checkValidationOfRefreshToken(refreshToken);
         }
     }
 
-    public void checkValidationOfRefreshToken(String refreshToken) throws Exception{
+    public void checkValidationOfRefreshToken(String refreshToken) throws BaseException{
 
         String databassRefreshToken;
 
@@ -214,6 +206,7 @@ public class JwtService {
             RefreshToken dbRefreshTokenObj = jwtRepository.getRefreshToken(refreshToken);
             databassRefreshToken = dbRefreshTokenObj.getRefreshToken();
         } catch(Exception ignored){  // DB에 RefreshToken 이 존재하지 않는경우
+            System.out.println("=====");
             throw new BaseException(BaseResponseStatus.NOT_DB_CONNECTED_TOKEN);
         }
 

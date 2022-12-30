@@ -1,5 +1,6 @@
 package maestrogroup.core.user;
 
+import com.fasterxml.jackson.databind.ser.Serializers;
 import maestrogroup.core.ExceptionHandler.BaseException;
 import maestrogroup.core.ExceptionHandler.BaseResponse;
 import maestrogroup.core.ExceptionHandler.BaseResponseStatus;
@@ -72,9 +73,8 @@ public class UserProvider {
         try {
             jwtService.makeExpireToken_WhenLogout();
         }
-        catch (Exception baseException){
-            System.out.println(baseException);
-            throw new BaseException(BaseResponseStatus.ACCESS_TOKEN_EXPIRED);
+        catch (BaseException baseException){
+            throw baseException;
         }
     }
 }
