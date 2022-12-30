@@ -51,7 +51,7 @@ public class JwtRepository {
 
     public void modifyUserInfo(int userIdx, ModifyUserInfoReq modifyUserInfoReq){
         String ModifyUserInfoQuery = "update User set email = ?, nickname = ?, userProfileImgUrl = ?, password = ? where userIdx = ?";
-        Object[] ModifyUserInfoParams = new Object[]{modifyUserInfoReq.getEmail(), modifyUserInfoReq.getNickname(), modifyUserInfoReq.getUserProfileImgUrl(), modifyUserInfoReq.getPassword(), userIdx};
+        Object[] ModifyUserInfoParams = new Object[]{modifyUserInfoReq.getEmail(), modifyUserInfoReq.getNickname(), modifyUserInfoReq.getPassword(), userIdx};
         this.jdbcTemplate.update(ModifyUserInfoQuery, ModifyUserInfoParams);
     }
 
