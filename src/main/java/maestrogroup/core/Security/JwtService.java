@@ -191,8 +191,7 @@ public class JwtService {
 
             jwtRepository.saveBlickList(userIdx, accessToken, exp); // accessToken 에 대한 정보들을 블랙리스트에 저장
             checkValidationOfRefreshToken(refreshToken);
-        }
-        catch(io.jsonwebtoken.ExpiredJwtException expiredJwtException){ // accessToken 이 만료된 경우 그냥 refreshToken에 대해 검증 및 만료시켜주면 된다.
+        } catch(io.jsonwebtoken.ExpiredJwtException expiredJwtException){ // accessToken 이 만료된 경우 그냥 refreshToken에 대해 검증 및 만료시켜주면 된다.
             checkValidationOfRefreshToken(refreshToken);
         }
     }
@@ -206,7 +205,6 @@ public class JwtService {
             RefreshToken dbRefreshTokenObj = jwtRepository.getRefreshToken(refreshToken);
             databassRefreshToken = dbRefreshTokenObj.getRefreshToken();
         } catch(Exception ignored){  // DB에 RefreshToken 이 존재하지 않는경우
-            System.out.println("=====");
             throw new BaseException(BaseResponseStatus.NOT_DB_CONNECTED_TOKEN);
         }
 
@@ -225,8 +223,8 @@ public class JwtService {
         }  catch (io.jsonwebtoken.security.SignatureException signatureException){
             throw new BaseException(BaseResponseStatus.INVALID_TOKEN);
         }
-        catch (io.jsonwebtoken.ExpiredJwtException expiredJwtException1) { // refresh token 이 만료된 경우
-            throw new BaseException(BaseResponseStatus.REFRESH_TOKEN_INVALID); // 새롭게 로그인읋 시도하라는 Response 를 보낸다.
+        catch (io.jsonwebtoken.ExpiredJwtException expiredJwtException) { // refresh token 이 만료된 경우
+            throw new BaseException(BaseResponseStatus.REFRESH_TOKEN_EXPIRED); // 새롭게 로그인읋 시도하라는 Response 를 보낸다.
         } catch (Exception ignored) { // Refresh Token이 유효하지 않은 경우 (만료여부 외의 예외처리)
             throw new BaseException(BaseResponseStatus.REFRESH_TOKEN_INVALID);
         }
