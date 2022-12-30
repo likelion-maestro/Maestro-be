@@ -36,7 +36,7 @@ public class MappingDao {
     }
 
     public void makeTeam(int userIdx, PostTeamReq postTeamReq){
-        String makeTeamQuery = "insert into Team teamName VALUES ?";
+        String makeTeamQuery = "insert into Team (teamName, count) VALUES (?, 1)";
         this.jdbcTemplate.update(makeTeamQuery, postTeamReq.getTeamName());
 
         String makeMappingQuery = "insert into Mapping (teamIdx, userIdx) values (?, ?)";
