@@ -30,9 +30,17 @@ public class MappingDao {
     }
 
     public void inviteUser(int teamIdx, int userIdx) {
+        //초대하는 부분
         String inviteUserQuery = "insert into Mapping (teamIdx, userIdx) VALUES (?, ?)";
         Object[] inviteUserParams = new Object[]{teamIdx, userIdx};
         this.jdbcTemplate.update(inviteUserQuery, inviteUserParams);
+
+        //해당 팀의 count를 증가시키는 부분
+        int nowCount = this.jdbcTemplate.queryForObject("select count from Team where teamIdx = ?", int.class, teamIdx);
+        nowCount += 1;
+
+        Object[] updateCountParams = new Object[]{nowCount, teamIdx};
+        this.jdbcTemplate.update("update Team set count = ? where teamIdx = ?", updateCountParams);
     }
 
     public void makeTeam(int userIdx, PostTeamReq postTeamReq){
