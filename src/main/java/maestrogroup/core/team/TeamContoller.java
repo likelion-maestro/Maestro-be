@@ -44,7 +44,7 @@ public class TeamContoller {
     @ResponseBody
     @PatchMapping("/patch_team/{teamIdx}")
     public void modifyTeam(@PathVariable("teamIdx") int teamIdx, @RequestBody PostTeamReq postTeamReq){
-        PatchTeamReq patchUserReq = new PatchTeamReq(teamIdx, postTeamReq.getTeamName(), postTeamReq.getTeamImgUrl());
+        PatchTeamReq patchUserReq = new PatchTeamReq(teamIdx, postTeamReq.getTeamName());
         teamService.modifyTeam(patchUserReq);
     }
 

@@ -29,15 +29,14 @@ public class MusicDao {
                  rs.getInt("musicIdx"),
                  rs.getInt("bpm"),
                  rs.getInt("folderIdx"),
-                 rs.getString("musicImgUrl"),
                         rs.getString("musicName"),
                         rs.getInt("circleNum"),
                         rs.getDouble("totalNum")),
                 folderIdx);
     }
     public void createMusic(PostMusicReq postMusicReq, int folderIdx) {
-        String createMusicQuery = "insert into Music (musicName, bpm, circleNum, totalNum, musicImgUrl, folderIdx) VALUES (?, ?, ?, ?, ?, ?)";
-        Object[] createMusicParams = new Object[]{postMusicReq.getMusicName(), postMusicReq.getBpm(), postMusicReq.getCircleNum(), (double)60 / postMusicReq.getBpm() * postMusicReq.getCircleNum(), postMusicReq.getMusicImgUrl(), folderIdx};
+        String createMusicQuery = "insert into Music (musicName, bpm, circleNum, totalNum, folderIdx) VALUES (?, ?, ?, ?, ?, ?)";
+        Object[] createMusicParams = new Object[]{postMusicReq.getMusicName(), postMusicReq.getBpm(), postMusicReq.getCircleNum(), (double)60 / postMusicReq.getBpm() * postMusicReq.getCircleNum(), folderIdx};
         this.jdbcTemplate.update(createMusicQuery, createMusicParams);
     }
 
@@ -59,7 +58,6 @@ public class MusicDao {
                         rs.getInt("musicIdx"),
                         rs.getInt("bpm"),
                         rs.getInt("folderIdx"),
-                        rs.getString("musicImgUrl"),
                         rs.getString("musicName"),
                         rs.getInt("circleNum"),
                         rs.getDouble("totalNum"),

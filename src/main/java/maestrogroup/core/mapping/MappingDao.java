@@ -36,9 +36,8 @@ public class MappingDao {
     }
 
     public void makeTeam(int userIdx, PostTeamReq postTeamReq){
-        String makeTeamQuery = "insert into Team (teamName, teamImgUrl) VALUES (?, ?)";
-        Object[] createTeamParams = new Object[]{postTeamReq.getTeamName(), postTeamReq.getTeamImgUrl()};
-        this.jdbcTemplate.update(makeTeamQuery, createTeamParams);
+        String makeTeamQuery = "insert into Team teamName VALUES (?, ?)";
+        this.jdbcTemplate.update(makeTeamQuery, postTeamReq.getTeamName());
 
         String makeMappingQuery = "insert into Mapping (teamIdx, userIdx) values (?, ?)";
         String lastInsertTeamIdxQuery = "select last_insert_id()";      // teamIdx 값 추출
@@ -104,7 +103,6 @@ public class MappingDao {
                     (rs, rowNum) -> new GetTeamRes(
                             rs.getInt("teamIdx"),
                             rs.getString("teamName"),
-                            rs.getString("teamImgUrl"),
                             rs.getInt("count")
                     ),
                     eachTeamIdx);
@@ -151,7 +149,6 @@ public class MappingDao {
                     (rs, rowNum) -> new GetTeamAndImportantRes(
                             rs.getInt("teamIdx"),
                             rs.getString("teamName"),
-                            rs.getString("teamImgUrl"),
                             rs.getInt("count"),
                             important),
                     teamIdx);

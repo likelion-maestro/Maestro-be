@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 public class GetTeamRes {
     private int teamIdx;
     private String teamName;
-    private String teamImgUrl;
     private int count;
 
 //    public GetTeamRes(int teamIdx, String teamName, String teamImgUrl, int count, int leaderIdx) {

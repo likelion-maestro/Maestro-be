@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PostMusicReq {
     private String musicName;
-    private String musicImgUrl;
     private int bpm;
     private int circleNum;
 }
