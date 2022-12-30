@@ -129,6 +129,15 @@ public class MappingDao {
         String deleteTeamQuery = "delete from Mapping where teamIdx = ? AND userIdx = ?";
         Object[] deleteTeamQueryParams = new Object[]{teamIdx, userIdx};
         this.jdbcTemplate.update(deleteTeamQuery, deleteTeamQueryParams);
+
+        //해당 팀의 count를 감소시키는 부분
+        int nowCount = this.jdbcTemplate.queryForObject("select count from Team where teamIdx = ?", int.class, teamIdx);
+        nowCount -= 1;
+
+        Object[] updateCountParams = new Object[]{nowCount, teamIdx};
+        this.jdbcTemplate.update("update Team set count = ? where teamIdx = ?", updateCountParams);
+
+        //if nowCount <= 0: 팀 삭제 기능 추후에 추가!
     }
 
     public void changeImportanceOfTeam(int userIdx, int teamIdx) {
