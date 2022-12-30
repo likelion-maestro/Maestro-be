@@ -109,13 +109,6 @@ public class JwtService {
             throw new BaseException(BaseResponseStatus.ACCESS_TOKEN_EXPIRED);
         }
 
-        /*
-        // Access Token 유효성 검증2. accessToken의 만료 여부 검증
-        if (claims.getBody().getExpiration().before(new Date())) { // AccessToken 이 만료된 경우
-            throw new BaseException(BaseResponseStatus.ACCESS_TOKEN_EXPIRED);  // access token 이 만료되었다는 Response 를 보낸다.
-        }
-        */
-
         // userIdx 추출
         return claims.getBody().get("userIdx", Integer.class);  // jwt 에서 userIdx를 추출합니다.
     }
@@ -177,6 +170,8 @@ public class JwtService {
         String refreshToken = getRefreshToken();
         String accessToken = getAccessToken();
         // String dbRefreshToken;
+
+        // 만료안된걸 계속 보낼 수도 있지않나?
 
         Jws<Claims> claimsAccessToken;
         try {

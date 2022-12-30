@@ -111,7 +111,6 @@ public class UserService {
             throw new BaseException(BaseResponseStatus.INVALID_PASSWORD_FORM);
         }
 
-
         try {
             userDao.modifyUserInfo(userIdx, modifyUserInfoReq);
         } catch(Exception exception) { // 서버 및 DB 에 연동해서 데이터를 Dao에서 데이터를 처리할 떄 문제가 발생한 경우
