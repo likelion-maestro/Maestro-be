@@ -5,7 +5,6 @@ import lombok.Data;
 
 @Data
 public class PostFolderReq {
-    private String folderImgUrl;
     private String folderName;
     //private int teamIdx;
 }

@@ -14,7 +14,6 @@ public class MusicInfoRes {
     int musicIdx;
     int bpm;
     int folderIdx;
-    String musicImgUrl;
     String musicName;
     int circleNum;
     double totalNum;

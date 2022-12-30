@@ -9,5 +9,4 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PostTeamReq {
     private String teamName;
-    private String teamImgUrl;
 }

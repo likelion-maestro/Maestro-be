@@ -19,9 +19,8 @@ public class TeamDao {
     }
 
     public void createTeam(PostTeamReq postTeamReq) {
-        String createTeamQuery = "insert into Team (teamName, teamImgUrl) VALUES (?, ?)";
-        Object[] createUserParams = new Object[]{postTeamReq.getTeamName(), postTeamReq.getTeamImgUrl()};
-        this.jdbcTemplate.update(createTeamQuery, createUserParams);
+        String createTeamQuery = "insert into Team teamName VALUES ?";
+        this.jdbcTemplate.update(createTeamQuery, postTeamReq.getTeamName());
 
         String lastInsertTeamIdx = "select last_insert_id()";
         String insertTeamQuery = "select * from Team where teamIdx = ?";
@@ -33,15 +32,14 @@ public class TeamDao {
                 (rs, rowNum) -> new GetTeamRes(
                   rs.getInt("teamIdx"),
                   rs.getString("teamName"),
-                  rs.getString("teamImgUrl"),
                   rs.getInt("count")
                 )
         );
     }
 
     public void modifyTeam(PatchTeamReq patchUserReq){
-        String modifyTeamQuery = "update Team set teamName = ?,  teamImgUrl = ? where teamIdx = ?";
-        Object[] modifyUserNameParams = new Object[]{patchUserReq.getTeamName(), patchUserReq.getTeamImgUrl(), patchUserReq.getTeamIdx()};
+        String modifyTeamQuery = "update Team set teamName = ? where teamIdx = ?";
+        Object[] modifyUserNameParams = new Object[]{patchUserReq.getTeamName(), patchUserReq.getTeamIdx()};
         this.jdbcTemplate.update(modifyTeamQuery, modifyUserNameParams);
     }
 

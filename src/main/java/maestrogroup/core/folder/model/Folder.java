@@ -8,13 +8,11 @@ import lombok.Data;
 @Data
 public class Folder {
     private int folderIdx;
-    private String folderImgUrl;
     private String folderName;
     private int teamIdx;
 
-    public Folder(int folderIdx, String folderImgUrl, String folderName, int teamIdx) {
+    public Folder(int folderIdx, String folderName, int teamIdx) {
         this.folderIdx = folderIdx;
-        this.folderImgUrl = folderImgUrl;
         this.folderName = folderName;
         this.teamIdx = teamIdx;
     }

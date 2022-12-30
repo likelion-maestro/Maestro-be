@@ -23,8 +23,8 @@ public class FolderDao {
     // folderIdx, folderImgUrl, folderName, teamIdx
 
     public void createFolder(PostFolderReq postFolderReq, int teamIdx){
-        String createFolderQuery = "insert into Folder (folderImgUrl, folderName, teamIdx) VALUES (?, ?, ?)";
-        Object[] createFolderParams = new Object[]{postFolderReq.getFolderImgUrl(), postFolderReq.getFolderName(), teamIdx};
+        String createFolderQuery = "insert into Folder (folderName, teamIdx) VALUES (?, ?, ?)";
+        Object[] createFolderParams = new Object[]{postFolderReq.getFolderName(), teamIdx};
         this.jdbcTemplate.update(createFolderQuery, createFolderParams);
     }
 
@@ -36,15 +36,14 @@ public class FolderDao {
         return this.jdbcTemplate.query(getAllFolderQuery,
                 (rs, rowNum) -> new Folder(
                         rs.getInt("folderIdx"),
-                        rs.getString("folderImgUrl"),
                         rs.getString("folderName"),
                         rs.getInt("teamIdx")),
                 getTeamIdx);
     }
 
     public void modifyFolder(int folderIdx, ModifyFolderReq modifyFolderReq){
-        String UpdateModifyFolderQuery = "UPDATE Folder set folderName = ?, folderImgUrl = ? where folderIdx = ?";
-        Object[] modifyFolderParams = new Object[]{modifyFolderReq.getFolderName(), modifyFolderReq.getFolderImgUrl(), folderIdx};
+        String UpdateModifyFolderQuery = "UPDATE Folder set folderName = ? where folderIdx = ?";
+        Object[] modifyFolderParams = new Object[]{modifyFolderReq.getFolderName(), folderIdx};
         this.jdbcTemplate.update(UpdateModifyFolderQuery, modifyFolderParams);
     }
 
