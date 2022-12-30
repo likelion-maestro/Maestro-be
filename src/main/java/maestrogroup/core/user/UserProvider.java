@@ -73,6 +73,7 @@ public class UserProvider {
             jwtService.makeExpireToken_WhenLogout();
         }
         catch (Exception baseException){
+            System.out.println(baseException);
             throw new BaseException(BaseResponseStatus.ACCESS_TOKEN_EXPIRED);
         }
     }

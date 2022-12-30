@@ -72,14 +72,9 @@ public class MappingDao {
             GetUser eachUser = this.jdbcTemplate.queryForObject(GetUserQuery,
                     (rs, rowNum) -> new GetUser(
                             rs.getInt("userIdx"),
-                            rs.getTimestamp("createdAt"),
                             rs.getString("email"),
-                            rs.getInt("is_connected"),
                             rs.getString("nickname"),
-                            rs.getString("password"),
-                            rs.getString("status"),
-                            rs.getTimestamp("updatedAt"),
-                            rs.getString("userProfileImgUrl")),
+                            rs.getString("password")),
                     eachUserIdx);
             // GetUser 리스트에 추가
             getUserList.add(eachUser);

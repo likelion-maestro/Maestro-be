@@ -84,7 +84,7 @@ public class UserController {
     public BaseResponse modifyUserInfo(@RequestBody ModifyUserInfoReq modifyUserInfoReq){
         try {
             int userIdxByJwt = jwtService.getUserIdx(); // 클라이언트로 부터 넘겨받은 JWT 토큰으로부터 userIdx 값 추출
-            //System.out.println("userIdxByJwt:" + userIdxByJwt);
+            System.out.println("userIdxByJwt:" + userIdxByJwt);
             userService.modifyUserInfo(userIdxByJwt, modifyUserInfoReq);
             return new BaseResponse();
         } catch(BaseException baseException){

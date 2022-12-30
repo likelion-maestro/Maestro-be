@@ -47,8 +47,8 @@ public class UserDao {
      */
 
     public void modifyUserInfo(int userIdx, ModifyUserInfoReq modifyUserInfoReq){
-        String ModifyUserInfoQuery = "update User set email = ?, nickname = ?, userProfileImgUrl = ?, password = ? where userIdx = ?";
-        Object[] ModifyUserInfoParams = new Object[]{modifyUserInfoReq.getEmail(), modifyUserInfoReq.getNickname(), modifyUserInfoReq.getUserProfileImgUrl(), modifyUserInfoReq.getPassword(), userIdx};
+        String ModifyUserInfoQuery = "update User set email = ?, nickname = ?, password = ? where userIdx = ?";
+        Object[] ModifyUserInfoParams = new Object[]{modifyUserInfoReq.getEmail(), modifyUserInfoReq.getNickname(), modifyUserInfoReq.getPassword(), userIdx};
         this.jdbcTemplate.update(ModifyUserInfoQuery, ModifyUserInfoParams);
     }
 
@@ -62,15 +62,9 @@ public class UserDao {
         return this.jdbcTemplate.queryForObject(GetUserQuery,
                 (rs, rowNum) -> new GetUser(
                         rs.getInt("userIdx"),
-                        rs.getTimestamp("createdAt"),
                         rs.getString("email"),
-                        rs.getInt("is_connected"),
                         rs.getString("nickname"),
-                        rs.getString("password"),
-                        rs.getString("status"),
-                        rs.getTimestamp("updatedAt"),
-                        rs.getString("userProfileImgU" +
-                                "rl")),
+                        rs.getString("password")),
                 userIdx);
     }
 

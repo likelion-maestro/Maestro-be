@@ -10,12 +10,7 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 public class GetUser {
     private int userIdx;
-    private Timestamp createdAt;
     private String email;
-    private int is_connected;
     private String nickname;
     private String password;
-    private String status;
-    private Timestamp updatedAt;
-    private String userProfileImgUrl;
 }
