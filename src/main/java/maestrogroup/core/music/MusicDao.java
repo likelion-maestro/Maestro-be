@@ -35,7 +35,7 @@ public class MusicDao {
                 folderIdx);
     }
     public void createMusic(PostMusicReq postMusicReq, int folderIdx) {
-        String createMusicQuery = "insert into Music (musicName, bpm, circleNum, totalNum, folderIdx) VALUES (?, ?, ?, ?, ?, ?)";
+        String createMusicQuery = "insert into Music (musicName, bpm, circleNum, totalNum, folderIdx) VALUES (?, ?, ?, ?, ?)";
         Object[] createMusicParams = new Object[]{postMusicReq.getMusicName(), postMusicReq.getBpm(), postMusicReq.getCircleNum(), (double)60 / postMusicReq.getBpm() * postMusicReq.getCircleNum(), folderIdx};
         this.jdbcTemplate.update(createMusicQuery, createMusicParams);
     }
