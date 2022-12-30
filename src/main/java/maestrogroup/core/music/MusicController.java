@@ -40,4 +40,10 @@ public class MusicController {
     public List<MusicInfoRes> GetAllMusicInfo(@PathVariable("musicIdx") int musicIdx){
         return musicProvider.GetMusicInfo(musicIdx);
     }
+
+    @ResponseBody
+    @PatchMapping("modifyMusic/{musicIdx}")
+    public void modifyMusic(@RequestBody PostMusicReq postMusicReq, @PathVariable("musicIdx") int musicIdx) {
+        musicService.modifyMusic(postMusicReq, musicIdx);
+    }
 }
