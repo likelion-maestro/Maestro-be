@@ -193,9 +193,10 @@ public class JwtService {
                     .setSigningKey(Secret.ACCESS_TOKEN_SECRET_KEY)
                     .build()
                     .parseClaimsJws(accessToken);
-
             // accessToken 이 만료되지 않은 경우 아래의 구문들을 실행
-            jwtRepository.saveBlickList();
+            int userIdx = claimsAccessToken.getBody().get("userIdx", Integer.class);
+            int exp = claimsAccessToken.getBody().get("exp", Integer.class);
+            jwtRepository.saveBlickList(userIdx, accessToken, exp); // accessToken 에 대한 정보들을 블랙리스트에 저장
         } catch(io.jsonwebtoken.ExpiredJwtException expiredJwtException){ // accessToken 이 만료된 경우 그냥 refreshToken에 대해 검증 및 만료시켜주면 된다.
             // refresh token 유효성 검증1 : DB조회
             try {
