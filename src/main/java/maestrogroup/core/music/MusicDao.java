@@ -41,35 +41,43 @@ public class MusicDao {
         }
     }
 
-    public void createMusic(PostMusicReq postMusicReq, int folderIdx) {
-        String createMusicQuery = "insert into Music (musicName, bpm, circleNum, totalNum, folderIdx) VALUES (?, ?, ?, ?, ?)";
-        Object[] createMusicParams = new Object[]{postMusicReq.getMusicName(), postMusicReq.getBpm(), postMusicReq.getCircleNum(), (double)60 / postMusicReq.getBpm() * postMusicReq.getCircleNum(), folderIdx};
-        this.jdbcTemplate.update(createMusicQuery, createMusicParams);
+    public void createMusic(PostMusicReq postMusicReq, int folderIdx) throws BaseException{
+        try {
+            String createMusicQuery = "insert into Music (musicName, bpm, circleNum, totalNum, folderIdx) VALUES (?, ?, ?, ?, ?)";
+            Object[] createMusicParams = new Object[]{postMusicReq.getMusicName(), postMusicReq.getBpm(), postMusicReq.getCircleNum(), (double) 60 / postMusicReq.getBpm() * postMusicReq.getCircleNum(), folderIdx};
+            this.jdbcTemplate.update(createMusicQuery, createMusicParams);
+        } catch (Exception e){
+            throw new BaseException(BaseResponseStatus.SERVER_ERROR);
+        }
     }
 
-    public List<MusicInfoRes> GetMusicInfo(int musicIdx){
-        int bpm = this.jdbcTemplate.queryForObject("select bpm from Music where musicIdx = ?", int.class, musicIdx);
-        double waitTime = (double) 60 / bpm;
-        int circleNum = this.jdbcTemplate.queryForObject("select circleNum from Music where musicIdx = ?", int.class, musicIdx);
+    public MusicInfoRes GetMusicInfo(int musicIdx) throws BaseException{
+        try {
+            int bpm = this.jdbcTemplate.queryForObject("select bpm from Music where musicIdx = ?", int.class, musicIdx);
+            double waitTime = (double) 60 / bpm;
+            int circleNum = this.jdbcTemplate.queryForObject("select circleNum from Music where musicIdx = ?", int.class, musicIdx);
 
-        double num = 0;
-        List<Double> startTimes = new ArrayList<>();
-        for (int i = 0; i < circleNum; i++) {
-            startTimes.add(num);
-            num += waitTime;
+            double num = 0;
+            List<Double> startTimes = new ArrayList<>();
+            for (int i = 0; i < circleNum; i++) {
+                startTimes.add(num);
+                num += waitTime;
+            }
+
+            String GetMusicInfoQuery = "select * from Music where musicIdx = ?";
+            return this.jdbcTemplate.queryForObject(GetMusicInfoQuery,
+                    (rs, rowNum) -> new MusicInfoRes(
+                            rs.getInt("musicIdx"),
+                            rs.getInt("bpm"),
+                            rs.getInt("folderIdx"),
+                            rs.getString("musicName"),
+                            rs.getInt("circleNum"),
+                            rs.getDouble("totalNum"),
+                            startTimes),
+                    musicIdx);
+        } catch (Exception e){
+            throw new BaseException(BaseResponseStatus.SERVER_ERROR);
         }
-
-        String GetMusicInfoQuery = "select * from Music where musicIdx = ?";
-        return this.jdbcTemplate.query(GetMusicInfoQuery,
-                (rs, rowNum) -> new MusicInfoRes(
-                        rs.getInt("musicIdx"),
-                        rs.getInt("bpm"),
-                        rs.getInt("folderIdx"),
-                        rs.getString("musicName"),
-                        rs.getInt("circleNum"),
-                        rs.getDouble("totalNum"),
-                        startTimes),
-                musicIdx);
     }
 
     public void modifyMusic(PostMusicReq postMusicReq, int musicIdx) {

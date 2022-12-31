@@ -1,5 +1,6 @@
 package maestrogroup.core.music;
 
+import maestrogroup.core.ExceptionHandler.BaseException;
 import maestrogroup.core.music.model.PostMusicReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,7 @@ public class MusicService {
         this.musicDao = musicDao;
     }
 
-    public void createMusic(PostMusicReq postMusicReq, int folderIdx) {
+    public void createMusic(PostMusicReq postMusicReq, int folderIdx) throws BaseException {
         musicDao.createMusic(postMusicReq, folderIdx);
     }
 
