@@ -35,7 +35,7 @@ public class FolderService {
         folderDao.deleteFolder(folderIdx);
     }
 
-    public void changeImportantOfFolder(int folderIdx) {
+    public void changeImportantOfFolder(int folderIdx) throws BaseException{
         folderDao.changeImportantOfFolder(folderIdx);
     }
 }

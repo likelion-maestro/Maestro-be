@@ -39,8 +39,7 @@ public class FolderController {
         try {
             folderService.createFolder(postFolderReq, teamIdx);
             return new BaseResponse();
-        }
-        catch(BaseException baseException){
+        } catch (BaseException baseException) {
             return new BaseResponse(baseException.getStatus());
         }
     }
@@ -48,14 +47,13 @@ public class FolderController {
     // 특정 팀에 대한 폴더 리스트 조회
     @ResponseBody
     @GetMapping("/get_all_folder/{teamIdx}")
-    public BaseResponse<List<Folder>> GetAllFolder(@PathVariable("teamIdx") int teamIdx){
+    public BaseResponse<List<Folder>> GetAllFolder(@PathVariable("teamIdx") int teamIdx) {
         try {
             List<Folder> folderList = folderProvider.GetAllFolder(teamIdx);
             return new BaseResponse<>(folderList);
-        }
-         catch (BaseException baseException){
+        } catch (BaseException baseException) {
             return new BaseResponse(baseException.getStatus());
-         }
+        }
     }
 
     // 폴더 수정 : 그런데 만약에 인자값이 1개만 들어온다면? ModifyFolderReq 의 생성자를 어떻게 선언하고 처리하는가?
@@ -65,11 +63,11 @@ public class FolderController {
     // 해당 폴더에 저장되어있던 값들을 수정란에 띄어주는 것으로 가정
     @ResponseBody
     @PatchMapping("/patchFolder/{folderIdx}/{teamIdx}")
-    public BaseResponse modifyFolder(@PathVariable("folderIdx") int folderIdx, @PathVariable("teamIdx") int teamIdx, @RequestBody ModifyFolderReq modifyFolderReq){
+    public BaseResponse modifyFolder(@PathVariable("folderIdx") int folderIdx, @PathVariable("teamIdx") int teamIdx, @RequestBody ModifyFolderReq modifyFolderReq) {
         try {
             folderService.modifyFolder(folderIdx, teamIdx, modifyFolderReq);
             return new BaseResponse();
-        } catch (BaseException baseException){
+        } catch (BaseException baseException) {
             return new BaseResponse(baseException.getStatus());
         }
     }
@@ -88,7 +86,12 @@ public class FolderController {
 
     @ResponseBody
     @PatchMapping("changeImportantOfFolder/{folderIdx}")
-    public void changeImportantOfFolder(@PathVariable("folderIdx") int folderIdx) {
-        folderService.changeImportantOfFolder(folderIdx);
+    public BaseResponse changeImportantOfFolder(@PathVariable("folderIdx") int folderIdx) {
+        try {
+            folderService.changeImportantOfFolder(folderIdx);
+            return new BaseResponse();
+        } catch (BaseException baseException) {
+            return new BaseResponse(baseException.getStatus());
+        }
     }
 }
