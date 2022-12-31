@@ -1,5 +1,7 @@
 package maestrogroup.core.folder;
 
+import maestrogroup.core.ExceptionHandler.BaseException;
+import maestrogroup.core.ExceptionHandler.BaseResponseStatus;
 import maestrogroup.core.folder.model.Folder;
 import maestrogroup.core.folder.model.PostFolderReq;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +23,24 @@ public class FolderDao {
 
     // 특정 그룹에 대한 폴더생성
     // folderIdx, folderImgUrl, folderName, teamIdx
-
-    public void createFolder(PostFolderReq postFolderReq, int teamIdx){
+    public void createFolder(PostFolderReq postFolderReq, int teamIdx) throws BaseException {
+        String curfolderName = postFolderReq.getFolderName();
+        int folderCount = checkDuplicateFolderName(curfolderName, teamIdx);
+        if (folderCount >= 1){ // 중복되는 폴더가 있는지 검증
+            throw new BaseException(BaseResponseStatus.DUPLICATE_FOLDER);
+        }
         String createFolderQuery = "insert into Folder (folderName, teamIdx, important) VALUES (?, ?, 0)";
         Object[] createFolderParams = new Object[]{postFolderReq.getFolderName(), teamIdx};
         this.jdbcTemplate.update(createFolderQuery, createFolderParams);
+    }
+
+    //해당 팀에 같은 이름의 폴더가 있는지에 대한 검증
+    //        int nowImportance = this.jdbcTemplate.queryForObject("select important from Mapping where userIdx = ? AND teamIdx = ?", int.class, userIdx, teamIdx);
+    public int checkDuplicateFolderName(String curfolderName, int teamIdx){
+        String checkFolderCountQUery = "select count(*) from Folder where folderName = ? AND teamIdx = ?";
+        Object[] folderNameParams = new Object[]{curfolderName, teamIdx};
+        Integer folderCount = this.jdbcTemplate.queryForObject(checkFolderCountQUery, folderNameParams, Integer.class);
+        return folderCount;
     }
 
 
