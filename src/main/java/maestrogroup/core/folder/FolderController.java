@@ -56,4 +56,10 @@ public class FolderController {
     public void deleteFolder(@PathVariable("folderIdx") int folderIdx){
         folderService.deleteFolder(folderIdx);
     }
+
+    @ResponseBody
+    @PatchMapping("changeImportantOfFolder/{folderIdx}")
+    public void changeImportantOfFolder(@PathVariable("folderIdx") int folderIdx) {
+        folderService.changeImportantOfFolder(folderIdx);
+    }
 }

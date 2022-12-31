@@ -23,7 +23,7 @@ public class FolderDao {
     // folderIdx, folderImgUrl, folderName, teamIdx
 
     public void createFolder(PostFolderReq postFolderReq, int teamIdx){
-        String createFolderQuery = "insert into Folder (folderName, teamIdx) VALUES (?, ?)";
+        String createFolderQuery = "insert into Folder (folderName, teamIdx, important) VALUES (?, ?, 0)";
         Object[] createFolderParams = new Object[]{postFolderReq.getFolderName(), teamIdx};
         this.jdbcTemplate.update(createFolderQuery, createFolderParams);
     }
@@ -37,7 +37,8 @@ public class FolderDao {
                 (rs, rowNum) -> new Folder(
                         rs.getInt("folderIdx"),
                         rs.getString("folderName"),
-                        rs.getInt("teamIdx")),
+                        rs.getInt("teamIdx"),
+                        rs.getInt("important")),
                 getTeamIdx);
     }
 
@@ -50,5 +51,21 @@ public class FolderDao {
     public void deleteFolder(int folderIdx){
         String deleteFolderQuery = "DELETE FROM Folder WHERE folderIdx = ?";
         this.jdbcTemplate.update(deleteFolderQuery, folderIdx);
+    }
+
+    public void changeImportantOfFolder(int folderIdx) {
+        int nowImportant = this.jdbcTemplate.queryForObject("select important from Folder where folderIdx = ?", int.class, folderIdx);
+
+        if (nowImportant == 0) {
+            nowImportant = 1;
+        }
+        if (nowImportant == 1) {
+            nowImportant = 0;
+        }
+
+        String query = "update Folder set important = ? where folderIdx = ?";
+        Object[] params = new Object[]{nowImportant, folderIdx};
+
+        this.jdbcTemplate.update(query, params);
     }
 }

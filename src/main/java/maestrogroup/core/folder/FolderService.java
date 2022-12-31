@@ -26,4 +26,8 @@ public class FolderService {
     public void deleteFolder(int folderIdx){
         folderDao.deleteFolder(folderIdx);
     }
+
+    public void changeImportantOfFolder(int folderIdx) {
+        folderDao.changeImportantOfFolder(folderIdx);
+    }
 }
