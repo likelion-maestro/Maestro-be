@@ -51,4 +51,8 @@ public class FolderDao {
         String deleteFolderQuery = "DELETE FROM Folder WHERE folderIdx = ?";
         this.jdbcTemplate.update(deleteFolderQuery, folderIdx);
     }
+
+    public int isExistsFolder(int folderIdx) {
+        return this.jdbcTemplate.queryForObject("select exists (select folderIdx from Folder where folderIdx = ?)", int.class, folderIdx);
+    }
 }

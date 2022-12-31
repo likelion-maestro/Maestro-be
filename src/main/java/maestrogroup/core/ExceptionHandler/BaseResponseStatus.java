@@ -47,7 +47,11 @@ BaseResponseStatus {
     USER_IS_NOT_IN_TEAM("팀에 가입되어 있지 않아 삭제할 권한이 없습니다.", HttpStatus.BAD_REQUEST),
 
     // 음악 관련
-    INVALID_MUSIC_VALUE("0보다 큰 값을 입력해주세요.", HttpStatus.BAD_REQUEST);
+    INVALID_MUSIC_VALUE("0보다 큰 값을 입력해주세요.", HttpStatus.BAD_REQUEST),
+
+
+    // 폴더 관련
+    NOT_EXISTS_FOLDER("폴더가 존재하지 않습니다", HttpStatus.BAD_REQUEST);
     private final HttpStatus httpStatus;
     private final String message;
 

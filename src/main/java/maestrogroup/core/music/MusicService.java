@@ -2,6 +2,7 @@ package maestrogroup.core.music;
 
 import maestrogroup.core.ExceptionHandler.BaseException;
 import maestrogroup.core.ExceptionHandler.BaseResponseStatus;
+import maestrogroup.core.folder.FolderDao;
 import maestrogroup.core.music.model.PostMusicReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,12 +11,20 @@ import org.springframework.stereotype.Service;
 public class MusicService {
     @Autowired
     private final MusicDao musicDao;
+    @Autowired
+    private final FolderDao folderDao;
 
-    public MusicService(MusicDao musicDao){
+    public MusicService(MusicDao musicDao, FolderDao folderDao){
         this.musicDao = musicDao;
+        this.folderDao = folderDao;
     }
 
     public void createMusic(PostMusicReq postMusicReq, int folderIdx) throws BaseException {
+        // Music을 생성할 Folder가 존재하지 않을 때에 대한 예외처리
+        if (folderDao.isExistsFolder(folderIdx) != 1) {
+            throw new BaseException(BaseResponseStatus.NOT_EXISTS_FOLDER);
+        }
+
         // musicName을 기입하지 않았을 때에 대한 예외처리
         if (postMusicReq.getMusicName() == null || postMusicReq.getMusicName() == "") {
             throw new BaseException(
