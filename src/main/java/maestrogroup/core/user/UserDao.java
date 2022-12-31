@@ -107,13 +107,3 @@ public class UserDao {
         );
     }
 }
-//
-//    @ResponseBody
-//    @DeleteMapping("/delete_team/{teamIdx}")
-//    public BaseResponse deleteTeam(@PathVariable("teamIdx") int teamIdx) throws BaseException {
-//        try {
-//            teamService.deleteTeam(teamIdx);
-//            return new BaseResponse();
-//        } catch (BaseException baseException) {
-//            return new BaseResponse(baseException.getStatus());
-//        }

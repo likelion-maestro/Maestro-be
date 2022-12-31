@@ -44,8 +44,14 @@ public class TeamDao {
     }
 
     public void deleteTeam(int teamIdx){
-        String deleteTeamQuery = "delete from Team where teamIdx = ?";
-        this.jdbcTemplate.update(deleteTeamQuery, teamIdx);
+        //삭제될 팀의 Mapping 관계 삭제
+        this.jdbcTemplate.update("delete from Mapping where teamIdx = ?", teamIdx);
+
+        //삭제될 팀의 Folder 삭제
+        this.jdbcTemplate.update("delete from Folder where teamIdx = ?", teamIdx);
+
+        //팀 삭제
+        this.jdbcTemplate.update("delete from Team where teamIdx = ?", teamIdx);
     }
 
     public int getLeaderIdx(int teamIdx) {

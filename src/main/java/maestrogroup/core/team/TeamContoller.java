@@ -2,14 +2,11 @@ package maestrogroup.core.team;
 
 import maestrogroup.core.ExceptionHandler.BaseException;
 import maestrogroup.core.ExceptionHandler.BaseResponse;
-import maestrogroup.core.ExceptionHandler.BaseResponseStatus;
-import maestrogroup.core.team.model.GetTeamRes;
+import maestrogroup.core.Security.JwtService;
 import maestrogroup.core.team.model.PatchTeamReq;
 import maestrogroup.core.team.model.PostTeamReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 public class TeamContoller {
@@ -19,11 +16,13 @@ public class TeamContoller {
     private final TeamProvider teamProvider;
     @Autowired
     private final TeamService teamService;
-
-    public TeamContoller(TeamDao teamDao, TeamProvider teamProvider, TeamService teamService) {
+    @Autowired
+    private final JwtService jwtService;
+    public TeamContoller(TeamDao teamDao, TeamProvider teamProvider, TeamService teamService, JwtService jwtService) {
         this.teamDao = teamDao;
         this.teamProvider = teamProvider;
         this.teamService = teamService;
+        this.jwtService = jwtService;
     }
 
 //    @ResponseBody
@@ -55,8 +54,14 @@ public class TeamContoller {
 
     @ResponseBody
     @DeleteMapping("/delete_team/{teamIdx}")
-    public void deleteTeam(@PathVariable("teamIdx") int teamIdx){
-        teamService.deleteTeam(teamIdx);
+    public BaseResponse deleteTeam(@PathVariable("teamIdx") int teamIdx) throws BaseException{
+        try {
+            int userIdx = jwtService.getUserIdx();
+            teamService.deleteTeam(teamIdx, userIdx);
+            return new BaseResponse();
+        } catch (BaseException baseException) {
+            return new BaseResponse(baseException.getStatus());
+        }
     }
 
 //    @ResponseBody

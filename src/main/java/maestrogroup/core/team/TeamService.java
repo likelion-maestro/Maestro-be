@@ -2,8 +2,8 @@ package maestrogroup.core.team;
 
 
 import maestrogroup.core.ExceptionHandler.BaseException;
-import maestrogroup.core.ExceptionHandler.BaseResponse;
 import maestrogroup.core.ExceptionHandler.BaseResponseStatus;
+import maestrogroup.core.mapping.MappingDao;
 import maestrogroup.core.team.model.PatchTeamReq;
 import maestrogroup.core.team.model.PostTeamReq;
 import org.springframework.stereotype.Service;
@@ -12,10 +12,12 @@ import org.springframework.stereotype.Service;
 public class TeamService {
     private final TeamDao teamDao;
     private final TeamProvider teamProvider;
+    private final MappingDao mappingDao;
 
-    public TeamService(TeamDao teamDao, TeamProvider teamProvider) {
+    public TeamService(TeamDao teamDao, TeamProvider teamProvider, MappingDao mappingDao) {
         this.teamDao = teamDao;
         this.teamProvider = teamProvider;
+        this.mappingDao = mappingDao;
     }
 
     // 팀 생성시 현재 로그인 상태인 유저 (= 팀 그룹을 생성하려는 유저) 가 새롭게 생성된 팀에 종속하도록 api 수정되어야함
@@ -38,8 +40,17 @@ public class TeamService {
         }
     }
 
-    public void deleteTeam(int teamIdx){
-        teamDao.deleteTeam(teamIdx);
+    public void deleteTeam(int teamIdx, int userIdx) throws BaseException {
+        //User가 삭제할 팀에 가입되어 있었는지 검증
+        if (mappingDao.isUserInTeam(teamIdx, userIdx) != 1) {
+            throw new BaseException(BaseResponseStatus.USER_IS_NOT_IN_TEAM);
+        }
+
+        try {
+            teamDao.deleteTeam(teamIdx);
+        } catch (Exception exception) {
+            throw new BaseException(BaseResponseStatus.SERVER_ERROR);
+        }
     }
 
     public void modifyTeamLeader(int userIdx1, int userIdx2, int teamIdx) throws BaseException {
