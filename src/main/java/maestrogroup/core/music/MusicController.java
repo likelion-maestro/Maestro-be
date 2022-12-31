@@ -51,7 +51,7 @@ public class MusicController {
     @GetMapping("getMusicInfo/{musicIdx}")
     public BaseResponse<List<MusicInfoRes>> GetAllMusicInfo(@PathVariable("musicIdx") int musicIdx) {
         try {
-            return new BaseResponse<List<MusicInfoRes>>(musicProvider.GetMusicInfo(musicIdx););
+            return new BaseResponse<List<MusicInfoRes>>(musicProvider.GetMusicInfo(musicIdx));
         } catch (BaseException baseException) {
             return new BaseResponse(baseException.getStatus());
         }
