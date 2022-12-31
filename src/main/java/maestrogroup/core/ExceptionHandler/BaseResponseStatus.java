@@ -42,6 +42,7 @@ BaseResponseStatus {
     INVALID_USER("존재하지 않는 회원입니다.", HttpStatus.BAD_REQUEST),
 
     // 폴더
+    FOLDER_NAME_LENGTH("폴더 이름을 20자 이하로 생성해주세요.", HttpStatus.BAD_REQUEST),
     DUPLICATE_FOLDER("이미 폴더가 존재합나다.", HttpStatus.NOT_ACCEPTABLE);
 
     private final HttpStatus httpStatus;
