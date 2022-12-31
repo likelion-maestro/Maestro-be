@@ -1,5 +1,6 @@
 package maestrogroup.core.music;
 
+import maestrogroup.core.ExceptionHandler.BaseException;
 import maestrogroup.core.music.model.Music;
 import maestrogroup.core.music.model.MusicInfoRes;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,7 @@ public class MusicProvider {
         this.musicDao = musicDao;
     }
 
-    public List<Music> GetAllMusic(int folderIdx){
+    public List<Music> GetAllMusic(int folderIdx) throws BaseException {
         return musicDao.GetAllMusic(folderIdx);
     }
 

@@ -1,5 +1,7 @@
 package maestrogroup.core.music;
 
+import maestrogroup.core.ExceptionHandler.BaseException;
+import maestrogroup.core.ExceptionHandler.BaseResponse;
 import maestrogroup.core.music.model.Music;
 import maestrogroup.core.music.model.MusicInfoRes;
 import maestrogroup.core.music.model.PostMusicReq;
@@ -26,8 +28,13 @@ public class MusicController {
     }
 
     @GetMapping("getMusicList/{folderIdx}")
-    public List<Music> GetAllMusic(@PathVariable("folderIdx") int folderIdx){
-        return musicProvider.GetAllMusic(folderIdx);
+    public BaseResponse<List<Music>> GetAllMusic(@PathVariable("folderIdx") int folderIdx){
+        try {
+            List<Music> musicList = musicProvider.GetAllMusic(folderIdx);
+            return new BaseResponse<>(musicList);
+        } catch (BaseException baseException){
+            return new BaseResponse<>(baseException.getStatus());
+        }
     }
 
     @ResponseBody

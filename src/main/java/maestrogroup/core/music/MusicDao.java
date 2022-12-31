@@ -1,5 +1,7 @@
 package maestrogroup.core.music;
 
+import maestrogroup.core.ExceptionHandler.BaseException;
+import maestrogroup.core.ExceptionHandler.BaseResponseStatus;
 import maestrogroup.core.music.model.Music;
 import maestrogroup.core.music.model.MusicInfoRes;
 import maestrogroup.core.music.model.PostMusicReq;
@@ -22,18 +24,23 @@ public class MusicDao {
     }
 
     // musicIdx, BPM, folderIdx, musicImgUrl, musicName;
-    public List<Music> GetAllMusic(int folderIdx){
-        String GetAllMusicQuery = "select * from Music where folderIdx = ?";
-        return this.jdbcTemplate.query(GetAllMusicQuery,
-                (rs, rowNum) -> new Music(
-                 rs.getInt("musicIdx"),
-                 rs.getInt("bpm"),
-                 rs.getInt("folderIdx"),
-                        rs.getString("musicName"),
-                        rs.getInt("circleNum"),
-                        rs.getDouble("totalNum")),
-                folderIdx);
+    public List<Music> GetAllMusic(int folderIdx) throws BaseException{
+        try {
+            String GetAllMusicQuery = "select * from Music where folderIdx = ?";
+            return this.jdbcTemplate.query(GetAllMusicQuery,
+                    (rs, rowNum) -> new Music(
+                            rs.getInt("musicIdx"),
+                            rs.getInt("bpm"),
+                            rs.getInt("folderIdx"),
+                            rs.getString("musicName"),
+                            rs.getInt("circleNum"),
+                            rs.getDouble("totalNum")),
+                    folderIdx);
+        } catch (Exception e){
+            throw new BaseException(BaseResponseStatus.SERVER_ERROR);
+        }
     }
+
     public void createMusic(PostMusicReq postMusicReq, int folderIdx) {
         String createMusicQuery = "insert into Music (musicName, bpm, circleNum, totalNum, folderIdx) VALUES (?, ?, ?, ?, ?)";
         Object[] createMusicParams = new Object[]{postMusicReq.getMusicName(), postMusicReq.getBpm(), postMusicReq.getCircleNum(), (double)60 / postMusicReq.getBpm() * postMusicReq.getCircleNum(), folderIdx};
