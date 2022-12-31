@@ -48,6 +48,7 @@ BaseResponseStatus {
 
     // 음악 관련
     INVALID_MUSIC_VALUE("0보다 큰 값을 입력해주세요.", HttpStatus.BAD_REQUEST),
+    NOT_EXISTS_MUSIC("음악이 존재하지 않습니다.", HttpStatus.BAD_REQUEST),
 
 
     // 폴더 관련

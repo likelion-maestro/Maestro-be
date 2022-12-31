@@ -50,7 +50,12 @@ public class MusicService {
         }
     }
 
-    public void deleteMusic(int musicIdx) {
+    public void deleteMusic(int musicIdx) throws BaseException {
+        // 삭제할 Music이 존재하지 않을 때에 대한 예외처리
+        if (musicDao.isExistsMusic(musicIdx) != 1) {
+            throw new BaseException(BaseResponseStatus.NOT_EXISTS_MUSIC);
+        }
+
         musicDao.deleteMusic(musicIdx);
     }
 }
