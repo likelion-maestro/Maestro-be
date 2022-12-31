@@ -22,7 +22,7 @@ public class MusicProvider {
         return musicDao.GetAllMusic(folderIdx);
     }
 
-    public List<MusicInfoRes> GetMusicInfo(int musicIdx){
+    public MusicInfoRes GetMusicInfo(int musicIdx) throws BaseException{
         return musicDao.GetMusicInfo(musicIdx);
     }
 }

@@ -39,13 +39,23 @@ public class MusicController {
 
     @ResponseBody
     @PostMapping("createMusic/{folderIdx}")
-    public void createMusic (@RequestBody PostMusicReq postMusicReq, @PathVariable int folderIdx) {
-        musicService.createMusic(postMusicReq, folderIdx);
+    public BaseResponse createMusic (@RequestBody PostMusicReq postMusicReq, @PathVariable int folderIdx) {
+        try {
+            musicService.createMusic(postMusicReq, folderIdx);
+            return new BaseResponse();
+        } catch (BaseException baseException){
+            return new BaseResponse(baseException.getStatus());
+        }
     }
 
     @GetMapping("getMusicInfo/{musicIdx}")
-    public List<MusicInfoRes> GetAllMusicInfo(@PathVariable("musicIdx") int musicIdx){
-        return musicProvider.GetMusicInfo(musicIdx);
+    public BaseResponse<MusicInfoRes> GetAllMusicInfo(@PathVariable("musicIdx") int musicIdx){
+        try {
+            MusicInfoRes musicInfo = musicProvider.GetMusicInfo(musicIdx);
+            return new BaseResponse(musicInfo);
+        } catch (BaseException baseException){
+            return new BaseResponse(baseException.getStatus());
+        }
     }
 
     @ResponseBody
