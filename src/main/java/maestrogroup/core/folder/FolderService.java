@@ -29,7 +29,7 @@ public class FolderService {
         folderDao.modifyFolder(folderIdx, teamIdx, modifyFolderReq);
     }
 
-    public void deleteFolder(int folderIdx){
+    public void deleteFolder(int folderIdx) throws BaseException{
         //유효한 folderIdx인지에 대한 검증
         //User가 Folder를 삭제하고자 하는 팀에 속해있는지에 대한 검증
         folderDao.deleteFolder(folderIdx);
