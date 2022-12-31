@@ -1,9 +1,14 @@
 package maestrogroup.core.user;
 
+import maestrogroup.core.ExceptionHandler.BaseException;
+import maestrogroup.core.ExceptionHandler.BaseResponse;
 import maestrogroup.core.user.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.sql.DataSource;
 import java.sql.Time;
@@ -102,3 +107,13 @@ public class UserDao {
         );
     }
 }
+//
+//    @ResponseBody
+//    @DeleteMapping("/delete_team/{teamIdx}")
+//    public BaseResponse deleteTeam(@PathVariable("teamIdx") int teamIdx) throws BaseException {
+//        try {
+//            teamService.deleteTeam(teamIdx);
+//            return new BaseResponse();
+//        } catch (BaseException baseException) {
+//            return new BaseResponse(baseException.getStatus());
+//        }

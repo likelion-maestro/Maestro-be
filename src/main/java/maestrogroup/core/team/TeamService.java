@@ -26,8 +26,16 @@ public class TeamService {
         //return postTeamRes;
     }
 
-    public void modifyTeam(PatchTeamReq patchTeamReq){
-        teamDao.modifyTeam(patchTeamReq);
+    public void modifyTeam(PatchTeamReq patchTeamReq) throws BaseException {
+        if (patchTeamReq.getTeamName() == null || patchTeamReq.getTeamName() == "") {
+            throw new BaseException(BaseResponseStatus.INVALID_TEAM_NAME_FORM);
+        }
+
+        try {
+            teamDao.modifyTeam(patchTeamReq);
+        } catch (Exception e) {
+            throw new BaseException(BaseResponseStatus.SERVER_ERROR);
+        }
     }
 
     public void deleteTeam(int teamIdx){
