@@ -75,10 +75,25 @@ public class FolderDao {
         }
     }
 
-    public void modifyFolder(int folderIdx, ModifyFolderReq modifyFolderReq){
-        String UpdateModifyFolderQuery = "UPDATE Folder set folderName = ? where folderIdx = ?";
-        Object[] modifyFolderParams = new Object[]{modifyFolderReq.getFolderName(), folderIdx};
-        this.jdbcTemplate.update(UpdateModifyFolderQuery, modifyFolderParams);
+    public void modifyFolder(int folderIdx, int teamIdx, ModifyFolderReq modifyFolderReq) throws BaseException{
+        String curfolderName = modifyFolderReq.getFolderName();
+        int folderUniCodeLength = checkFolderNameLength(curfolderName);
+
+        if(folderUniCodeLength > 20){
+            throw new BaseException(BaseResponseStatus.FOLDER_NAME_LENGTH);
+        }
+        int folderCount = checkDuplicateFolderName(curfolderName, teamIdx);
+        if (folderCount >= 1){ // 중복되는 폴더가 있는지 검증
+            throw new BaseException(BaseResponseStatus.DUPLICATE_FOLDER);
+        }
+        try {
+            String UpdateModifyFolderQuery = "UPDATE Folder set folderName = ? where folderIdx = ?";
+            Object[] modifyFolderParams = new Object[]{modifyFolderReq.getFolderName(), folderIdx};
+            this.jdbcTemplate.update(UpdateModifyFolderQuery, modifyFolderParams);
+        }
+        catch (Exception e){
+            throw new BaseException(BaseResponseStatus.SERVER_ERROR);
+        }
     }
 
     public void deleteFolder(int folderIdx){

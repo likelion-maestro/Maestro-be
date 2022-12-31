@@ -64,17 +64,29 @@ public class FolderController {
     // 또한 폴더 수정페이지로 넘어갔을떄, 기본적으로 폴더 이미지와 폴더 이름 수정란에 아무것도 값이 없는것이 아닌, 디폴트 값으로 기존에
     // 해당 폴더에 저장되어있던 값들을 수정란에 띄어주는 것으로 가정
     @ResponseBody
-    @PatchMapping("/patchFolder/{folderIdx}")
-    public void modifyFolder(@PathVariable("folderIdx") int folderIdx, @RequestBody ModifyFolderReq modifyFolderReq){
-        folderService.modifyFolder(folderIdx, modifyFolderReq);
+    @PatchMapping("/patchFolder/{folderIdx}/{teamIdx}")
+    public BaseResponse modifyFolder(@PathVariable("folderIdx") int folderIdx, @PathVariable("teamIdx") int teamIdx, @RequestBody ModifyFolderReq modifyFolderReq){
+        try {
+            folderService.modifyFolder(folderIdx, teamIdx, modifyFolderReq);
+            return new BaseResponse();
+        } catch (BaseException baseException){
+            return new BaseResponse(baseException.getStatus());
+        }
     }
 
     // 폴더를 삭제할떄 폴더안에 담겨있는 음악 객체들도 모두 삭제되도록 API 추가 개발 처리요망
+    /*
     @ResponseBody
     @DeleteMapping("/deleteFolder/{folderIdx}")
-    public void deleteFolder(@PathVariable("folderIdx") int folderIdx){
-        folderService.deleteFolder(folderIdx);
+    public BaseResponse deleteFolder(@PathVariable("folderIdx") int folderIdx){
+        try {
+            folderService.deleteFolder(folderIdx);
+            return new BaseResponse();
+        } catch(BaseException baseException) {
+            return new BaseResponse(baseException.getStatus());
+        }
     }
+     */
 
     @ResponseBody
     @PatchMapping("changeImportantOfFolder/{folderIdx}")
