@@ -23,11 +23,10 @@ public class FolderService {
         //해당 팀에 같은 이름의 폴더가 있는지에 대한 검증
         folderDao.createFolder(postFolderReq, teamIdx);
     }
-    public void modifyFolder(int folderIdx, ModifyFolderReq modifyFolderReq){
+    public void modifyFolder(int folderIdx, int teamIdx, ModifyFolderReq modifyFolderReq) throws BaseException{
         //User가 Folder를 수정하고자 하는 팀에 속해있는지에 대한 검증
         //입력값이 유효한지에 대한 검증
-        folderDao.modifyFolder(folderIdx, modifyFolderReq);
-
+        folderDao.modifyFolder(folderIdx, teamIdx, modifyFolderReq);
     }
 
     public void deleteFolder(int folderIdx){
