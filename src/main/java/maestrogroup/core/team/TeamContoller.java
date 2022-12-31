@@ -44,8 +44,9 @@ public class TeamContoller {
     @PatchMapping("/patch_team/{teamIdx}")
     public BaseResponse modifyTeam(@PathVariable("teamIdx") int teamIdx, @RequestBody PostTeamReq postTeamReq) throws BaseException {
         try {
+            int userIdx = jwtService.getUserIdx();
             PatchTeamReq patchUserReq = new PatchTeamReq(teamIdx, postTeamReq.getTeamName());
-            teamService.modifyTeam(patchUserReq);
+            teamService.modifyTeam(patchUserReq, userIdx);
             return new BaseResponse();
         } catch (BaseException baseException) {
             return new BaseResponse(baseException.getStatus());

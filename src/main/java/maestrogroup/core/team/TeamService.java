@@ -28,9 +28,14 @@ public class TeamService {
         //return postTeamRes;
     }
 
-    public void modifyTeam(PatchTeamReq patchTeamReq) throws BaseException {
+    public void modifyTeam(PatchTeamReq patchTeamReq, int userIdx) throws BaseException {
+        //수정 내용이 공백일 경우에 대한 예외처리
         if (patchTeamReq.getTeamName() == null || patchTeamReq.getTeamName() == "") {
             throw new BaseException(BaseResponseStatus.INVALID_TEAM_NAME_FORM);
+        }
+        //User가 수정할 팀에 가입되어 있었는지 검증
+        if (mappingDao.isUserInTeam(patchTeamReq.getTeamIdx(), userIdx) != 1) {
+            throw new BaseException(BaseResponseStatus.USER_IS_NOT_IN_TEAM);
         }
 
         try {
