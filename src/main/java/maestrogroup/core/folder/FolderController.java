@@ -1,5 +1,8 @@
 package maestrogroup.core.folder;
 
+import maestrogroup.core.ExceptionHandler.BaseException;
+import maestrogroup.core.ExceptionHandler.BaseResponse;
+import maestrogroup.core.Security.JwtService;
 import maestrogroup.core.folder.model.Folder;
 import maestrogroup.core.folder.model.*;
 import maestrogroup.core.folder.model.PostFolderReq;
@@ -18,18 +21,28 @@ public class FolderController {
     @Autowired
     private final FolderDao folderDao;
 
-    public FolderController(FolderProvider folderProvider, FolderService folderService, FolderDao folderDao) {
+    @Autowired
+    private final JwtService jwtService;
+
+    public FolderController(FolderProvider folderProvider, FolderService folderService, FolderDao folderDao, JwtService jwtService) {
         this.folderProvider = folderProvider;
         this.folderService = folderService;
         this.folderDao = folderDao;
+        this.jwtService = jwtService;
     }
 
     // POST: /create_folder/{teamID}
     // folderIdx, folderImgUrl, folderName, teamIdx
     @ResponseBody
     @PostMapping("/create_folder/{teamIdx}")
-    public void createFolder(@PathVariable("teamIdx") int teamIdx, @RequestBody PostFolderReq postFolderReq){
-        folderService.createFolder(postFolderReq, teamIdx);
+    public BaseResponse createFolder(@PathVariable("teamIdx") int teamIdx, @RequestBody PostFolderReq postFolderReq) {
+        try {
+            folderService.createFolder(postFolderReq, teamIdx);
+            return new BaseResponse();
+        }
+        catch(BaseException baseException){
+            return new BaseResponse(baseException.getStatus());
+        }
     }
 
     // 특정 팀에 대한 폴더 리스트 조회

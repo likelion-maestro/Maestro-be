@@ -39,7 +39,11 @@ BaseResponseStatus {
     INVALID_TEAM_AUTH("팀장이 아니므로, 팀장 권한 부여가 불가능합니다.", HttpStatus.NOT_ACCEPTABLE),
 
     // 로그인 관련
-    INVALID_USER("존재하지 않는 회원입니다.", HttpStatus.BAD_REQUEST);
+    INVALID_USER("존재하지 않는 회원입니다.", HttpStatus.BAD_REQUEST),
+
+    // 폴더
+    DUPLICATE_FOLDER("이미 폴더가 존재합나다.", HttpStatus.NOT_ACCEPTABLE);
+
     private final HttpStatus httpStatus;
     private final String message;
 
