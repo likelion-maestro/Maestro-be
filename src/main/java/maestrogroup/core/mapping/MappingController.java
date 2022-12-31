@@ -77,17 +77,17 @@ public class MappingController {
         return mappingProvider.getTeamMembers(teamIdx);
     }
 
-    // 특정 유저가 속해있는 모든 팀 그룹 출력 : ManyToMany
-    @GetMapping("/getTeamList")
-    public BaseResponse<List<GetTeamRes>> getTeamList(){
-        try {
-            int userIdxByJwt = jwtService.getUserIdx();
-            List<GetTeamRes> getTeamResList = mappingProvider.getTeamList(userIdxByJwt);
-            return new BaseResponse<List<GetTeamRes>>(getTeamResList);
-        } catch(BaseException baseException){
-            return new BaseResponse(baseException.getStatus());
-        }
-    }
+//    // 특정 유저가 속해있는 모든 팀 그룹 출력 : ManyToMany
+//    @GetMapping("/getTeamList")
+//    public BaseResponse<List<GetTeamRes>> getTeamList(){
+//        try {
+//            int userIdxByJwt = jwtService.getUserIdx();
+//            List<GetTeamRes> getTeamResList = mappingProvider.getTeamList(userIdxByJwt);
+//            return new BaseResponse<List<GetTeamRes>>(getTeamResList);
+//        } catch(BaseException baseException){
+//            return new BaseResponse(baseException.getStatus());
+//        }
+//    }
 
     @PatchMapping("/changeImportanceOfTeam/{teamIdx}")
     public void changeImportanceOfTeam(@PathVariable("teamIdx") int teamIdx) throws BaseException {
@@ -95,7 +95,7 @@ public class MappingController {
         mappingService.changeImportanceOfTeam(userIdx, teamIdx);
     }
 
-    @GetMapping("/getTeamListAndImportant")
+    @GetMapping("/getTeamList")
     public BaseResponse<List<GetTeamAndImportantRes>> getTeamListAndImportant() throws BaseException {
         try {
             int userIdx = jwtService.getUserIdx();
