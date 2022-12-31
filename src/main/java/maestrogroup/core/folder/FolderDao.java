@@ -25,6 +25,11 @@ public class FolderDao {
     // folderIdx, folderImgUrl, folderName, teamIdx
     public void createFolder(PostFolderReq postFolderReq, int teamIdx) throws BaseException {
         String curfolderName = postFolderReq.getFolderName();
+        int folderUniCodeLength =  checkFolderNameLength(curfolderName);
+
+        if(folderUniCodeLength > 20){
+            throw new BaseException(BaseResponseStatus.FOLDER_NAME_LENGTH);
+        }
         int folderCount = checkDuplicateFolderName(curfolderName, teamIdx);
         if (folderCount >= 1){ // 중복되는 폴더가 있는지 검증
             throw new BaseException(BaseResponseStatus.DUPLICATE_FOLDER);
@@ -41,6 +46,11 @@ public class FolderDao {
         Object[] folderNameParams = new Object[]{curfolderName, teamIdx};
         Integer folderCount = this.jdbcTemplate.queryForObject(checkFolderCountQUery, folderNameParams, Integer.class);
         return folderCount;
+    }
+
+    // 입력값으로 들어온 폴더 이름의 길이 체크
+    public int checkFolderNameLength(String folderName){
+        return folderName.length();
     }
 
 
