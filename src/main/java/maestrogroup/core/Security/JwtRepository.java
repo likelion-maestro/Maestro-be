@@ -75,6 +75,7 @@ public class JwtRepository {
 
     public void deleteRefreshToken(String refreshToken){
         String deleteTokenQuery = "DELETE FROM RefreshToken where tokenContents = ?";
-        this.jdbcTemplate.update(deleteTokenQuery, refreshToken);
+        Object[] refreshTokenParams = new Object[]{refreshToken};
+        this.jdbcTemplate.update(deleteTokenQuery, refreshTokenParams);
     }
 }
