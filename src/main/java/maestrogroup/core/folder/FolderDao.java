@@ -56,15 +56,16 @@ public class FolderDao {
     public void changeImportantOfFolder(int folderIdx) {
         int nowImportant = this.jdbcTemplate.queryForObject("select important from Folder where folderIdx = ?", int.class, folderIdx);
 
-        if (nowImportant == 0) {
-            nowImportant = 1;
-        }
+        int value = -1;
         if (nowImportant == 1) {
-            nowImportant = 0;
+            value = 0;
+        }
+        if (nowImportant == 0) {
+            value = 1;
         }
 
         String query = "update Folder set important = ? where folderIdx = ?";
-        Object[] params = new Object[]{nowImportant, folderIdx};
+        Object[] params = new Object[]{value, folderIdx};
 
         this.jdbcTemplate.update(query, params);
     }
