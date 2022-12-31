@@ -18,7 +18,7 @@ public class MusicService {
         musicDao.createMusic(postMusicReq, folderIdx);
     }
 
-    public void modifyMusic(PostMusicReq postMusicReq, int musicIdx) {
+    public void modifyMusic(PostMusicReq postMusicReq, int musicIdx) throws BaseException{
         musicDao.modifyMusic(postMusicReq, musicIdx);
     }
 }

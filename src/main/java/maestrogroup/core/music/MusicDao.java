@@ -42,6 +42,10 @@ public class MusicDao {
     }
 
     public void createMusic(PostMusicReq postMusicReq, int folderIdx) throws BaseException{
+        if(checkMusicNameLength(postMusicReq.getMusicName()) > 20){
+            throw new BaseException(BaseResponseStatus.MUSIC_NAME_LENGTH);
+        }
+
         try {
             String createMusicQuery = "insert into Music (musicName, bpm, circleNum, totalNum, folderIdx) VALUES (?, ?, ?, ?, ?)";
             Object[] createMusicParams = new Object[]{postMusicReq.getMusicName(), postMusicReq.getBpm(), postMusicReq.getCircleNum(), (double) 60 / postMusicReq.getBpm() * postMusicReq.getCircleNum(), folderIdx};
@@ -80,13 +84,21 @@ public class MusicDao {
         }
     }
 
-    public void modifyMusic(PostMusicReq postMusicReq, int musicIdx) {
-        String ModifyMusicQuery = "update Music set musicName = ?, bpm = ?, circleNum = ?, totalNum = ? where musicIdx = ?";
-        Object[] ModifyMusicParams = new Object[]{postMusicReq.getMusicName(), postMusicReq.getBpm(), postMusicReq.getCircleNum(), (double)60 / postMusicReq.getBpm() * postMusicReq.getCircleNum(), musicIdx};
-        this.jdbcTemplate.update(ModifyMusicQuery, ModifyMusicParams);
+    public void modifyMusic(PostMusicReq postMusicReq, int musicIdx) throws BaseException{
+        if(checkMusicNameLength(postMusicReq.getMusicName()) > 20){
+            throw new BaseException(BaseResponseStatus.MUSIC_NAME_LENGTH);
+        }
 
-//        private String musicName;
-//        private int bpm;
-//        private int circleNum;
+        try {
+            String ModifyMusicQuery = "update Music set musicName = ?, bpm = ?, circleNum = ?, totalNum = ? where musicIdx = ?";
+            Object[] ModifyMusicParams = new Object[]{postMusicReq.getMusicName(), postMusicReq.getBpm(), postMusicReq.getCircleNum(), (double) 60 / postMusicReq.getBpm() * postMusicReq.getCircleNum(), musicIdx};
+            this.jdbcTemplate.update(ModifyMusicQuery, ModifyMusicParams);
+        } catch (Exception e){
+            throw new BaseException(BaseResponseStatus.SERVER_ERROR);
+        }
+    }
+
+    public int checkMusicNameLength(String musicName){
+        return musicName.length();
     }
 }
