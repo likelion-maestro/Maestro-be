@@ -60,7 +60,12 @@ public class MusicController {
 
     @ResponseBody
     @PatchMapping("modifyMusic/{musicIdx}")
-    public void modifyMusic(@RequestBody PostMusicReq postMusicReq, @PathVariable("musicIdx") int musicIdx) {
-        musicService.modifyMusic(postMusicReq, musicIdx);
+    public BaseResponse modifyMusic(@RequestBody PostMusicReq postMusicReq, @PathVariable("musicIdx") int musicIdx) {
+        try {
+            musicService.modifyMusic(postMusicReq, musicIdx);
+            return new BaseResponse();
+        } catch (BaseException baseException){
+            return new BaseResponse(baseException.getStatus());
+        }
     }
 }
