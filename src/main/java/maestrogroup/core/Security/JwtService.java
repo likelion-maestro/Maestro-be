@@ -149,6 +149,7 @@ public class JwtService {
             throw new BaseException(BaseResponseStatus.INVALID_TOKEN);
         }
         catch (io.jsonwebtoken.ExpiredJwtException expiredJwtException) { // refresh token 이 만료된 경우
+            jwtRepository.deleteRefreshToken(refreshToken);
             throw new BaseException(BaseResponseStatus.REFRESH_TOKEN_EXPIRED); // 새롭게 로그인읋 시도하라는 Response 를 보낸다.
         } catch (Exception ignored) { // Refresh Token이 유효하지 않은 경우 (만료여부 외의 예외처리)
             throw new BaseException(BaseResponseStatus.REFRESH_TOKEN_INVALID);
