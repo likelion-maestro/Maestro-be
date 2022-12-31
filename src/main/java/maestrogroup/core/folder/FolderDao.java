@@ -96,9 +96,23 @@ public class FolderDao {
         }
     }
 
-    public void deleteFolder(int folderIdx){
-        String deleteFolderQuery = "DELETE FROM Folder WHERE folderIdx = ?";
-        this.jdbcTemplate.update(deleteFolderQuery, folderIdx);
+    public void deleteFolder(int folderIdx) throws BaseException{
+        try {
+            String deleteFolderQuery = "DELETE FROM Folder WHERE folderIdx = ?";
+            deleteMusicInFolder(folderIdx);
+            this.jdbcTemplate.update(deleteFolderQuery, folderIdx);
+        }  catch (Exception e){
+            throw new BaseException(BaseResponseStatus.SERVER_ERROR);
+        }
+    }
+
+    public void deleteMusicInFolder(int folderIdx) throws BaseException{
+        try {
+            String deleteMusicInFolderQuery = "DELETE FROM Music WHERE folderIdx = ?";
+            this.jdbcTemplate.update(deleteMusicInFolderQuery, folderIdx);
+        } catch (Exception e){
+            throw new BaseException(BaseResponseStatus.SERVER_ERROR);
+        }
     }
 
     public void changeImportantOfFolder(int folderIdx) {

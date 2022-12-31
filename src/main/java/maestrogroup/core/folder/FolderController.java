@@ -75,18 +75,16 @@ public class FolderController {
     }
 
     // 폴더를 삭제할떄 폴더안에 담겨있는 음악 객체들도 모두 삭제되도록 API 추가 개발 처리요망
-    /*
     @ResponseBody
     @DeleteMapping("/deleteFolder/{folderIdx}")
-    public BaseResponse deleteFolder(@PathVariable("folderIdx") int folderIdx){
+    public BaseResponse deleteFolder(@PathVariable("folderIdx") int folderIdx) {
         try {
             folderService.deleteFolder(folderIdx);
             return new BaseResponse();
-        } catch(BaseException baseException) {
+        } catch (BaseException baseException) {
             return new BaseResponse(baseException.getStatus());
         }
     }
-     */
 
     @ResponseBody
     @PatchMapping("changeImportantOfFolder/{folderIdx}")
