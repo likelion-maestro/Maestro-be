@@ -48,8 +48,14 @@ public class FolderController {
     // 특정 팀에 대한 폴더 리스트 조회
     @ResponseBody
     @GetMapping("/get_all_folder/{teamIdx}")
-    public List<Folder> GetAllFolder(@PathVariable("teamIdx") int teamIdx){
-        return folderProvider.GetAllFolder(teamIdx);
+    public BaseResponse<List<Folder>> GetAllFolder(@PathVariable("teamIdx") int teamIdx){
+        try {
+            List<Folder> folderList = folderProvider.GetAllFolder(teamIdx);
+            return new BaseResponse<>(folderList);
+        }
+         catch (BaseException baseException){
+            return new BaseResponse(baseException.getStatus());
+         }
     }
 
     // 폴더 수정 : 그런데 만약에 인자값이 1개만 들어온다면? ModifyFolderReq 의 생성자를 어떻게 선언하고 처리하는가?

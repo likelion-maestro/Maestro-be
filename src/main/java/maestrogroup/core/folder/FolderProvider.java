@@ -1,5 +1,6 @@
 package maestrogroup.core.folder;
 
+import maestrogroup.core.ExceptionHandler.BaseException;
 import maestrogroup.core.folder.model.Folder;
 import maestrogroup.core.folder.model.PostFolderReq;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ public class FolderProvider {
         this.folderDao = folderDao;
     }
 
-    public List<Folder> GetAllFolder(int teamIdx){
+    public List<Folder> GetAllFolder(int teamIdx) throws BaseException {
         return folderDao.GetAllFolder(teamIdx);
     }
 }

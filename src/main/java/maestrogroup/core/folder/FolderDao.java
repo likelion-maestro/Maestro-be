@@ -34,9 +34,13 @@ public class FolderDao {
         if (folderCount >= 1){ // 중복되는 폴더가 있는지 검증
             throw new BaseException(BaseResponseStatus.DUPLICATE_FOLDER);
         }
-        String createFolderQuery = "insert into Folder (folderName, teamIdx, important) VALUES (?, ?, 0)";
-        Object[] createFolderParams = new Object[]{postFolderReq.getFolderName(), teamIdx};
-        this.jdbcTemplate.update(createFolderQuery, createFolderParams);
+        try {
+            String createFolderQuery = "insert into Folder (folderName, teamIdx, important) VALUES (?, ?, 0)";
+            Object[] createFolderParams = new Object[]{postFolderReq.getFolderName(), teamIdx};
+            this.jdbcTemplate.update(createFolderQuery, createFolderParams);
+        } catch (Exception e){
+            throw new BaseException(BaseResponseStatus.SERVER_ERROR);
+        }
     }
 
     //해당 팀에 같은 이름의 폴더가 있는지에 대한 검증
@@ -55,16 +59,20 @@ public class FolderDao {
 
 
     // folderIdx, folderImgUrl, folderName, teamIdx
-    public List<Folder> GetAllFolder(int teamIdx){
-        String getAllFolderQuery = "select * from Folder where teamIdx = ?";
-        int getTeamIdx = teamIdx;
-        return this.jdbcTemplate.query(getAllFolderQuery,
-                (rs, rowNum) -> new Folder(
-                        rs.getInt("folderIdx"),
-                        rs.getString("folderName"),
-                        rs.getInt("teamIdx"),
-                        rs.getInt("important")),
-                getTeamIdx);
+    public List<Folder> GetAllFolder(int teamIdx) throws BaseException{
+        try {
+            String getAllFolderQuery = "select * from Folder where teamIdx = ?";
+            int getTeamIdx = teamIdx;
+            return this.jdbcTemplate.query(getAllFolderQuery,
+                    (rs, rowNum) -> new Folder(
+                            rs.getInt("folderIdx"),
+                            rs.getString("folderName"),
+                            rs.getInt("teamIdx"),
+                            rs.getInt("important")),
+                    getTeamIdx);
+        } catch (Exception e){
+            throw new BaseException(BaseResponseStatus.SERVER_ERROR);
+        }
     }
 
     public void modifyFolder(int folderIdx, ModifyFolderReq modifyFolderReq){
