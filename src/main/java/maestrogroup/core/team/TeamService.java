@@ -41,6 +41,11 @@ public class TeamService {
     }
 
     public void deleteTeam(int teamIdx, int userIdx) throws BaseException {
+        //삭제할 팀이 존재하는지 검증
+        if (teamDao.isExistsTeam(teamIdx) != 1) {
+            throw new BaseException(BaseResponseStatus.NOT_EXISTS_TEAM);
+        }
+
         //User가 삭제할 팀에 가입되어 있었는지 검증
         if (mappingDao.isUserInTeam(teamIdx, userIdx) != 1) {
             throw new BaseException(BaseResponseStatus.USER_IS_NOT_IN_TEAM);

@@ -65,6 +65,10 @@ public class TeamDao {
         Object[] modifyTeamLeaderParams = new Object[]{userIdx2, teamIdx};
         this.jdbcTemplate.update(modifyTeamLeaderQuery, modifyTeamLeaderParams);
     }
+
+    public int isExistsTeam(int teamIdx) {
+        return this.jdbcTemplate.queryForObject("select exists (select teamIdx from Team where teamIdx = ?)", int.class, teamIdx);
+    }
 }
 
 
