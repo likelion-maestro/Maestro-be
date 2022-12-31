@@ -43,7 +43,9 @@ BaseResponseStatus {
 
     // 폴더
     FOLDER_NAME_LENGTH("폴더 이름을 20자 이하로 생성해주세요.", HttpStatus.BAD_REQUEST),
-    DUPLICATE_FOLDER("이미 폴더가 존재합나다.", HttpStatus.NOT_ACCEPTABLE);
+    DUPLICATE_FOLDER("이미 폴더가 존재합나다.", HttpStatus.NOT_ACCEPTABLE),
+
+    FOLDER_ERROR("폴더가 존재하지 않습니다.", HttpStatus.FORBIDDEN);
 
     private final HttpStatus httpStatus;
     private final String message;

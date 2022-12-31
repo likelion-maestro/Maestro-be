@@ -1,5 +1,6 @@
 package maestrogroup.core.folder;
 
+import com.fasterxml.jackson.databind.ser.Serializers;
 import maestrogroup.core.ExceptionHandler.BaseException;
 import maestrogroup.core.ExceptionHandler.BaseResponseStatus;
 import maestrogroup.core.folder.model.Folder;
@@ -116,24 +117,38 @@ public class FolderDao {
     }
 
     public void changeImportantOfFolder(int folderIdx) throws BaseException {
+        int exist = 0;
         try {
-            int nowImportant = this.jdbcTemplate.queryForObject("select important from Folder where folderIdx = ?", int.class, folderIdx);
-            int value = -1;
-            if (nowImportant == 1) {
-                value = 0;
+            exist = isExistsFolder(folderIdx);
+            System.out.println(exist);
+        } catch (BaseException baseException){
+            throw new BaseException(baseException.getStatus());
+        }
+
+        if(exist == 0) {
+            try {
+                int nowImportant = this.jdbcTemplate.queryForObject("select important from Folder where folderIdx = ?", int.class, folderIdx);
+                int value = -1;
+                if (nowImportant == 1) {
+                    value = 0;
+                }
+                if (nowImportant == 0) {
+                    value = 1;
+                }
+                String query = "update Folder set important = ? where folderIdx = ?";
+                Object[] params = new Object[]{value, folderIdx};
+                this.jdbcTemplate.update(query, params);
+            } catch (Exception e) {
+                throw new BaseException(BaseResponseStatus.SERVER_ERROR);
             }
-            if (nowImportant == 0) {
-                value = 1;
-            }
-            String query = "update Folder set important = ? where folderIdx = ?";
-            Object[] params = new Object[]{value, folderIdx};
-            this.jdbcTemplate.update(query, params);
-        } catch (Exception e){
-            throw new BaseException(BaseResponseStatus.SERVER_ERROR);
         }
     }
 
-    public int isExistsFolder(int folderIdx) {
-        return this.jdbcTemplate.queryForObject("select exists (select folderIdx from Folder where folderIdx = ?)", int.class, folderIdx);
+    public int isExistsFolder(int folderIdx) throws BaseException {
+        try {
+            return this.jdbcTemplate.queryForObject("select exists (select folderIdx from Folder where folderIdx = ?)", int.class, folderIdx);
+        } catch (Exception e){
+            throw new BaseException(BaseResponseStatus.FOLDER_ERROR);
+        }
     }
 }
