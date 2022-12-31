@@ -1,5 +1,6 @@
 package maestrogroup.core.music;
 
+import maestrogroup.core.ExceptionHandler.BaseResponse;
 import maestrogroup.core.music.model.Music;
 import maestrogroup.core.music.model.MusicInfoRes;
 import maestrogroup.core.music.model.PostMusicReq;
@@ -39,5 +40,10 @@ public class MusicController {
     @GetMapping("getMusicInfo/{musicIdx}")
     public List<MusicInfoRes> GetAllMusicInfo(@PathVariable("musicIdx") int musicIdx){
         return musicProvider.GetMusicInfo(musicIdx);
+    }
+
+    @DeleteMapping("deleteMusic/{musicIdx}")
+    public void deleteMusic(@PathVariable("musicIdx") int musicIdx) {
+        musicService.deleteMusic(musicIdx);
     }
 }

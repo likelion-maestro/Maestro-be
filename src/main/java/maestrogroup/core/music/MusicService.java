@@ -16,4 +16,8 @@ public class MusicService {
     public void createMusic(PostMusicReq postMusicReq, int folderIdx) {
         musicDao.createMusic(postMusicReq, folderIdx);
     }
+
+    public void deleteMusic(int musicIdx) {
+        musicDao.deleteMusic(musicIdx);
+    }
 }

@@ -64,4 +64,8 @@ public class MusicDao {
                         startTimes),
                 musicIdx);
     }
+
+    public void deleteMusic(int musicIdx) {
+        this.jdbcTemplate.update("delete from Music where musicIdx = ?", musicIdx);
+    }
 }
