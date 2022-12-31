@@ -173,6 +173,12 @@ public class MappingDao {
         }
         return result;
     }
+
+    public int isUserInTeam(int teamIdx, int userIdx) {
+        String query = "select exists (select userIdx from Mapping where teamIdx = ? AND userIdx = ?)";
+        Object[] params= new Object[]{teamIdx, userIdx};
+        return this.jdbcTemplate.queryForObject(query, int.class, params);
+    }
 }
 
 

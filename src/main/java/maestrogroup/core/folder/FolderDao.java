@@ -69,4 +69,8 @@ public class FolderDao {
 
         this.jdbcTemplate.update(query, params);
     }
+
+    public int isExistsFolder(int folderIdx) {
+        return this.jdbcTemplate.queryForObject("select exists (select folderIdx from Folder where folderIdx = ?)", int.class, folderIdx);
+    }
 }

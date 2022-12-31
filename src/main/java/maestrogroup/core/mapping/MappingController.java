@@ -56,7 +56,7 @@ public class MappingController {
      */
 
     // 이전에 생성된 팀원 그룹에 특정 유저를 초대하기 : mapping 객체만 생성함
-    @PostMapping("/inviteUser/{teamIdx}/{userIdx}")
+    @PostMapping("/inviteUser/{teamIdx}")
     public void inviteUser(@PathVariable("teamIdx") int teamIdx) throws BaseException {
         int userIdx = jwtService.getUserIdx();
         mappingService.inviteUser(teamIdx, userIdx);
@@ -77,6 +77,7 @@ public class MappingController {
         return mappingProvider.getTeamMembers(teamIdx);
     }
 
+    /*
     // 특정 유저가 속해있는 모든 팀 그룹 출력 : ManyToMany
     @GetMapping("/getTeamList")
     public BaseResponse<List<GetTeamRes>> getTeamList(){
@@ -87,7 +88,7 @@ public class MappingController {
         } catch(BaseException baseException){
             return new BaseResponse(baseException.getStatus());
         }
-    }
+    }*/
 
     @PatchMapping("/changeImportanceOfTeam/{teamIdx}")
     public void changeImportanceOfTeam(@PathVariable("teamIdx") int teamIdx) throws BaseException {
