@@ -45,14 +45,14 @@ public class MusicService {
 
         try {
             musicDao.createMusic(postMusicReq, folderIdx);
-        } catch (Exception exception) {
-            throw new BaseException(BaseResponseStatus.SERVER_ERROR);
+        } catch (BaseException exception) {
+            throw new BaseException(exception.getStatus());
         }
 
         try {
             musicDao.createMusic(postMusicReq, folderIdx);
-        } catch (Exception exception) {
-            throw new BaseException(BaseResponseStatus.SERVER_ERROR);
+        } catch (BaseException exception) {
+            throw new BaseException(exception.getStatus());
         }
     }
 
