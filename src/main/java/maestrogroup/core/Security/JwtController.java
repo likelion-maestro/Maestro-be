@@ -30,7 +30,7 @@ public class JwtController {
             AccessToken returnAccessToken = new AccessToken(newAccessToken);
             return new BaseResponse<AccessToken>(returnAccessToken);
         } catch(BaseException baseException){
-            return new BaseResponse<>(baseException.getStatus());
+            return new BaseResponse(baseException.getStatus());
         }
     }
 }
