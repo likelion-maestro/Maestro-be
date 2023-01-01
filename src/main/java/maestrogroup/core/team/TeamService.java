@@ -31,6 +31,12 @@ public class TeamService {
         if (teamDao.isExistsTeam(patchTeamReq.getTeamIdx()) != 1) {
             throw new BaseException(BaseResponseStatus.NOT_EXISTS_TEAM);
         }
+
+        // 수정한 내용이 공백일 경우에 대한 검증
+        if (patchTeamReq.getTeamName() == null || patchTeamReq.getTeamName() == "") {
+            throw new BaseException(BaseResponseStatus.INVALID_TEAM_NAME_FORM);
+        }
+
         teamDao.modifyTeam(patchTeamReq);
     }
 
