@@ -33,23 +33,26 @@ public class MappingDao {
     }
 
     public void inviteUser(int teamIdx, int userIdx) throws BaseException {
-
         // 초대를 받는 User가 이미 Team에 가입되어 있는지에 대한 검증
-        if(checkDuplicateUser(userIdx, teamIdx) >= 1){
+        if (checkDuplicateUser(userIdx, teamIdx) >= 1) {
             throw new BaseException(BaseResponseStatus.DUPLICATE_USER);
         }
 
-        //초대하는 부분
-        String inviteUserQuery = "insert into Mapping (teamIdx, userIdx) VALUES (?, ?)";
-        Object[] inviteUserParams = new Object[]{teamIdx, userIdx};
-        this.jdbcTemplate.update(inviteUserQuery, inviteUserParams);
+        try {
+            //초대하는 부분
+            String inviteUserQuery = "insert into Mapping (teamIdx, userIdx) VALUES (?, ?)";
+            Object[] inviteUserParams = new Object[]{teamIdx, userIdx};
+            this.jdbcTemplate.update(inviteUserQuery, inviteUserParams);
 
-        //해당 팀의 count를 증가시키는 부분
-        int nowCount = this.jdbcTemplate.queryForObject("select count from Team where teamIdx = ?", int.class, teamIdx);
-        nowCount += 1;
+            //해당 팀의 count를 증가시키는 부분
+            int nowCount = this.jdbcTemplate.queryForObject("select count from Team where teamIdx = ?", int.class, teamIdx);
+            nowCount += 1;
 
-        Object[] updateCountParams = new Object[]{nowCount, teamIdx};
-        this.jdbcTemplate.update("update Team set count = ? where teamIdx = ?", updateCountParams);
+            Object[] updateCountParams = new Object[]{nowCount, teamIdx};
+            this.jdbcTemplate.update("update Team set count = ? where teamIdx = ?", updateCountParams);
+        } catch (Exception exception){
+            throw new BaseException(BaseResponseStatus.SERVER_ERROR);
+        }
     }
 
     // 해당 팀에 이미 중복되는 유저가 있는지 검증
@@ -188,24 +191,28 @@ public class MappingDao {
         }
     }
 
-    public List<GetTeamAndImportantRes> getTeamAndImportant(int userIdx){
-        List<GetTeamAndImportantRes> result = new ArrayList<GetTeamAndImportantRes>();
+    public List<GetTeamAndImportantRes> getTeamAndImportant(int userIdx) throws BaseException{
+        try {
+            List<GetTeamAndImportantRes> result = new ArrayList<GetTeamAndImportantRes>();
 
-        List<Integer> teamIdxList = this.jdbcTemplate.queryForList("select teamIdx from Mapping where userIdx = ?", int.class, userIdx);
-        for (int teamIdx : teamIdxList) {
+            List<Integer> teamIdxList = this.jdbcTemplate.queryForList("select teamIdx from Mapping where userIdx = ?", int.class, userIdx);
+            for (int teamIdx : teamIdxList) {
 
-            int important = this.jdbcTemplate.queryForObject("select important from Mapping where userIdx = ? AND teamIdx = ?", int.class, userIdx, teamIdx);
+                int important = this.jdbcTemplate.queryForObject("select important from Mapping where userIdx = ? AND teamIdx = ?", int.class, userIdx, teamIdx);
 
-            GetTeamAndImportantRes eachTeam = this.jdbcTemplate.queryForObject("select * from Team where teamIdx = ?",
-                    (rs, rowNum) -> new GetTeamAndImportantRes(
-                            rs.getInt("teamIdx"),
-                            rs.getString("teamName"),
-                            rs.getInt("count"),
-                            important),
-                    teamIdx);
-            result.add(eachTeam);
+                GetTeamAndImportantRes eachTeam = this.jdbcTemplate.queryForObject("select * from Team where teamIdx = ?",
+                        (rs, rowNum) -> new GetTeamAndImportantRes(
+                                rs.getInt("teamIdx"),
+                                rs.getString("teamName"),
+                                rs.getInt("count"),
+                                important),
+                        teamIdx);
+                result.add(eachTeam);
+            }
+            return result;
+        } catch(Exception exception){
+            throw new BaseException(BaseResponseStatus.SERVER_ERROR);
         }
-        return result;
     }
 
     public int isUserInTeam(int teamIdx, int userIdx) {
