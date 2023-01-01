@@ -74,38 +74,42 @@ public class MappingDao {
     }
 
     // ManyToMany 다대다 관계 활용
-    public List<GetUser> getTeamMembers(int teamIdx){
-        String getTeamAllUserIdxQuery = "select userIdx from Mapping where teamIdx = ?"; // teamIdx 값에 속하는 팀에 속하는 유저들의 userIdx 값들을 추출
+    public List<GetUser> getTeamMembers(int teamIdx) throws BaseException{
+        try {
+            String getTeamAllUserIdxQuery = "select userIdx from Mapping where teamIdx = ?"; // teamIdx 값에 속하는 팀에 속하는 유저들의 userIdx 값들을 추출
 
-        // userIdx 값들이 추출해서 userIdx값들이 저장된 GetUserIdx 리스트 생성
-        java.util.List<GetUserIdx> GetUserIdxList = this.jdbcTemplate.query(getTeamAllUserIdxQuery,
-                (rs, rowNum) -> new GetUserIdx(
-                        rs.getInt("userIdx")), teamIdx);
+            // userIdx 값들이 추출해서 userIdx값들이 저장된 GetUserIdx 리스트 생성
+            java.util.List<GetUserIdx> GetUserIdxList = this.jdbcTemplate.query(getTeamAllUserIdxQuery,
+                    (rs, rowNum) -> new GetUserIdx(
+                            rs.getInt("userIdx")), teamIdx);
 
-        List<Integer> userIdxlist = new ArrayList<Integer>();
-        // 각 GetUserIdx 객체로부터 userIdx 값을 추출해서 int형 리스트 생성
-        for(GetUserIdx getUserIdx : GetUserIdxList){
-            userIdxlist.add(getUserIdx.getUserIdx());
+            List<Integer> userIdxlist = new ArrayList<Integer>();
+            // 각 GetUserIdx 객체로부터 userIdx 값을 추출해서 int형 리스트 생성
+            for (GetUserIdx getUserIdx : GetUserIdxList) {
+                userIdxlist.add(getUserIdx.getUserIdx());
+            }
+
+            // 반복문으로 순환하면서 얻어온 각 userIdx 값을 기반으로 GetUser 리스트 생성
+            List<GetUser> getUserList = new ArrayList<GetUser>();
+            String GetUserQuery = "select * from User where userIdx = ?";
+
+            for (int eachUserIdx : userIdxlist) {
+                // DB 로 부터 User 를 얻어와서
+                GetUser eachUser = this.jdbcTemplate.queryForObject(GetUserQuery,
+                        (rs, rowNum) -> new GetUser(
+                                rs.getInt("userIdx"),
+                                rs.getString("email"),
+                                rs.getString("nickname"),
+                                rs.getString("password")),
+                        eachUserIdx);
+                // GetUser 리스트에 추가
+                getUserList.add(eachUser);
+            }
+
+            return getUserList;
+        } catch (Exception e){
+            throw  new BaseException(BaseResponseStatus.SERVER_ERROR);
         }
-
-        // 반복문으로 순환하면서 얻어온 각 userIdx 값을 기반으로 GetUser 리스트 생성
-        List<GetUser> getUserList = new ArrayList<GetUser>();
-        String GetUserQuery = "select * from User where userIdx = ?";
-
-        for(int eachUserIdx : userIdxlist){
-            // DB 로 부터 User 를 얻어와서
-            GetUser eachUser = this.jdbcTemplate.queryForObject(GetUserQuery,
-                    (rs, rowNum) -> new GetUser(
-                            rs.getInt("userIdx"),
-                            rs.getString("email"),
-                            rs.getString("nickname"),
-                            rs.getString("password")),
-                    eachUserIdx);
-            // GetUser 리스트에 추가
-            getUserList.add(eachUser);
-        }
-
-        return getUserList;
     }
 
     public List<GetTeamRes> getTeamList(int userIdx){
@@ -215,6 +219,7 @@ public class MappingDao {
 
             String deleteTeamQuery = "delete from Team where teamIdx = ?";
             this.jdbcTemplate.update(deleteTeamQuery, params1);
+
 
         } catch (Exception exception){
             System.out.println(exception.getMessage());

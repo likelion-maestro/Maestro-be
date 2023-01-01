@@ -1,5 +1,6 @@
 package maestrogroup.core.mapping;
 
+import maestrogroup.core.ExceptionHandler.BaseException;
 import maestrogroup.core.mapping.model.GetTeamAndImportantRes;
 import maestrogroup.core.mapping.model.Mapping;
 import maestrogroup.core.team.model.GetTeamRes;
@@ -19,7 +20,7 @@ public class MappingProvider {
         this.mappingDao = mappingDao;
     }
 
-    public List<GetUser> getTeamMembers(int teamIdx){
+    public List<GetUser> getTeamMembers(int teamIdx) throws BaseException {
         return mappingDao.getTeamMembers(teamIdx);
     }
 

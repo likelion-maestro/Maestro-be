@@ -97,12 +97,15 @@ public class MappingController {
         }
     }
 
-    // 특정 유저가 속해있는 모든 팀 출력
-
     // 특정 팀 그룹에 속하는 모든 팀멤버 출력 : ManyToMany
     @GetMapping("/getTeamMembers/{teamIdx}")
-    public List<GetUser> getTeamMembers(@PathVariable("teamIdx") int teamIdx){
-        return mappingProvider.getTeamMembers(teamIdx);
+    public BaseResponse<List<GetUser>> getTeamMembers(@PathVariable("teamIdx") int teamIdx){
+        try {
+            List<GetUser> getUserList = mappingProvider.getTeamMembers(teamIdx);
+            return new BaseResponse<>(getUserList);
+        } catch (BaseException baseException){
+            return new BaseResponse(baseException.getStatus());
+        }
     }
 
     // 특정 유저가 속해있는 모든 팀 그룹 출력 : ManyToMany
