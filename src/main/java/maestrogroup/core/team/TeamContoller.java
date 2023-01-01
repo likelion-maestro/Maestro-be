@@ -62,18 +62,18 @@ public class TeamContoller {
         }
     }
 
-    @ResponseBody
-    @DeleteMapping("/delete_team/{teamIdx}")
-    @Operation(summary = "팀 삭제", description = "jwt 를 HttpHeader에 넘겨주시고 삭제해주세요. 수정을 시도하는 User가 해당 팀원이 아닐 경우 에러를 발생시킵니다.")
-    public BaseResponse deleteTeam(@PathVariable("teamIdx") int teamIdx){
-        try {
-            int userIdx = jwtService.getUserIdx();
-            teamService.deleteTeam(teamIdx, userIdx);
-            return new BaseResponse();
-        } catch (BaseException baseException) {
-            return new BaseResponse(baseException.getStatus());
-        }
-    }
+//    @ResponseBody
+//    @DeleteMapping("/delete_team/{teamIdx}")
+//    @Operation(summary = "팀 삭제", description = "jwt 를 HttpHeader에 넘겨주시고 삭제해주세요. 수정을 시도하는 User가 해당 팀원이 아닐 경우 에러를 발생시킵니다.")
+//    public BaseResponse deleteTeam(@PathVariable("teamIdx") int teamIdx){
+//        try {
+//            int userIdx = jwtService.getUserIdx();
+//            teamService.deleteTeam(teamIdx, userIdx);
+//            return new BaseResponse();
+//        } catch (BaseException baseException) {
+//            return new BaseResponse(baseException.getStatus());
+//        }
+//    }
 
 //    @ResponseBody
 //    @PatchMapping("/change_team_leader/{teamIdx}/{userIdx1}/{userIdx2}")
