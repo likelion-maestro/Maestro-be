@@ -23,8 +23,6 @@ public class JwtController {
     @ResponseBody
     @PostMapping("/getNewAccessToken")
     public BaseResponse<AccessToken> getNewAccessToken(){
-        // String refreshToken = jwtService.getRefreshToken(); // HTTP Header를 통해 Access Token 과 Refresh Token 을 클라이언트로부터 전달받고
-        // String originAccessToken = jwtService.getAccessToken();
         try{
             String newAccessToken = jwtService.ReCreateAccessToken();
             AccessToken returnAccessToken = new AccessToken(newAccessToken);
