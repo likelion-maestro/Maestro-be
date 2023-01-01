@@ -38,6 +38,8 @@ BaseResponseStatus {
     PASSWORD_ENCRYPTION_FAILURE("비밀번호 암호화에 실패했습니다.", HttpStatus.NOT_ACCEPTABLE),
     INVALID_TEAM_AUTH("팀장이 아니므로, 팀장 권한 부여가 불가능합니다.", HttpStatus.NOT_ACCEPTABLE),
     NOT_EXISTS_TEAM("팀이 존재하지 않습니다.", HttpStatus.NOT_FOUND),
+    INVALID_TEAM_VALUE("팀 이름이 너무 짧습니다.", HttpStatus.BAD_REQUEST),
+    TOO_LONG_TEAM_VALUE("팀 이름을 20자 이하로 입력해주세요..", HttpStatus.BAD_REQUEST),
 
     // 로그인 관련
     INVALID_USER("존재하지 않는 회원입니다.", HttpStatus.BAD_REQUEST),
