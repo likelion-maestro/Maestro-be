@@ -1,5 +1,7 @@
 package maestrogroup.core.mapping;
 
+import maestrogroup.core.ExceptionHandler.BaseException;
+import maestrogroup.core.ExceptionHandler.BaseResponseStatus;
 import maestrogroup.core.mapping.model.GetTeamAndImportantRes;
 import maestrogroup.core.mapping.model.GetTeamIdx;
 import maestrogroup.core.mapping.model.GetUserIdx;
@@ -29,7 +31,13 @@ public class MappingDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    public void inviteUser(int teamIdx, int userIdx) {
+    public void inviteUser(int teamIdx, int userIdx) throws BaseException {
+
+        // 초대를 받는 User가 이미 Team에 가입되어 있는지에 대한 검증
+        if(checkDuplicateUser(userIdx, teamIdx) >= 1){
+            throw new BaseException(BaseResponseStatus.DUPLICATE_USER);
+        }
+
         //초대하는 부분
         String inviteUserQuery = "insert into Mapping (teamIdx, userIdx) VALUES (?, ?)";
         Object[] inviteUserParams = new Object[]{teamIdx, userIdx};
@@ -42,6 +50,15 @@ public class MappingDao {
         Object[] updateCountParams = new Object[]{nowCount, teamIdx};
         this.jdbcTemplate.update("update Team set count = ? where teamIdx = ?", updateCountParams);
     }
+
+    // 해당 팀에 이미 중복되는 유저가 있는지 검증
+    public int checkDuplicateUser(int userIdx, int teamIdx) {
+        String checkUserCountQuery = "select count(*) from Mapping where userIdx = ? AND teamIdx = ?";
+        Object[] countParams = new Object[]{userIdx, teamIdx};
+        Integer userCount = this.jdbcTemplate.queryForObject(checkUserCountQuery, countParams, Integer.class);
+        return userCount;
+    }
+
 
     public void makeTeam(int userIdx, PostTeamReq postTeamReq){
         String makeTeamQuery = "insert into Team (teamName, count) VALUES (?, 1)";

@@ -48,6 +48,7 @@ BaseResponseStatus {
     FOLDER_NAME_LENGTH("폴더 이름을 20자 이하로 생성해주세요.", HttpStatus.BAD_REQUEST),
     INVALID_FOLDER_VALUE("폴더 이름이 너무 짧습니다..", HttpStatus.BAD_REQUEST),
     DUPLICATE_FOLDER("이미 폴더가 존재합나다.", HttpStatus.NOT_ACCEPTABLE),
+    DUPLICATE_USER("이미 초대된 사용자압니다.", HttpStatus.NOT_ACCEPTABLE),
 
     FOLDER_ERROR("폴더가 존재하지 않습니다.", HttpStatus.FORBIDDEN),
     NOT_EXISTS_FOLDER("폴더가 존재하지 않습니다", HttpStatus.BAD_REQUEST),

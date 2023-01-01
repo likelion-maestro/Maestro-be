@@ -30,8 +30,7 @@ public class MappingService {
         mappingDao.makeTeam(userIdx, postTeamReq);
     }
 
-    public void inviteUser(int teamIdx, int userIdx){
-        // 초대를 받는 User가 이미 Team에 가입되어 있는지에 대한 검증
+    public void inviteUser(int teamIdx, int userIdx) throws BaseException{
         mappingDao.inviteUser(teamIdx, userIdx);
     }
 
