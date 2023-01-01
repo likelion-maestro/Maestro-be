@@ -59,8 +59,13 @@ public class TeamContoller {
 
     @ResponseBody
     @DeleteMapping("/delete_team/{teamIdx}")
-    public void deleteTeam(@PathVariable("teamIdx") int teamIdx){
-        teamService.deleteTeam(teamIdx);
+    public BaseResponse deleteTeam(@PathVariable("teamIdx") int teamIdx){
+        try {
+            teamService.deleteTeam(teamIdx);
+            return new BaseResponse();
+        } catch (BaseException baseException) {
+            return new BaseResponse(baseException.getStatus());
+        }
     }
 
     @ResponseBody

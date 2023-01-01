@@ -51,8 +51,17 @@ public class TeamService {
         }
     }
 
-    public void deleteTeam(int teamIdx){
-        teamDao.deleteTeam(teamIdx);
+    public void deleteTeam(int teamIdx) throws BaseException {
+        //삭제할 팀이 존재하는지 검증
+        if (teamDao.isExistsTeam(teamIdx) != 1) {
+            throw new BaseException(BaseResponseStatus.NOT_EXISTS_TEAM);
+        }
+
+        try {
+            teamDao.deleteTeam(teamIdx);
+        } catch (Exception exception) {
+            throw new BaseException(BaseResponseStatus.SERVER_ERROR);
+        }
     }
 
     public void modifyTeamLeader(int userIdx1, int userIdx2, int teamIdx) throws BaseException {
