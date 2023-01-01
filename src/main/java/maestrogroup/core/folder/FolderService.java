@@ -31,6 +31,9 @@ public class FolderService {
         folderDao.createFolder(postFolderReq, teamIdx);
     }
     public void modifyFolder(int folderIdx, int teamIdx, ModifyFolderReq modifyFolderReq) throws BaseException{
+        if (teamDao.isExistsTeam(teamIdx) != 1) {
+            throw new BaseException(BaseResponseStatus.NOT_EXISTS_TEAM);
+        }
         //입력값이 유효한지에 대한 검증
         folderDao.modifyFolder(folderIdx, teamIdx, modifyFolderReq);
     }
