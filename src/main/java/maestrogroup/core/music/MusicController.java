@@ -68,4 +68,14 @@ public class MusicController {
             return new BaseResponse(baseException.getStatus());
         }
     }
+
+    @DeleteMapping("deleteMusic/{musicIdx}")
+    public BaseResponse deleteMusic(@PathVariable("musicIdx") int musicIdx) {
+        try {
+            musicService.deleteMusic(musicIdx);
+            return new BaseResponse<>();
+        } catch (BaseException baseException) {
+            return new BaseResponse(baseException.getStatus());
+        }
+    }
 }

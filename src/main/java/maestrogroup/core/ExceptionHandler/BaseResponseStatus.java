@@ -46,11 +46,13 @@ BaseResponseStatus {
     DUPLICATE_FOLDER("이미 폴더가 존재합나다.", HttpStatus.NOT_ACCEPTABLE),
 
     FOLDER_ERROR("폴더가 존재하지 않습니다.", HttpStatus.FORBIDDEN),
+    NOT_EXISTS_FOLDER("폴더가 존재하지 않습니다", HttpStatus.BAD_REQUEST),
 
     // 음악
-    MUSIC_NAME_LENGTH("음악 이름을 20자 이하로 생성해주세요.", HttpStatus.BAD_REQUEST);
-    // DUPLICATE_MUSIC( "이미 음악이 존재합나다", HttpStatus.NOT_ACCEPTABLE);
-
+    MUSIC_NAME_LENGTH("음악 이름을 20자 이하로 생성해주세요.", HttpStatus.BAD_REQUEST),
+    // DUPLICATE_MUSIC( "이미 음악이 존재합나다", HttpStatus.NOT_ACCEPTABLE),
+    INVALID_MUSIC_VALUE("0보다 큰 값을 입력해주세요.", HttpStatus.BAD_REQUEST),
+    NOT_EXISTS_MUSIC("음악이 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
     private final HttpStatus httpStatus;
     private final String message;
 
