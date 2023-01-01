@@ -61,17 +61,20 @@ public class MappingController {
      */
 
     // 이전에 생성된 팀원 그룹에 특정 유저를 초대하기 : mapping 객체만 생성함
-    @PostMapping("/inviteUser/{teamIdx}")
-    public void inviteUser(@PathVariable("teamIdx") int teamIdx) throws BaseException {
-        int userIdx = jwtService.getUserIdx();
-        mappingService.inviteUser(teamIdx, userIdx);
+    @PostMapping("/inviteUser/{teamIdx}/{userIdx}")
+    public BaseResponse inviteUser(@PathVariable("teamIdx") int teamIdx, @PathVariable("userIdx") int userIdx) {
+        try {
+            mappingService.inviteUser(teamIdx, userIdx);
+            return new BaseResponse();
+        } catch (BaseException baseException){
+            return new BaseResponse(baseException.getStatus());
+        }
     }
-
 
     // 해당 그룹을 특정 유저가 탈퇴할떄 teamIdx 값을 가지는 Mapping 객체가 삭제되도록 구현
     // + 그리고 해당 그룹 팀의 총 인원수가 0명일떄, 그룹 객체(Team 객체)도 Mapping객체와 함께 삭제되도록 구현
     @DeleteMapping("/deleteTeam/{teamIdx}")
-    public void deleteTeam(@PathVariable("teamIdx") int teamIdx) throws BaseException {
+    public void deleteTeam(@PathVariable("teamIdx") int teamIdx) throws BaseException{
         int userIdxByJwt = jwtService.getUserIdx();
         mappingService.deleteTeam(teamIdx, userIdxByJwt);
     }
