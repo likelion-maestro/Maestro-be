@@ -205,6 +205,22 @@ public class MappingDao {
         Object[] params= new Object[]{teamIdx, userIdx};
         return this.jdbcTemplate.queryForObject(query, int.class, params);
     }
+
+    public void deleteTeam(int teamIdx) throws BaseException{
+        try {
+            Object[] params1 = new Object[]{teamIdx};
+
+            String deleteAllMappingQuery = "delete from Mapping where teamIdx = ?";
+            this.jdbcTemplate.update(deleteAllMappingQuery, params1);
+
+            String deleteTeamQuery = "delete from Team where teamIdx = ?";
+            this.jdbcTemplate.update(deleteTeamQuery, params1);
+
+        } catch (Exception exception){
+            System.out.println(exception.getMessage());
+            throw new BaseException(BaseResponseStatus.SERVER_ERROR);
+        }
+    }
 }
 
 

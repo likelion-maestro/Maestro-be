@@ -73,7 +73,15 @@ public class MappingController {
 
 
     // 팀 삭제 => 팀 객체, 해당 팀의 모든 유저들에 대한 Mapping 객체들이 모두 삭제되도록 구현
-
+    @DeleteMapping("/deleteTeam/{teamIdx}")
+    public BaseResponse deleteTeam(@PathVariable("teamIdx") int teamIdx){
+        try{
+            mappingService.deleteTeam(teamIdx);
+            return new BaseResponse();
+        } catch (BaseException baseException){
+            return new BaseResponse(baseException.getStatus());
+        }
+    }
 
     // 팀 탈퇴
     // => 해당 유저에 대한 Mapping 객체가 삭제되도록 구현
