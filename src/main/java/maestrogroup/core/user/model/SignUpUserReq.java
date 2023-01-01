@@ -1,5 +1,6 @@
 package maestrogroup.core.user.model;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 import javax.validation.constraints.Email;
@@ -12,9 +13,16 @@ import javax.validation.constraints.Pattern;
 @NoArgsConstructor
 public class SignUpUserReq {
     //@Email(message = "올바른 이메일 형식이 아닙니다.")
+    @ApiModelProperty(example = "abcde2@naver.com")
     private String email;
+
+    @ApiModelProperty(example = "abcde12345")
     private String password;
+
+    @ApiModelProperty(example = "abcde12345")
     private String repass;
+
+    @ApiModelProperty(example = "member2")
     private String nickname;
     
 }
