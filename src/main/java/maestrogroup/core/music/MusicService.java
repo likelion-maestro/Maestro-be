@@ -66,6 +66,9 @@ public class MusicService {
     }
 
     public void modifyMusic(PostMusicReq postMusicReq, int musicIdx) throws BaseException{
+        if (musicDao.isExistsMusic(musicIdx) != 1) {
+            throw new BaseException(BaseResponseStatus.NOT_EXISTS_MUSIC);
+        }
         musicDao.modifyMusic(postMusicReq, musicIdx);
     }
 }
