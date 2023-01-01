@@ -1,5 +1,7 @@
 package maestrogroup.core.mapping;
 
+import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.Operation;
 import maestrogroup.core.ExceptionHandler.BaseException;
 import maestrogroup.core.ExceptionHandler.BaseResponse;
 import maestrogroup.core.Security.JwtService;
@@ -14,6 +16,7 @@ import java.util.List;
 
 
 @RequestMapping("/mapping")
+@Api(value = "Mapping", tags = "Mapping 관련 API (User와 Team 간 관계)")
 @RestController
 public class MappingController {
     @Autowired
@@ -41,6 +44,7 @@ public class MappingController {
     // team 객체와 mapping 객체를 생성
     @ResponseBody
     @PostMapping("/makeTeam")
+    @Operation(summary = "팀 생성", description = "jwt 를 HttpHeader에 넘겨주시고 생성해주세요. 누락된 정보가 있거나 20글자를 초과할 때 에러를 발생시켰습니다.")
     public BaseResponse makeTeam(@RequestBody PostTeamReq postTeamReq) {
         try {
             int userIdxByJwt = jwtService.getUserIdx();
@@ -62,6 +66,7 @@ public class MappingController {
 
     // 이전에 생성된 팀원 그룹에 특정 유저를 초대하기 : mapping 객체만 생성함
     @PostMapping("/inviteUser/{teamIdx}/{userIdx}")
+    @Operation(summary = "상대방을 팀으로 초대", description = "유저 인덱스가 userIdx인 상대방을 팀 인덱스가 teamIdx인 팀으로 초대합니다.")
     public BaseResponse inviteUser(@PathVariable("teamIdx") int teamIdx, @PathVariable("userIdx") int userIdx) {
         try {
             mappingService.inviteUser(teamIdx, userIdx);
@@ -74,6 +79,7 @@ public class MappingController {
 
     // 팀 삭제 => 팀 객체, 해당 팀의 모든 유저들에 대한 Mapping 객체들이 모두 삭제되도록 구현
     @DeleteMapping("/deleteTeam/{teamIdx}")
+    @Operation(summary = "팀 삭제")
     public BaseResponse deleteTeam(@PathVariable("teamIdx") int teamIdx){
         try{
             mappingService.deleteTeam(teamIdx);
@@ -87,6 +93,7 @@ public class MappingController {
     // => 해당 유저에 대한 Mapping 객체가 삭제되도록 구현
     // 또한 해당 팀의 총 인워수가 0이 되는 경우라면, 해당 팀 객체 또한 삭제되도록 구현
     @DeleteMapping("/getOutOfTeam/{teamIdx}")
+    @Operation(summary = "팀 탈퇴", description = "jwt 를 HttpHeader에 넘겨주시고 수행해주세요. 탈퇴를 시도하는 User가 해당 팀에 가입되어 있지 않았을 때 에러를 발생시켰습니다.")
     public BaseResponse getOutOfTeam(@PathVariable("teamIdx") int teamIdx)  throws BaseException{
         try {
             int userIdxByJwt = jwtService.getUserIdx();
@@ -99,6 +106,7 @@ public class MappingController {
 
     // 특정 팀 그룹에 속하는 모든 팀멤버 출력 : ManyToMany
     @GetMapping("/getTeamMembers/{teamIdx}")
+    @Operation(summary = "팀에 속한 팀원들 조회")
     public BaseResponse<List<GetUser>> getTeamMembers(@PathVariable("teamIdx") int teamIdx){
         try {
             List<GetUser> getUserList = mappingProvider.getTeamMembers(teamIdx);
@@ -108,19 +116,20 @@ public class MappingController {
         }
     }
 
-    // 특정 유저가 속해있는 모든 팀 그룹 출력 : ManyToMany
-    @GetMapping("/getTeamList")
-    public BaseResponse<List<GetTeamRes>> getTeamList() throws BaseException{
-        try {
-            int userIdxByJwt = jwtService.getUserIdx();
-            List<GetTeamRes> getTeamResList = mappingProvider.getTeamList(userIdxByJwt);
-            return new BaseResponse<List<GetTeamRes>>(getTeamResList);
-        } catch(BaseException baseException){
-            return new BaseResponse(baseException.getStatus());
-        }
-    }
+//    // 특정 유저가 속해있는 모든 팀 그룹 출력 : ManyToMany
+//    @GetMapping("/getTeamList")
+//    public BaseResponse<List<GetTeamRes>> getTeamList() throws BaseException{
+//        try {
+//            int userIdxByJwt = jwtService.getUserIdx();
+//            List<GetTeamRes> getTeamResList = mappingProvider.getTeamList(userIdxByJwt);
+//            return new BaseResponse<List<GetTeamRes>>(getTeamResList);
+//        } catch(BaseException baseException){
+//            return new BaseResponse(baseException.getStatus());
+//        }
+//    }
 
     @PatchMapping("/changeImportanceOfTeam/{teamIdx}")
+    @Operation(summary = "팀 별 표시 기능", description = "jwt 를 HttpHeader에 넘겨주시고 수행해주세요. 팀의 중요도를 나타내는 별 표시 기능입니다. important가 0이라면 1이 되고, 1이라면 0이 되도록 구현했습니다. 별 표시를 시도하는 User가 해당 팀에 가입되어 있지 않았을 때 에러를 발생시켰습니다.")
     public BaseResponse changeImportanceOfTeam(@PathVariable("teamIdx") int teamIdx) throws BaseException {
         try {
             int userIdx = jwtService.getUserIdx();
@@ -131,7 +140,9 @@ public class MappingController {
         }
     }
 
-    @GetMapping("/getTeamListAndImportant")
+//    @GetMapping("/getTeamListAndImportant")
+    @GetMapping("/getTeamList")
+    @Operation(summary = "본인이 속한 팀 목록 조회", description = "jwt 를 HttpHeader에 넘겨주시고 수행해주세요. 현재 User가 속한 팀의 목록 및 정보들을 조회합니다.")
     public BaseResponse<List<GetTeamAndImportantRes>> getTeamListAndImportant() throws BaseException{
         try {
             int userIdx = jwtService.getUserIdx();
