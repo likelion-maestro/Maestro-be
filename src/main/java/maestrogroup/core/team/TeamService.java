@@ -26,7 +26,11 @@ public class TeamService {
         //return postTeamRes;
     }
 
-    public void modifyTeam(PatchTeamReq patchTeamReq){
+    public void modifyTeam(PatchTeamReq patchTeamReq) throws BaseException {
+        // 수정할 팀이 존재하는지 검증
+        if (teamDao.isExistsTeam(patchTeamReq.getTeamIdx()) != 1) {
+            throw new BaseException(BaseResponseStatus.NOT_EXISTS_TEAM);
+        }
         teamDao.modifyTeam(patchTeamReq);
     }
 
