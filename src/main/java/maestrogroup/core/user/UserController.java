@@ -91,9 +91,11 @@ public class UserController {
         }
     }
 
+    // 계정 삭제
+    // => 삭제시킬 것들 : User, Mapping
     @ResponseBody
     @DeleteMapping("/deleteUser")
-    public BaseResponse deleteUser() throws BaseException {
+    public BaseResponse deleteUser() {
         try {
             int userIdx = jwtService.getUserIdx();
             userService.deleteUser(userIdx);

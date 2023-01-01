@@ -132,7 +132,7 @@ public class MappingController {
     }
 
     @GetMapping("/getTeamListAndImportant")
-    public BaseResponse<List<GetTeamAndImportantRes>> getTeamListAndImportant() throws BaseException {
+    public BaseResponse<List<GetTeamAndImportantRes>> getTeamListAndImportant() throws BaseException{
         try {
             int userIdx = jwtService.getUserIdx();
             List<GetTeamAndImportantRes> getTeamAndImportantResList = mappingProvider.getTeamAndImportant(userIdx);
