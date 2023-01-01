@@ -1,7 +1,14 @@
+
+
+
 server:
   port: 9001  # 9001번 포트로 실행
 
 spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
   application:
     name: demo
 
