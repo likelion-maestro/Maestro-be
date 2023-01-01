@@ -98,5 +98,6 @@ public class FolderController {
         } catch (BaseException baseException) {
             return new BaseResponse(baseException.getStatus());
         }
+
     }
 }
