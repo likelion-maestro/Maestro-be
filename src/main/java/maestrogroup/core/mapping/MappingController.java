@@ -71,13 +71,25 @@ public class MappingController {
         }
     }
 
-    // 해당 그룹을 특정 유저가 탈퇴할떄 teamIdx 값을 가지는 Mapping 객체가 삭제되도록 구현
-    // + 그리고 해당 그룹 팀의 총 인원수가 0명일떄, 그룹 객체(Team 객체)도 Mapping객체와 함께 삭제되도록 구현
-    @DeleteMapping("/deleteTeam/{teamIdx}")
-    public void deleteTeam(@PathVariable("teamIdx") int teamIdx) throws BaseException{
-        int userIdxByJwt = jwtService.getUserIdx();
-        mappingService.deleteTeam(teamIdx, userIdxByJwt);
+
+    // 팀 삭제 => 팀 객체, 해당 팀의 모든 유저들에 대한 Mapping 객체들이 모두 삭제되도록 구현
+
+
+    // 팀 탈퇴
+    // => 해당 유저에 대한 Mapping 객체가 삭제되도록 구현
+    // 또한 해당 팀의 총 인워수가 0이 되는 경우라면, 해당 팀 객체 또한 삭제되도록 구현
+    @DeleteMapping("/getOutOfTeam/{teamIdx}")
+    public BaseResponse getOutOfTeam(@PathVariable("teamIdx") int teamIdx)  {
+        try {
+            int userIdxByJwt = jwtService.getUserIdx();
+            mappingService.getOutOfTeam(teamIdx, userIdxByJwt);
+            return new BaseResponse();
+        } catch (BaseException baseException){
+            return new BaseResponse(baseException.getStatus());
+        }
     }
+
+    // 특정 유저가 속해있는 모든 팀 출력
 
     // 특정 팀 그룹에 속하는 모든 팀멤버 출력 : ManyToMany
     @GetMapping("/getTeamMembers/{teamIdx}")
@@ -85,7 +97,6 @@ public class MappingController {
         return mappingProvider.getTeamMembers(teamIdx);
     }
 
-    /*
     // 특정 유저가 속해있는 모든 팀 그룹 출력 : ManyToMany
     @GetMapping("/getTeamList")
     public BaseResponse<List<GetTeamRes>> getTeamList(){
@@ -96,7 +107,7 @@ public class MappingController {
         } catch(BaseException baseException){
             return new BaseResponse(baseException.getStatus());
         }
-    }*/
+    }
 
     @PatchMapping("/changeImportanceOfTeam/{teamIdx}")
     public void changeImportanceOfTeam(@PathVariable("teamIdx") int teamIdx) throws BaseException {

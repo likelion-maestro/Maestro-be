@@ -34,9 +34,9 @@ public class MappingService {
         mappingDao.inviteUser(teamIdx, userIdx);
     }
 
-    public void deleteTeam(int teamIdx, int userIdx){
+    public void getOutOfTeam(int teamIdx, int userIdx) throws BaseException{
         // User가 탈퇴하고자 하는 팀에 가입되어 있는지에 대한 검증
-        mappingDao.deleteTeam(teamIdx, userIdx);
+        mappingDao.getOutOfTeam(teamIdx, userIdx);
     }
 
     public void changeImportanceOfTeam(int userIdx, int teamIdx) {

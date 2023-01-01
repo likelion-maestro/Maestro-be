@@ -1,5 +1,6 @@
 package maestrogroup.core.mapping;
 
+import ch.qos.logback.core.encoder.EchoEncoder;
 import maestrogroup.core.ExceptionHandler.BaseException;
 import maestrogroup.core.ExceptionHandler.BaseResponseStatus;
 import maestrogroup.core.mapping.model.GetTeamAndImportantRes;
@@ -142,19 +143,27 @@ public class MappingDao {
     //        String deleteTeamQuery = "delete from Team where teamIdx = ?";
     //        this.jdbcTemplate.update(deleteTeamQuery, teamIdx);
     //    }
-    public void deleteTeam(int teamIdx, int userIdx){
-        String deleteTeamQuery = "delete from Mapping where teamIdx = ? AND userIdx = ?";
-        Object[] deleteTeamQueryParams = new Object[]{teamIdx, userIdx};
-        this.jdbcTemplate.update(deleteTeamQuery, deleteTeamQueryParams);
+    public void getOutOfTeam(int teamIdx, int userIdx) throws BaseException{
+        try {
+            String getOutOfTeamQuery = "delete from Mapping where teamIdx = ? AND userIdx = ?";
+            Object[] getOutOfTeamQueryParams = new Object[]{teamIdx, userIdx};
+            this.jdbcTemplate.update(getOutOfTeamQuery, getOutOfTeamQueryParams);
 
-        //해당 팀의 count를 감소시키는 부분
-        int nowCount = this.jdbcTemplate.queryForObject("select count from Team where teamIdx = ?", int.class, teamIdx);
-        nowCount -= 1;
+            //해당 팀의 count를 감소시키는 부분
+            int nowCount = this.jdbcTemplate.queryForObject("select count from Team where teamIdx = ?", int.class, teamIdx);
+            nowCount -= 1;
 
-        Object[] updateCountParams = new Object[]{nowCount, teamIdx};
-        this.jdbcTemplate.update("update Team set count = ? where teamIdx = ?", updateCountParams);
+            Object[] updateCountParams = new Object[]{nowCount, teamIdx};
+            this.jdbcTemplate.update("update Team set count = ? where teamIdx = ?", updateCountParams);
 
-        //if nowCount <= 0: 팀 삭제 기능 추후에 추가!
+            //if nowCount <= 0: 팀 삭제 기능 추후에 추가!
+            if (nowCount <= 0) {
+                String deleteTeamQuery = "delete from Team where teamIdx = ?";
+                this.jdbcTemplate.update(deleteTeamQuery, teamIdx);
+            }
+        } catch(Exception e){
+            throw new BaseException(BaseResponseStatus.SERVER_ERROR);
+        }
     }
 
     public void changeImportanceOfTeam(int userIdx, int teamIdx) {
