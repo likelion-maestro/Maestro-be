@@ -87,7 +87,7 @@ public class MappingController {
     // => 해당 유저에 대한 Mapping 객체가 삭제되도록 구현
     // 또한 해당 팀의 총 인워수가 0이 되는 경우라면, 해당 팀 객체 또한 삭제되도록 구현
     @DeleteMapping("/getOutOfTeam/{teamIdx}")
-    public BaseResponse getOutOfTeam(@PathVariable("teamIdx") int teamIdx)  {
+    public BaseResponse getOutOfTeam(@PathVariable("teamIdx") int teamIdx)  throws BaseException{
         try {
             int userIdxByJwt = jwtService.getUserIdx();
             mappingService.getOutOfTeam(teamIdx, userIdxByJwt);
@@ -110,7 +110,7 @@ public class MappingController {
 
     // 특정 유저가 속해있는 모든 팀 그룹 출력 : ManyToMany
     @GetMapping("/getTeamList")
-    public BaseResponse<List<GetTeamRes>> getTeamList(){
+    public BaseResponse<List<GetTeamRes>> getTeamList() throws BaseException{
         try {
             int userIdxByJwt = jwtService.getUserIdx();
             List<GetTeamRes> getTeamResList = mappingProvider.getTeamList(userIdxByJwt);
@@ -121,9 +121,14 @@ public class MappingController {
     }
 
     @PatchMapping("/changeImportanceOfTeam/{teamIdx}")
-    public void changeImportanceOfTeam(@PathVariable("teamIdx") int teamIdx) throws BaseException {
-        int userIdx = jwtService.getUserIdx();
-        mappingService.changeImportanceOfTeam(userIdx, teamIdx);
+    public BaseResponse changeImportanceOfTeam(@PathVariable("teamIdx") int teamIdx) throws BaseException {
+        try {
+            int userIdx = jwtService.getUserIdx();
+            mappingService.changeImportanceOfTeam(userIdx, teamIdx);
+            return new BaseResponse();
+        } catch (BaseException baseException){
+            return new BaseResponse(baseException.getStatus());
+        }
     }
 
     @GetMapping("/getTeamListAndImportant")

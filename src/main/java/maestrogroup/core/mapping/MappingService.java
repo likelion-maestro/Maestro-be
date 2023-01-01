@@ -44,7 +44,7 @@ public class MappingService {
     }
 
 
-    public void changeImportanceOfTeam(int userIdx, int teamIdx) {
+    public void changeImportanceOfTeam(int userIdx, int teamIdx) throws  BaseException{
         // User가 별 표시 하려는 팀에 가입되어 있는지에 대한 검증
         mappingDao.changeImportanceOfTeam(userIdx, teamIdx);
     }
