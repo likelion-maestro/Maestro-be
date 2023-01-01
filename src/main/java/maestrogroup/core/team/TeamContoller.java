@@ -2,7 +2,7 @@ package maestrogroup.core.team;
 
 import maestrogroup.core.ExceptionHandler.BaseException;
 import maestrogroup.core.ExceptionHandler.BaseResponse;
-import maestrogroup.core.ExceptionHandler.BaseResponseStatus;
+import maestrogroup.core.Security.JwtService;
 import maestrogroup.core.team.model.GetTeamRes;
 import maestrogroup.core.team.model.PatchTeamReq;
 import maestrogroup.core.team.model.PostTeamReq;
@@ -19,11 +19,14 @@ public class TeamContoller {
     private final TeamProvider teamProvider;
     @Autowired
     private final TeamService teamService;
+    @Autowired
+    private final JwtService jwtService;
 
-    public TeamContoller(TeamDao teamDao, TeamProvider teamProvider, TeamService teamService) {
+    public TeamContoller(TeamDao teamDao, TeamProvider teamProvider, TeamService teamService, JwtService jwtService) {
         this.teamDao = teamDao;
         this.teamProvider = teamProvider;
         this.teamService = teamService;
+        this.jwtService = jwtService;
     }
 
     @ResponseBody
@@ -45,8 +48,9 @@ public class TeamContoller {
     @PatchMapping("/patch_team/{teamIdx}")
     public BaseResponse modifyTeam(@PathVariable("teamIdx") int teamIdx, @RequestBody PostTeamReq postTeamReq){
         try {
+            int userIdx = jwtService.getUserIdx();
             PatchTeamReq patchUserReq = new PatchTeamReq(teamIdx, postTeamReq.getTeamName());
-            teamService.modifyTeam(patchUserReq);
+            teamService.modifyTeam(patchUserReq, userIdx);
             return new BaseResponse();
         } catch (BaseException baseException) {
             return new BaseResponse(baseException.getStatus());
