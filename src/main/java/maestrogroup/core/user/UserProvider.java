@@ -26,7 +26,7 @@ public class UserProvider {
         this.userDao = userDao;
         this.jwtService = jwtService;
     }
-    public GetUser getUser(int userIdx){
+    public GetUser getUser(int userIdx) throws BaseException{
         return userDao.getUser(userIdx);
     }
 

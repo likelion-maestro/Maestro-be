@@ -81,15 +81,19 @@ public class UserDao {
         }
     }
 
-    public GetUser getUser(int userIdx) {
-        String GetUserQuery = "select * from User where userIdx = ?";
-        return this.jdbcTemplate.queryForObject(GetUserQuery,
-                (rs, rowNum) -> new GetUser(
-                        rs.getInt("userIdx"),
-                        rs.getString("email"),
-                        rs.getString("nickname"),
-                        rs.getString("password")),
-                userIdx);
+    public GetUser getUser(int userIdx) throws BaseException{
+        try {
+            String GetUserQuery = "select * from User where userIdx = ?";
+            return this.jdbcTemplate.queryForObject(GetUserQuery,
+                    (rs, rowNum) -> new GetUser(
+                            rs.getInt("userIdx"),
+                            rs.getString("email"),
+                            rs.getString("nickname"),
+                            rs.getString("password")),
+                    userIdx);
+        } catch (Exception exception){
+            throw new BaseException(BaseResponseStatus.SERVER_ERROR);
+        }
     }
 
     public int Email_Duplicate_Check(String email){
