@@ -2,6 +2,8 @@ package maestrogroup.core.user;
 
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.v3.oas.annotations.Operation;
 import maestrogroup.core.ExceptionHandler.BaseException;
 import maestrogroup.core.ExceptionHandler.BaseResponse;
@@ -116,6 +118,7 @@ public class UserController {
 
     @ResponseBody
     @GetMapping("/getUser")
+    @Operation(summary = "회원정보(프로필) 조회", description = "jwt 를 HttpHeader에 넘겨주시고 조회해주세요. 마이페이지에 쓰이는 기능입니다.")
     public BaseResponse<GetUser> getUser(){
         try {
             int userIdx = jwtService.getUserIdx();
