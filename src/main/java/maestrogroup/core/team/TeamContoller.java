@@ -61,7 +61,8 @@ public class TeamContoller {
     @DeleteMapping("/delete_team/{teamIdx}")
     public BaseResponse deleteTeam(@PathVariable("teamIdx") int teamIdx){
         try {
-            teamService.deleteTeam(teamIdx);
+            int userIdx = jwtService.getUserIdx();
+            teamService.deleteTeam(teamIdx, userIdx);
             return new BaseResponse();
         } catch (BaseException baseException) {
             return new BaseResponse(baseException.getStatus());
