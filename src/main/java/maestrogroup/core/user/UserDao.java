@@ -1,5 +1,7 @@
 package maestrogroup.core.user;
 
+import maestrogroup.core.ExceptionHandler.BaseException;
+import maestrogroup.core.ExceptionHandler.BaseResponseStatus;
 import maestrogroup.core.user.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -53,22 +55,30 @@ public class UserDao {
         this.jdbcTemplate.update(ModifyUserInfoQuery, ModifyUserInfoParams);
     }
 
-    public void deleteUser(int userIdx){
-        //삭제할 User가 가입되어 있는 Team의 teamIdx를 불러옴
-        List<Integer> teamIdxList = this.jdbcTemplate.queryForList("select teamIdx from Mapping where userIdx = ?", int.class, userIdx);
+    public void deleteUser(int userIdx) throws BaseException{
+        try {
+            //삭제할 User가 가입되어 있는 Team의 teamIdx를 불러옴
+            List<Integer> teamIdxList = this.jdbcTemplate.queryForList("select teamIdx from Mapping where userIdx = ?", int.class, userIdx);
 
-        for (int teamIdx : teamIdxList) {
-            //해당 팀의 count를 감소시키는 부분
-            int nowCount = this.jdbcTemplate.queryForObject("select count from Team where teamIdx = ?", int.class, teamIdx);
-            nowCount -= 1;
+            for (int teamIdx : teamIdxList) {
+                //해당 팀의 count를 감소시키는 부분
+                int nowCount = this.jdbcTemplate.queryForObject("select count from Team where teamIdx = ?", int.class, teamIdx);
+                nowCount -= 1;
 
-            Object[] updateCountParams = new Object[]{nowCount, teamIdx};
-            this.jdbcTemplate.update("update Team set count = ? where teamIdx = ?", updateCountParams);
+                Object[] updateCountParams = new Object[]{nowCount, teamIdx};
+                this.jdbcTemplate.update("update Team set count = ? where teamIdx = ?", updateCountParams);
+            }
+
+            // 해당 유저의 Mapping 데이터도 모두 삭제
+            String deleteMappingQUery = "delete from Mapping where userIdx = ?";
+            this.jdbcTemplate.update(deleteMappingQUery, userIdx);
+
+            //User 삭제
+            String deleteUserQuery = "delete from User where userIdx = ?";
+            this.jdbcTemplate.update(deleteUserQuery, userIdx);
+        } catch(Exception e){
+            throw new BaseException(BaseResponseStatus.SERVER_ERROR);
         }
-
-        //User 삭제
-        String deleteUserQuery = "delete from User where userIdx = ?";
-        this.jdbcTemplate.update(deleteUserQuery, userIdx);
     }
 
     public GetUser getUser(int userIdx) {

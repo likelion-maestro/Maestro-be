@@ -119,11 +119,7 @@ public class UserService {
     }
 
     public void deleteUser(int userIdx) throws BaseException {
-        try {
-            userDao.deleteUser(userIdx);
-        } catch (Exception exception) {
-            throw new BaseException(BaseResponseStatus.SERVER_ERROR);
-        }
+        userDao.deleteUser(userIdx);
     }
 
     public GetUser getUser(int userIdx) throws BaseException {
