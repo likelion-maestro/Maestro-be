@@ -2,8 +2,8 @@ package maestrogroup.core.team;
 
 
 import maestrogroup.core.ExceptionHandler.BaseException;
-import maestrogroup.core.ExceptionHandler.BaseResponse;
 import maestrogroup.core.ExceptionHandler.BaseResponseStatus;
+import maestrogroup.core.mapping.MappingDao;
 import maestrogroup.core.team.model.PatchTeamReq;
 import maestrogroup.core.team.model.PostTeamReq;
 import org.springframework.stereotype.Service;
@@ -11,10 +11,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class TeamService {
     private final TeamDao teamDao;
+    private final MappingDao mappingDao;
     private final TeamProvider teamProvider;
 
-    public TeamService(TeamDao teamDao, TeamProvider teamProvider) {
+    public TeamService(TeamDao teamDao, MappingDao mappingDao, TeamProvider teamProvider) {
         this.teamDao = teamDao;
+        this.mappingDao = mappingDao;
         this.teamProvider = teamProvider;
     }
 
@@ -26,7 +28,7 @@ public class TeamService {
         //return postTeamRes;
     }
 
-    public void modifyTeam(PatchTeamReq patchTeamReq) throws BaseException {
+    public void modifyTeam(PatchTeamReq patchTeamReq, int userIdx) throws BaseException {
         // 수정할 팀이 존재하는지 검증
         if (teamDao.isExistsTeam(patchTeamReq.getTeamIdx()) != 1) {
             throw new BaseException(BaseResponseStatus.NOT_EXISTS_TEAM);
@@ -35,6 +37,11 @@ public class TeamService {
         // 수정한 내용이 공백일 경우에 대한 검증
         if (patchTeamReq.getTeamName() == null || patchTeamReq.getTeamName() == "") {
             throw new BaseException(BaseResponseStatus.INVALID_TEAM_NAME_FORM);
+        }
+
+        //User가 수정할 팀에 가입되어 있었는지 검증
+        if (mappingDao.isUserInTeam(patchTeamReq.getTeamIdx(), userIdx) != 1) {
+            throw new BaseException(BaseResponseStatus.USER_IS_NOT_IN_TEAM);
         }
 
         teamDao.modifyTeam(patchTeamReq);
