@@ -2,10 +2,12 @@ package maestrogroup.core.folder;
 
 import maestrogroup.core.ExceptionHandler.BaseException;
 import maestrogroup.core.ExceptionHandler.BaseResponse;
+import maestrogroup.core.ExceptionHandler.BaseResponseStatus;
 import maestrogroup.core.Security.JwtService;
 import maestrogroup.core.folder.model.Folder;
 import maestrogroup.core.folder.model.*;
 import maestrogroup.core.folder.model.PostFolderReq;
+import maestrogroup.core.team.TeamDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,15 +22,18 @@ public class FolderController {
     private final FolderService folderService;
     @Autowired
     private final FolderDao folderDao;
-
     @Autowired
     private final JwtService jwtService;
 
-    public FolderController(FolderProvider folderProvider, FolderService folderService, FolderDao folderDao, JwtService jwtService) {
+    @Autowired
+    private final TeamDao teamDao;
+
+    public FolderController(FolderProvider folderProvider, FolderService folderService, FolderDao folderDao, JwtService jwtService, TeamDao teamDao) {
         this.folderProvider = folderProvider;
         this.folderService = folderService;
         this.folderDao = folderDao;
         this.jwtService = jwtService;
+        this.teamDao = teamDao;
     }
 
     // POST: /create_folder/{teamID}
@@ -47,7 +52,7 @@ public class FolderController {
     // 특정 팀에 대한 폴더 리스트 조회
     @ResponseBody
     @GetMapping("/get_all_folder/{teamIdx}")
-    public BaseResponse<List<Folder>> GetAllFolder(@PathVariable("teamIdx") int teamIdx) {
+    public BaseResponse<List<Folder>> GetAllFolder(@PathVariable("teamIdx") int teamIdx) throws BaseException{
         try {
             List<Folder> folderList = folderProvider.GetAllFolder(teamIdx);
             return new BaseResponse<>(folderList);

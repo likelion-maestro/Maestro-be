@@ -1,7 +1,9 @@
 package maestrogroup.core.folder;
 
 import maestrogroup.core.ExceptionHandler.BaseException;
+import maestrogroup.core.ExceptionHandler.BaseResponseStatus;
 import maestrogroup.core.folder.model.PostFolderReq;
+import maestrogroup.core.team.TeamDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,21 +12,25 @@ public class FolderService {
 
     @Autowired
     private final FolderDao folderDao;
+    @Autowired
+    private final TeamDao teamDao;
 
-    public FolderService(FolderDao folderDao) {
+    public FolderService(FolderDao folderDao, TeamDao teamDao) {
         this.folderDao = folderDao;
+        this.teamDao = teamDao;
     }
 
     //createFolder
     public void createFolder(PostFolderReq postFolderReq, int teamIdx) throws BaseException {
-        //유효한 teamIdx인지에 대한 검증
         //User가 Folder를 생성하고자 하는 팀에 속해있는지에 대한 검증
-        //입력값이 유효한지에 대한 검증
-        //해당 팀에 같은 이름의 폴더가 있는지에 대한 검증
+        // Team이 존재하지 않을 때에 대한 예외처리
+        if (teamDao.isExistsTeam(teamIdx) != 1) {
+            throw new BaseException(BaseResponseStatus.NOT_EXISTS_TEAM);
+        }
+
         folderDao.createFolder(postFolderReq, teamIdx);
     }
     public void modifyFolder(int folderIdx, int teamIdx, ModifyFolderReq modifyFolderReq) throws BaseException{
-        //User가 Folder를 수정하고자 하는 팀에 속해있는지에 대한 검증
         //입력값이 유효한지에 대한 검증
         folderDao.modifyFolder(folderIdx, teamIdx, modifyFolderReq);
     }

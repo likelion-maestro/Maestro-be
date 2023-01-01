@@ -28,6 +28,10 @@ public class FolderDao {
         String curfolderName = postFolderReq.getFolderName();
         int folderUniCodeLength =  checkFolderNameLength(curfolderName);
 
+        if(folderUniCodeLength == 0){
+            throw new BaseException(BaseResponseStatus.INVALID_FOLDER_VALUE);
+        }
+
         if(folderUniCodeLength > 20){
             throw new BaseException(BaseResponseStatus.FOLDER_NAME_LENGTH);
         }
@@ -35,6 +39,7 @@ public class FolderDao {
         if (folderCount >= 1){ // 중복되는 폴더가 있는지 검증
             throw new BaseException(BaseResponseStatus.DUPLICATE_FOLDER);
         }
+
         try {
             String createFolderQuery = "insert into Folder (folderName, teamIdx, important) VALUES (?, ?, 0)";
             Object[] createFolderParams = new Object[]{postFolderReq.getFolderName(), teamIdx};
@@ -79,6 +84,10 @@ public class FolderDao {
     public void modifyFolder(int folderIdx, int teamIdx, ModifyFolderReq modifyFolderReq) throws BaseException{
         String curfolderName = modifyFolderReq.getFolderName();
         int folderUniCodeLength = checkFolderNameLength(curfolderName);
+
+        if(folderUniCodeLength == 0){
+            throw new BaseException(BaseResponseStatus.INVALID_FOLDER_VALUE);
+        }
 
         if(folderUniCodeLength > 20){
             throw new BaseException(BaseResponseStatus.FOLDER_NAME_LENGTH);

@@ -1,5 +1,7 @@
 package maestrogroup.core.team;
 
+import maestrogroup.core.ExceptionHandler.BaseException;
+import maestrogroup.core.ExceptionHandler.BaseResponseStatus;
 import maestrogroup.core.team.model.GetTeamRes;
 import maestrogroup.core.team.model.PatchTeamReq;
 import maestrogroup.core.team.model.PostTeamReq;
@@ -58,6 +60,14 @@ public class TeamDao {
         String modifyTeamLeaderQuery = "update Team set leaderIdx = ? where teamIdx = ?";
         Object[] modifyTeamLeaderParams = new Object[]{userIdx2, teamIdx};
         this.jdbcTemplate.update(modifyTeamLeaderQuery, modifyTeamLeaderParams);
+    }
+
+    public int isExistsTeam(int teamIdx) throws BaseException {
+        try {
+            return this.jdbcTemplate.queryForObject("select exists (select teamIdx from Team where teamIdx = ?)", int.class, teamIdx);
+        } catch (Exception e){
+            throw new BaseException(BaseResponseStatus.NOT_EXISTS_TEAM);
+        }
     }
 }
 
