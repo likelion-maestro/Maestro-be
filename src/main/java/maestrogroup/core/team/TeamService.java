@@ -44,7 +44,11 @@ public class TeamService {
             throw new BaseException(BaseResponseStatus.USER_IS_NOT_IN_TEAM);
         }
 
-        teamDao.modifyTeam(patchTeamReq);
+        try {
+            teamDao.modifyTeam(patchTeamReq);
+        } catch (Exception exception) {
+            throw new BaseException(BaseResponseStatus.SERVER_ERROR);
+        }
     }
 
     public void deleteTeam(int teamIdx){
