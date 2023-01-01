@@ -57,7 +57,10 @@ BaseResponseStatus {
     MUSIC_NAME_LENGTH("음악 이름을 20자 이하로 생성해주세요.", HttpStatus.BAD_REQUEST),
     // DUPLICATE_MUSIC( "이미 음악이 존재합나다", HttpStatus.NOT_ACCEPTABLE),
     INVALID_MUSIC_VALUE("0보다 큰 값을 입력해주세요.", HttpStatus.BAD_REQUEST),
-    NOT_EXISTS_MUSIC("음악이 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
+    NOT_EXISTS_MUSIC("음악이 존재하지 않습니다.", HttpStatus.BAD_REQUEST),
+
+    // 팀
+    INVALID_TEAM_NAME_FORM("팀 이름을 입력해주세요.", HttpStatus.BAD_REQUEST);
     private final HttpStatus httpStatus;
     private final String message;
 
