@@ -101,4 +101,12 @@ public class MusicDao {
     public int checkMusicNameLength(String musicName){
         return musicName.length();
     }
+
+    public void deleteMusic(int musicIdx) {
+        this.jdbcTemplate.update("delete from Music where musicIdx = ?", musicIdx);
+    }
+
+    public int isExistsMusic(int musicIdx) {
+        return this.jdbcTemplate.queryForObject("select exists (select musicIdx from Music where musicIdx = ?)", int.class, musicIdx);
+    }
 }
