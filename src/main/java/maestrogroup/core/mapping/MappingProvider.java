@@ -28,7 +28,7 @@ public class MappingProvider {
         return mappingDao.getTeamList(teamIdx);
     }
 
-    public List<GetTeamAndImportantRes> getTeamAndImportant(int userIdx) {
+    public List<GetTeamAndImportantRes> getTeamAndImportant(int userIdx) throws BaseException{
         return mappingDao.getTeamAndImportant(userIdx);
     }
 }
