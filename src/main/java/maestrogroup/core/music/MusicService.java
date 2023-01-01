@@ -69,6 +69,25 @@ public class MusicService {
         if (musicDao.isExistsMusic(musicIdx) != 1) {
             throw new BaseException(BaseResponseStatus.NOT_EXISTS_MUSIC);
         }
+
+        // musicName을 기입하지 않았을 때에 대한 예외처리
+        if (postMusicReq.getMusicName() == null || postMusicReq.getMusicName() == "") {
+            throw new BaseException(
+                    BaseResponseStatus.MODIFY_FIELD_NOT_FULL);
+        }
+
+        // bpm을 올바르게 기입하지 않았을 때에 대한 예외처리
+        if (postMusicReq.getBpm() <= 0) {
+            throw new BaseException(
+                    BaseResponseStatus.INVALID_MUSIC_VALUE);
+        }
+
+        // circleNum을 올바르게 기입하지 않았을 때에 대한 예외처리
+        if (postMusicReq.getCircleNum() <= 0) {
+            throw new BaseException(
+                    BaseResponseStatus.INVALID_MUSIC_VALUE);
+        }
+
         musicDao.modifyMusic(postMusicReq, musicIdx);
     }
 }
