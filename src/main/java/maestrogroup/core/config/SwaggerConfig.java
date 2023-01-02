@@ -24,7 +24,8 @@ public class SwaggerConfig {  // Swagger
     private static final String API_NAME = "Maestro API";
     private static final String API_VERSION = "0.0.1";
     private static final String API_DESCRIPTION = "Maestro API 명세서";
-    private static final String REFERENCE = "Authorization 헤더 값";
+    private static final String REFERENCE = "AccessToken 헤더 값";
+    private static final String RefreshToken = "RefreshToken 헤더 값";
 
 
     @Bean
@@ -35,7 +36,7 @@ public class SwaggerConfig {  // Swagger
                 .paths(PathSelectors.any())  // 해당 package 하위에 있는 모든 url에 적용
                 .build()
                 .securityContexts(List.of(securityContext()))
-                .securitySchemes(List.of(securityScheme()));
+                .securitySchemes(List.of(securityScheme_AccessToken(), securityScheme_RefreshToken()));
     }
 
     private SecurityContext securityContext() {
@@ -54,9 +55,14 @@ public class SwaggerConfig {  // Swagger
         return List.of(new SecurityReference(REFERENCE, authorizationScopes));
     }
 
-    private ApiKey securityScheme() {
+    private ApiKey securityScheme_AccessToken() {
         String targetHeader = "Authorization";
         return new ApiKey(REFERENCE, targetHeader, "header");
+    }
+
+    private ApiKey securityScheme_RefreshToken(){
+        String targetHeader = "RefreshToken";
+        return new ApiKey(RefreshToken, targetHeader, "header");
     }
 
     public ApiInfo apiInfo() {  // API의 이름, 현재 버전, API에 대한 정보
