@@ -77,7 +77,7 @@ public class UserController {
     }
 
     @PostMapping("/logout")
-    @Operation(summary = "로그아웃", description = "로그아웃 호출시 클라이언트는 local storage 에 저장하고 있던 access, refresh token을 모두 삭제해야한다.")
+    @Operation(summary = "로그아웃", description = "로그아웃 호출시 클라이언트는 local storage 에 저장하고 있던 access, refresh token을 모두 삭제해야합니다.")
     public BaseResponse<LoginUserRes>logoutUser(){
         try{
             userProvider.logoutUser();
