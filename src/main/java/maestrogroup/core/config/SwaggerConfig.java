@@ -52,7 +52,7 @@ public class SwaggerConfig {  // Swagger
     private List<SecurityReference> defaultAuth() {
         AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
         authorizationScopes[0] = new AuthorizationScope("global", "accessEverything");
-        return List.of(new SecurityReference(REFERENCE, authorizationScopes));
+        return List.of(new SecurityReference(REFERENCE, authorizationScopes), new SecurityReference(RefreshToken, authorizationScopes));
     }
 
     private ApiKey securityScheme_AccessToken() {
