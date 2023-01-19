@@ -96,9 +96,7 @@ public class MusicDao {
         }
     }
 
-    public SelfMusicRes getSelfMusicInfo(SelfMusicReq selfMusicReq) {
-        int bpm = selfMusicReq.getBpm();
-        int circleNum = selfMusicReq.getCircleNum();
+    public SelfMusicRes getSelfMusicInfo(int bpm, int circleNum) {
         double waitTime = (double) 60 / bpm;
 
         double totalNum = waitTime * circleNum;

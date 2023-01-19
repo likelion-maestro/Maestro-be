@@ -46,15 +46,15 @@ public class MusicProvider {
         return musicDao.GetMusicInfo(musicIdx);
     }
 
-    public SelfMusicRes getSelfMusicInfo(SelfMusicReq selfMusicReq) throws BaseException {
-        if (selfMusicReq.getBpm() <= 0) {
+    public SelfMusicRes getSelfMusicInfo(int bpm, int circleNum) throws BaseException {
+        if (bpm <= 0) {
             throw new BaseException(BaseResponseStatus.INVALID_MUSIC_VALUE);
         }
 
-        if (selfMusicReq.getCircleNum() <= 0) {
+        if (circleNum <= 0) {
             throw new BaseException(BaseResponseStatus.INVALID_MUSIC_VALUE);
         }
 
-        return musicDao.getSelfMusicInfo(selfMusicReq);
+        return musicDao.getSelfMusicInfo(bpm, circleNum);
     }
 }
