@@ -5,6 +5,8 @@ import maestrogroup.core.ExceptionHandler.BaseResponseStatus;
 import maestrogroup.core.folder.FolderDao;
 import maestrogroup.core.music.model.Music;
 import maestrogroup.core.music.model.MusicInfoRes;
+import maestrogroup.core.music.model.SelfMusicReq;
+import maestrogroup.core.music.model.SelfMusicRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,5 +44,17 @@ public class MusicProvider {
             throw new BaseException(BaseResponseStatus.NOT_EXISTS_MUSIC);
         }
         return musicDao.GetMusicInfo(musicIdx);
+    }
+
+    public SelfMusicRes getSelfMusicInfo(SelfMusicReq selfMusicReq) throws BaseException {
+        if (selfMusicReq.getBpm() <= 0) {
+            throw new BaseException(BaseResponseStatus.INVALID_MUSIC_VALUE);
+        }
+
+        if (selfMusicReq.getCircleNum() <= 0) {
+            throw new BaseException(BaseResponseStatus.INVALID_MUSIC_VALUE);
+        }
+
+        return musicDao.getSelfMusicInfo(selfMusicReq);
     }
 }

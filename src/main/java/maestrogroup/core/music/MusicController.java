@@ -4,9 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
 import maestrogroup.core.ExceptionHandler.BaseException;
 import maestrogroup.core.ExceptionHandler.BaseResponse;
-import maestrogroup.core.music.model.Music;
-import maestrogroup.core.music.model.MusicInfoRes;
-import maestrogroup.core.music.model.PostMusicReq;
+import maestrogroup.core.music.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -85,5 +83,17 @@ public class MusicController {
         } catch (BaseException baseException) {
             return new BaseResponse(baseException.getStatus());
         }
+    }
+
+    @PostMapping("")
+    @Operation(summary = "개인 메트로놈 페이지에 필요한 정보 조회", description = "BPM, 동그라미 개수가 0보다 같거나 작을 때 에러를 발생시켰습니다.")
+    public BaseResponse<SelfMusicRes> getSelfMusicInfo(@RequestBody SelfMusicReq selfMusicReq) {
+        try {
+            SelfMusicRes selfMusicInfo = musicProvider.getSelfMusicInfo(selfMusicReq);
+            return new BaseResponse(selfMusicInfo);
+        } catch (BaseException baseException) {
+            return new BaseResponse<>(baseException.getStatus());
+        }
+
     }
 }

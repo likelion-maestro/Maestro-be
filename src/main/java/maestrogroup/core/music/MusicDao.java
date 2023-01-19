@@ -2,9 +2,7 @@ package maestrogroup.core.music;
 
 import maestrogroup.core.ExceptionHandler.BaseException;
 import maestrogroup.core.ExceptionHandler.BaseResponseStatus;
-import maestrogroup.core.music.model.Music;
-import maestrogroup.core.music.model.MusicInfoRes;
-import maestrogroup.core.music.model.PostMusicReq;
+import maestrogroup.core.music.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -96,6 +94,22 @@ public class MusicDao {
         } catch (Exception e){
             throw new BaseException(BaseResponseStatus.SERVER_ERROR);
         }
+    }
+
+    public SelfMusicRes getSelfMusicInfo(SelfMusicReq selfMusicReq) {
+        int bpm = selfMusicReq.getBpm();
+        int circleNum = selfMusicReq.getCircleNum();
+        double waitTime = (double) 60 / bpm;
+
+        double totalNum = waitTime * circleNum;
+        double num = 0;
+        List<Double> startTimes = new ArrayList<>();
+        for (int i = 0; i < circleNum; i++) {
+            startTimes.add(num);
+            num += waitTime;
+        }
+
+        return new SelfMusicRes(totalNum, startTimes);
     }
 
     public int checkMusicNameLength(String musicName){
