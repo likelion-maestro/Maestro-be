@@ -85,15 +85,27 @@ public class MusicController {
         }
     }
 
-    @PostMapping("")
-    @Operation(summary = "개인 메트로놈 페이지에 필요한 정보 조회", description = "BPM, 동그라미 개수가 0보다 같거나 작을 때 에러를 발생시켰습니다.")
-    public BaseResponse<SelfMusicRes> getSelfMusicInfo(@RequestBody SelfMusicReq selfMusicReq) {
+    @PostMapping("/self")
+    @Operation(summary = "Requestbody를 이용한 개인 메트로놈 페이지에 필요한 정보 조회", description = "BPM, 동그라미 개수가 0보다 같거나 작을 때 에러를 발생시켰습니다.")
+    public BaseResponse<SelfMusicRes> getSelfMusicInfoWithBody(@RequestBody SelfMusicReq selfMusicReq) {
         try {
-            SelfMusicRes selfMusicInfo = musicProvider.getSelfMusicInfo(selfMusicReq);
+            int bpm = selfMusicReq.getBpm();
+            int circleNum = selfMusicReq.getCircleNum();
+            SelfMusicRes selfMusicInfo = musicProvider.getSelfMusicInfo(bpm, circleNum);
             return new BaseResponse(selfMusicInfo);
         } catch (BaseException baseException) {
             return new BaseResponse<>(baseException.getStatus());
         }
+    }
 
+    @GetMapping("/self/{bpm}/{circleNum}")
+    @Operation(summary = "Pathvariable을 이용한 개인 메트로놈 페이지에 필요한 정보 조회", description = "BPM, 동그라미 개수가 0보다 같거나 작을 때 에러를 발생시켰습니다.")
+    public BaseResponse<SelfMusicRes> getSelfMusicInfoWithBody(@PathVariable("bpm") int bpm, @PathVariable("circleNum") int circleNum) {
+        try {
+            SelfMusicRes selfMusicInfo = musicProvider.getSelfMusicInfo(bpm, circleNum);
+            return new BaseResponse(selfMusicInfo);
+        } catch (BaseException baseException) {
+            return new BaseResponse<>(baseException.getStatus());
+        }
     }
 }
